@@ -13,7 +13,7 @@ services:
       - DB_PASS=544728
       - APP_ENV=docker
     volumes:
-      - .:/var/www/html
+      - uploads_data:/var/www/html/uploads
     depends_on:
       - db
     networks:
@@ -50,6 +50,7 @@ services:
 
 volumes:
   db_data:
+  uploads_data:
 
 networks:
   antmaster_network:
