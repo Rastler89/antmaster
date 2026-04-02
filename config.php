@@ -1,9 +1,14 @@
 <?php
 // Configuración de la Base de Datos
-define('DB_HOST', getenv('DB_HOST') !== false ? getenv('DB_HOST') : 'localhost');
-define('DB_NAME', getenv('DB_NAME') !== false ? getenv('DB_NAME') : 'gestor_hormigas');
-define('DB_USER', getenv('DB_USER') !== false ? getenv('DB_USER') : 'root');
-define('DB_PASS', getenv('DB_PASS') !== false ? getenv('DB_PASS') : '544728');
+$env_db_host = getenv('DB_HOST') ?: ($_ENV['DB_HOST'] ?? $_SERVER['DB_HOST'] ?? 'localhost');
+$env_db_name = getenv('DB_NAME') ?: ($_ENV['DB_NAME'] ?? $_SERVER['DB_NAME'] ?? 'gestor_hormigas');
+$env_db_user = getenv('DB_USER') ?: ($_ENV['DB_USER'] ?? $_SERVER['DB_USER'] ?? 'root');
+$env_db_pass = getenv('DB_PASS') ?: ($_ENV['DB_PASS'] ?? $_SERVER['DB_PASS'] ?? '544728');
+
+define('DB_HOST', $env_db_host === 'localhost' ? '127.0.0.1' : $env_db_host);
+define('DB_NAME', $env_db_name);
+define('DB_USER', $env_db_user);
+define('DB_PASS', $env_db_pass);
 
 // Configuración de la Aplicación
 define('APP_NAME', 'AntMaster Pro');
