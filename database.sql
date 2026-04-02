@@ -1,6 +1,4 @@
 -- Base de datos para el Gestor de Hormigas
-CREATE DATABASE IF NOT EXISTS gestor_hormigas CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE gestor_hormigas;
 
 -- Tabla de Usuarios
 CREATE TABLE IF NOT EXISTS usuarios (
