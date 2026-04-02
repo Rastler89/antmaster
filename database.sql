@@ -8,6 +8,8 @@ CREATE TABLE IF NOT EXISTS usuarios (
     email VARCHAR(150) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     rol ENUM('usuario', 'admin') DEFAULT 'usuario',
+    last_login TIMESTAMP NULL DEFAULT NULL,
+    is_banned TINYINT(1) DEFAULT 0,
     fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -34,9 +36,10 @@ CREATE TABLE IF NOT EXISTS especies (
 CREATE TABLE IF NOT EXISTS revisiones_especies (
     id INT AUTO_INCREMENT PRIMARY KEY,
     usuario_id INT NOT NULL,
-    especie_id INT NOT NULL,
+    especie_id INT NULL,
     cambios_solicitados JSON NOT NULL,
     estado ENUM('pendiente', 'aprobada', 'rechazada') DEFAULT 'pendiente',
+    motivo_rechazo TEXT DEFAULT NULL,
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
     FOREIGN KEY (especie_id) REFERENCES especies(id) ON DELETE CASCADE
@@ -69,6 +72,17 @@ CREATE TABLE IF NOT EXISTS historial_poblacion (
     FOREIGN KEY (colonia_id) REFERENCES colonias(id) ON DELETE CASCADE
 );
 
+-- Stock de Alimento
+CREATE TABLE IF NOT EXISTS stock_alimento (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    nombre VARCHAR(100) NOT NULL,
+    categoria VARCHAR(50) DEFAULT 'Otros',
+    cantidad DECIMAL(10,2) NOT NULL,
+    unidad VARCHAR(20) NOT NULL,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+
 -- Diario de la Colonia
 CREATE TABLE IF NOT EXISTS diario (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -83,17 +97,6 @@ CREATE TABLE IF NOT EXISTS diario (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (colonia_id) REFERENCES colonias(id) ON DELETE CASCADE,
     FOREIGN KEY (stock_id) REFERENCES stock_alimento(id) ON DELETE SET NULL
-);
-
--- Stock de Alimento
-CREATE TABLE IF NOT EXISTS stock_alimento (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    usuario_id INT NOT NULL,
-    nombre VARCHAR(100) NOT NULL,
-    categoria VARCHAR(50) DEFAULT 'Otros',
-    cantidad DECIMAL(10,2) NOT NULL,
-    unidad VARCHAR(20) NOT NULL,
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 );
 
 -- Datos iniciales para especies (Fichas de cría)

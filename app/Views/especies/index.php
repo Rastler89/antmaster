@@ -3,10 +3,14 @@
         <a href="<?= BASE_URL ?>/" class="p-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-colors text-zinc-400 hover:text-white">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
         </a>
-        <div>
+        <div class="flex-1">
             <h1 class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-blue-500">Fichas de Cría</h1>
             <p class="text-muted text-sm mt-1">Consulta información técnica para tus hormigas.</p>
         </div>
+        <a href="<?= BASE_URL ?>/especies/proponer" class="magic-btn shadow-lg shadow-emerald-500/20 !from-emerald-500 !to-teal-500 active:scale-95 transition-all flex items-center gap-2 whitespace-nowrap">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+            <span class="hidden sm:inline">Nueva Especie</span>
+        </a>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -6,6 +6,10 @@ require_once '../core/Database.php';
 require_once '../core/Router.php';
 require_once '../core/View.php';
 require_once '../core/Controller.php';
+require_once '../core/Migrator.php';
+
+// Ejecutar migraciones automáticamente si las hay
+Migrator::run();
 
 $router = new Router();
 
@@ -37,11 +41,18 @@ $router->delete('/stock/{id}', 'StockController@destroy');
 
 $router->get('/especies', 'EspeciesController@index');
 $router->get('/especies/ver/{id}', 'EspeciesController@show');
+$router->get('/especies/proponer', 'EspeciesController@proposeNew');
+$router->post('/especies/proponer', 'EspeciesController@storeNewProposal');
 $router->get('/especies/editar/{id}', 'EspeciesController@edit');
 $router->post('/especies/editar/{id}', 'EspeciesController@proposeEdit');
 
 $router->get('/admin/revisiones', 'EspeciesController@pendingRevisions');
+$router->get('/admin/revisiones/historial', 'EspeciesController@historyRevisions');
 $router->put('/admin/revisiones/{id}', 'EspeciesController@resolveRevision');
+
+// Panel de Administración (Usuarios y Estadísticas)
+$router->get('/admin/dashboard', 'AdminController@dashboard');
+$router->post('/admin/usuarios/ban/{id}', 'AdminController@toggleBan');
 
 // Rutas Públicas (Logs Compartibles)
 $router->get('/log/{user}/{colony}', 'PublicLogController@show');

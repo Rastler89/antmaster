@@ -16,6 +16,14 @@ class AuthController extends Controller {
         $user = User::whereOne('email', '=', $email);
 
         if ($user && password_verify($password, $user['password'])) {
+            if (isset($user['is_banned']) && $user['is_banned'] == 1) {
+                $this->view('auth/login', ['error' => 'Tu cuenta ha sido suspendida. Contacta con soporte para más información.', 'email' => $email]);
+                return;
+            }
+
+            // Registrar last_login
+            User::update($user['id'], ['last_login' => date('Y-m-d H:i:s')]);
+
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_name'] = $user['nombre'];
             $_SESSION['user_rol'] = $user['rol'];

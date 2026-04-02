@@ -17,12 +17,18 @@
             <h1 class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-blue-500">Centro de Revisiones</h1>
             <p class="text-zinc-400 text-sm mt-1">Evalúa moderadamente las modificaciones propuestas por la comunidad.</p>
         </div>
-        <div class="bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-3 py-1.5 rounded-lg text-sm font-medium flex items-center gap-2 max-w-fit">
-            Modo Administrador
-            <span class="relative flex h-2.5 w-2.5">
-              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-indigo-500"></span>
-            </span>
+        <div class="flex items-center gap-3">
+            <a href="<?= BASE_URL ?>/admin/revisiones/historial" class="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-sm font-medium text-zinc-300 transition-colors flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Ver Historial
+            </a>
+            <div class="bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-3 py-1.5 rounded-lg text-sm font-medium flex items-center gap-2 max-w-fit">
+                Modo Administrador
+                <span class="relative flex h-2.5 w-2.5">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-indigo-500"></span>
+                </span>
+            </div>
         </div>
     </div>
     
@@ -37,12 +43,18 @@
     <?php else: ?>
         <div class="grid grid-cols-1 gap-6">
             <?php foreach ($revisiones as $rev): ?>
-            <?php $cambios = json_decode($rev['cambios_solicitados'], true); ?>
-                <div class="glass-card p-6 border-l-4 border-l-blue-500 overflow-hidden">
+            <?php 
+                $cambios = json_decode($rev['cambios_solicitados'], true);
+                $isNew = is_null($rev['especie_id']);
+                $titleText = $isNew ? "NUEVA ESPECIE: " . ($cambios['nombre'] ?? 'Sin nombre') : "Propuesta para: " . $rev['especie_nombre'];
+                $borderColor = $isNew ? "border-l-emerald-500" : "border-l-blue-500";
+                $titleColor = $isNew ? "text-emerald-400" : "text-blue-400";
+            ?>
+                <div class="glass-card p-6 border-l-4 <?= $borderColor ?> overflow-hidden">
                     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
                         <div>
                             <h2 class="text-lg font-bold text-white flex items-center gap-2">
-                                Propuesta para: <span class="text-emerald-400"><?= htmlspecialchars($rev['especie_nombre']) ?></span>
+                                <span class="<?= $titleColor ?>"><?= htmlspecialchars($titleText) ?></span>
                             </h2>
                             <p class="text-sm text-zinc-400 flex items-center gap-1 mt-1">
                                 <svg class="w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
@@ -66,12 +78,13 @@
                     </div>
                     
                     <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-white/5">
-                        <form method="POST" action="<?= BASE_URL ?>/admin/revisiones/<?= $rev['id'] ?>" class="m-0 sm:ml-auto w-full sm:w-auto">
+                        <form method="POST" action="<?= BASE_URL ?>/admin/revisiones/<?= $rev['id'] ?>" class="m-0 sm:ml-auto w-full sm:w-auto on-reject-form">
                             <input type="hidden" name="_method" value="PUT">
                             <input type="hidden" name="action" value="rechazar">
-                            <button type="submit" class="w-full sm:w-auto px-5 py-2.5 bg-red-500/10 text-red-500 hover:bg-red-500/20 border border-red-500/20 rounded-xl transition-colors font-medium text-sm flex items-center justify-center gap-2">
+                            <input type="hidden" name="motivo_rechazo" class="motivo_input" value="">
+                            <button type="submit" class="w-full sm:w-auto px-5 py-2.5 bg-red-500/10 text-red-500 hover:bg-red-500/20 border border-red-500/20 rounded-xl transition-colors font-medium text-sm flex items-center justify-center gap-2 btn-reject">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                                Rechazar y Borrar
+                                Rechazar
                             </button>
                         </form>
                         
@@ -89,3 +102,16 @@
         </div>
     <?php endif; ?>
 </div>
+
+<script>
+document.querySelectorAll('.on-reject-form').forEach(form => {
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const motivo = prompt('Por favor, indica un motivo para el rechazo (opcional pero recomendado):');
+        if (motivo !== null) {
+            this.querySelector('.motivo_input').value = motivo;
+            this.submit();
+        }
+    });
+});
+</script>

@@ -195,6 +195,9 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
                     <a href="<?= BASE_URL ?>/especies" class="text-sm text-muted hover:text-main transition">Fichas de Cría</a>
                     <a href="<?= BASE_URL ?>/stock" class="text-sm text-muted hover:text-main transition">Stock</a>
                     <?php if (is_admin()): ?>
+                        <a href="<?= BASE_URL ?>/admin/dashboard" class="px-3 py-2 text-muted hover:text-red-400 transition-colors flex items-center gap-1.5" title="Panel de Administración">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                        </a>
                         <a href="<?= BASE_URL ?>/admin/revisiones" class="px-3 py-2 text-muted hover:text-main transition-colors flex items-center gap-1.5" title="Revisiones Pendientes">
                             <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         </a>
