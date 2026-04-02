@@ -1,0 +1,148 @@
+<div class="max-w-3xl mx-auto">
+    <div class="flex items-center gap-4 mb-8">
+        <a href="<?= BASE_URL ?>/" class="p-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-colors text-zinc-400 hover:text-white">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+        </a>
+        <h1 class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-emerald-400">Registrar Nueva Colonia</h1>
+    </div>
+
+    <div class="glass-card p-6 md:p-8 relative overflow-hidden">
+        <div class="absolute -inset-20 bg-gradient-to-r from-blue-500/10 to-emerald-500/10 rounded-full blur-3xl z-0 pointer-events-none"></div>
+        
+        <form method="POST" action="<?= BASE_URL ?>/colonias/nueva" enctype="multipart/form-data" class="space-y-6 relative z-10">
+            <!-- Foto de Portada -->
+            <div class="mb-8">
+                <label class="block text-sm font-medium text-muted mb-3">Foto de Portada</label>
+                <div class="relative group">
+                    <input type="file" name="imagen" id="imagen-input" class="hidden" accept="image/*" onchange="previewImage(this)">
+                    <label for="imagen-input" id="image-preview" class="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-white/10 rounded-2xl cursor-pointer hover:bg-white/5 hover:border-blue-500/50 transition-all overflow-hidden relative">
+                        <div id="preview-placeholder" class="flex flex-col items-center">
+                            <div class="p-4 bg-blue-500/10 rounded-full text-blue-400 mb-2 group-hover:scale-110 transition-transform">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            </div>
+                            <span class="text-xs text-muted">Subir una foto de tu colonia</span>
+                        </div>
+                        <img id="image-render" class="hidden absolute inset-0 w-full h-full object-cover">
+                    </label>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Nombre -->
+                <div class="space-y-1.5">
+                    <label class="block text-sm font-medium text-zinc-300">Nombre de la Colonia</label>
+                    <input type="text" name="nombre" required placeholder="Ej: Imperio Messor" class="magic-input">
+                </div>
+                
+                <!-- Especie -->
+                <div class="space-y-1.5">
+                    <label class="block text-sm font-medium text-muted">Especie</label>
+                    <div class="relative">
+                        <select name="especie_id" required class="magic-input appearance-none w-full">
+                            <option value="">Selecciona una especie...</option>
+                            <?php foreach ($species as $s): ?>
+                                <option value="<?= $s['id'] ?>">
+                                    <?= htmlspecialchars($s['nombre_cientifico']) ?> (<?= htmlspecialchars($s['nombre']) ?>)
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Fecha Adquisición -->
+                <div class="space-y-1.5">
+                    <label class="block text-sm font-medium text-zinc-300">Fecha de Adquisición</label>
+                    <input type="date" name="fecha_adquisicion" value="<?= date('Y-m-d') ?>" required class="magic-input w-full [color-scheme:dark]">
+                </div>
+                
+                <!-- Tipo Hormiguero -->
+                <div class="space-y-1.5">
+                    <label class="block text-sm font-medium text-zinc-300">Tipo de Hormiguero</label>
+                    <input type="text" name="tipo_hormiguero" placeholder="Ej: Acrílico 10x10" class="magic-input">
+                </div>
+                
+            <!-- Población -->
+            <div class="bg-black/20 p-5 rounded-2xl border border-white/5">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        <label class="text-sm font-bold text-main">Control de Población</label>
+                    </div>
+                    <label class="flex items-center gap-3 cursor-pointer group">
+                        <span class="text-xs text-muted group-hover:text-main transition-colors">Desglose por castas</span>
+                        <div class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="toggle-castas" name="usar_castas" value="1" class="sr-only peer" onchange="toggleCastasSection(this)">
+                            <div class="w-9 h-5 bg-zinc-800 rounded-full peer peer-checked:bg-[var(--theme-primary)] after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full border border-white/10"></div>
+                        </div>
+                    </label>
+                </div>
+
+                <!-- Población Simple -->
+                <div id="poblacion-simple" class="space-y-1.5 transition-all">
+                    <input type="number" name="poblacion_actual" min="0" value="0" class="magic-input" placeholder="Total obreras">
+                </div>
+
+                <!-- Población Detallada (Hidden) -->
+                <div id="poblacion-detallada" class="hidden transition-all">
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-2">
+                        <div class="space-y-1">
+                            <label class="text-[10px] uppercase font-bold text-muted ml-1">Reinas</label>
+                            <input type="number" name="casta[reina]" value="1" min="0" class="magic-input !p-2 text-center">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] uppercase font-bold text-muted ml-1">Minors</label>
+                            <input type="number" name="casta[minor]" value="0" min="0" class="magic-input !p-2 text-center">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] uppercase font-bold text-muted ml-1">Medias</label>
+                            <input type="number" name="casta[media]" value="0" min="0" class="magic-input !p-2 text-center">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] uppercase font-bold text-muted ml-1">Majors</label>
+                            <input type="number" name="casta[major]" value="0" min="0" class="magic-input !p-2 text-center">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] uppercase font-bold text-muted ml-1">Soldados</label>
+                            <input type="number" name="casta[soldado]" value="0" min="0" class="magic-input !p-2 text-center">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-1.5">
+                <label class="block text-sm font-medium text-main">Descripción / Notas</label>
+                <textarea name="descripcion" rows="3" class="magic-input resize-none" placeholder="Estado de la reina..."></textarea>
+            </div>
+
+            <div class="pt-6 border-t border-white/10 flex justify-end">
+                <button type="submit" class="magic-btn w-full md:w-auto px-8 py-3 shadow-xl shadow-blue-500/20">Guardar Colonia</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function previewImage(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('image-render').src = e.target.result;
+            document.getElementById('image-render').classList.remove('hidden');
+            document.getElementById('preview-placeholder').classList.add('hidden');
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+function toggleCastasSection(checkbox) {
+    const simple = document.getElementById('poblacion-simple');
+    const detallada = document.getElementById('poblacion-detallada');
+    if (checkbox.checked) {
+        simple.classList.add('hidden');
+        detallada.classList.remove('hidden');
+    } else {
+        simple.classList.remove('hidden');
+        detallada.classList.add('hidden');
+    }
+}
+</script>

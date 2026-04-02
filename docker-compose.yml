@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: antmaster_app
+    ports:
+      - "8080:80"
+    environment:
+      - DB_HOST=db
+      - DB_NAME=gestor_hormigas
+      - DB_USER=root
+      - DB_PASS=544728
+      - APP_ENV=docker
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db
+    networks:
+      - antmaster_network
+
+  db:
+    image: mysql:8.0
+    container_name: antmaster_db
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=544728
+      - MYSQL_DATABASE=gestor_hormigas
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./database.sql:/docker-entrypoint-initdb.d/database.sql
+    networks:
+      - antmaster_network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: antmaster_pma
+    ports:
+      - "8081:80"
+    environment:
+      - PMA_HOST=db
+      - PMA_USER=root
+      - PMA_PASSWORD=544728
+    depends_on:
+      - db
+    networks:
+      - antmaster_network
+
+volumes:
+  db_data:
+
+networks:
+  antmaster_network:
+    driver: bridge

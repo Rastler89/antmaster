@@ -1,0 +1,71 @@
+<?php
+require_once '../app/Models/User.php';
+
+class AuthController extends Controller {
+    public function loginForm() {
+        if (is_logged_in()) $this->redirect('/');
+        $this->view('auth/login');
+    }
+
+    public function login() {
+        if (is_logged_in()) $this->redirect('/');
+        
+        $email = $_POST['email'] ?? '';
+        $password = $_POST['password'] ?? '';
+        
+        $user = User::whereOne('email', '=', $email);
+
+        if ($user && password_verify($password, $user['password'])) {
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['user_name'] = $user['nombre'];
+            $_SESSION['user_rol'] = $user['rol'];
+            $_SESSION['user_settings'] = json_decode($user['settings'] ?? '{}', true);
+            
+            $redirectTo = $_SESSION['redirect_to'] ?? '/';
+            unset($_SESSION['redirect_to']);
+            $this->redirect($redirectTo);
+        } else {
+            $this->view('auth/login', ['error' => 'Credenciales incorrectas.', 'email' => $email]);
+        }
+    }
+
+    public function registerForm() {
+        if (is_logged_in()) $this->redirect('/');
+        $this->view('auth/register');
+    }
+
+    public function register() {
+        if (is_logged_in()) $this->redirect('/');
+
+        $nombre = $_POST['nombre'] ?? '';
+        $email = $_POST['email'] ?? '';
+        $password = $_POST['password'] ?? '';
+        
+        if (User::whereOne('email', '=', $email)) {
+            $this->view('auth/register', ['error' => 'El email ya está registrado.', 'nombre' => $nombre, 'email' => $email]);
+            return;
+        }
+
+        $data = [
+            'nombre' => $nombre,
+            'email' => $email,
+            'password' => password_hash($password, PASSWORD_DEFAULT)
+        ];
+
+        if (User::create($data)) {
+            $user = User::whereOne('email', '=', $email);
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['user_name'] = $user['nombre'];
+            $_SESSION['user_rol'] = $user['rol'];
+            $_SESSION['user_settings'] = json_decode($user['settings'] ?? '{}', true);
+            $this->redirect('/');
+        } else {
+            $this->view('auth/register', ['error' => 'Error al registrar el usuario.', 'nombre' => $nombre, 'email' => $email]);
+        }
+    }
+
+    public function logout() {
+        session_destroy();
+        $this->redirect('/login');
+    }
+}
