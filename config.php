@@ -12,6 +12,7 @@ define('DB_PASS', $env_db_pass);
 
 // Configuración de la Aplicación
 define('APP_NAME', 'AntMaster Pro');
+define('APP_VERSION', '1.1.0');
 define('BASE_URL', getenv('APP_ENV') === 'docker' ? '' : '/laravel'); // Ajustar según la carpeta en Laragon / Docker
 
 

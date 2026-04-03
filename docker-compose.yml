@@ -13,7 +13,8 @@ services:
       - DB_PASS=544728
       - APP_ENV=docker
     volumes:
-      - uploads_data:/var/www/html/uploads
+      - .:/var/www/html
+      - uploads_data:/var/www/html/public/uploads
     depends_on:
       - db
     networks:

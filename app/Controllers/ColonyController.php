@@ -32,6 +32,9 @@ class ColonyController extends Controller {
         $imagePath = null;
         if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
             $uploadDir = 'uploads/colonies/';
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0777, true);
+            }
             $extension = pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION);
             $filename = uniqid() . '.' . $extension;
             if (move_uploaded_file($_FILES['imagen']['tmp_name'], $uploadDir . $filename)) {
@@ -96,10 +99,33 @@ class ColonyController extends Controller {
         $user = Colony::query("SELECT slug FROM usuarios WHERE id = ?", [$_SESSION['user_id']]);
         $userSlug = $user[0]['slug'];
 
+        // Preparar galería para el Tab
+        $media = [];
+        if ($colony['imagen']) {
+            $media[] = [
+                'url' => 'uploads/colonies/' . $colony['imagen'],
+                'fecha' => $colony['fecha_adquisicion'],
+                'tipo' => 'Foto de Perfil',
+                'descripcion' => 'Imagen principal.'
+            ];
+        }
+        foreach ($diary as $entry) {
+            if ($entry['imagen_url']) {
+                $media[] = [
+                    'url' => 'uploads/diary/' . $entry['imagen_url'],
+                    'fecha' => $entry['fecha_entrada'],
+                    'tipo' => $entry['tipo_evento'],
+                    'descripcion' => $entry['entrada']
+                ];
+            }
+        }
+        usort($media, function($a, $b) { return strcmp($b['fecha'], $a['fecha']); });
+
         $data = [
             'colony'  => $colony,
             'history' => $history,
             'diary'   => $diary,
+            'media'   => $media,
             'stocks'  => Stock::where('usuario_id', '=', $_SESSION['user_id']),
             'trend'   => $trend,
             'userSlug'=> $userSlug,
@@ -150,6 +176,9 @@ class ColonyController extends Controller {
         $imagePath = null;
         if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
             $uploadDir = 'uploads/diary/';
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0777, true);
+            }
             $extension = pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION);
             $filename = uniqid() . '.' . $extension;
             if (move_uploaded_file($_FILES['imagen']['tmp_name'], $uploadDir . $filename)) {
@@ -254,6 +283,9 @@ class ColonyController extends Controller {
         $imagePath = $colony['imagen'];
         if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
             $uploadDir = 'uploads/colonies/';
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0777, true);
+            }
             $extension = pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION);
             $filename = uniqid() . '.' . $extension;
             if (move_uploaded_file($_FILES['imagen']['tmp_name'], $uploadDir . $filename)) {
