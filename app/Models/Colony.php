@@ -5,21 +5,25 @@ class Colony extends Model {
     protected static $table = 'colonias';
 
     public static function getUserColonies($userId) {
+        $lang = defined('APP_LANG') ? APP_LANG : 'es';
         return self::query("
-            SELECT c.*, e.nombre as especie_nombre 
+            SELECT c.*, COALESCE(t.nombre, e.nombre) as especie_nombre 
             FROM colonias c 
             JOIN especies e ON c.especie_id = e.id 
+            LEFT JOIN especies_traducciones t ON e.id = t.especie_id AND t.idioma = ?
             WHERE c.usuario_id = ?
-        ", [$userId]);
+        ", [$lang, $userId]);
     }
 
     public static function findWithSpecies($id, $userId) {
+        $lang = defined('APP_LANG') ? APP_LANG : 'es';
         $result = self::query("
-            SELECT c.*, e.nombre as especie_nombre 
+            SELECT c.*, COALESCE(t.nombre, e.nombre) as especie_nombre 
             FROM colonias c 
             JOIN especies e ON c.especie_id = e.id 
+            LEFT JOIN especies_traducciones t ON e.id = t.especie_id AND t.idioma = ?
             WHERE c.id = ? AND c.usuario_id = ?
-        ", [$id, $userId]);
+        ", [$lang, $id, $userId]);
         return $result ? $result[0] : null;
     }
 
@@ -78,13 +82,15 @@ class Colony extends Model {
     }
 
     public static function findBySlug($userSlug, $colonySlug) {
+        $lang = defined('APP_LANG') ? APP_LANG : 'es';
         return self::query("
-            SELECT c.*, e.nombre as especie_nombre, u.nombre as usuario_nombre, u.slug as usuario_slug
+            SELECT c.*, COALESCE(t.nombre, e.nombre) as especie_nombre, u.nombre as usuario_nombre, u.slug as usuario_slug
             FROM colonias c
             JOIN usuarios u ON c.usuario_id = u.id
             JOIN especies e ON c.especie_id = e.id
+            LEFT JOIN especies_traducciones t ON e.id = t.especie_id AND t.idioma = ?
             WHERE u.slug = ? AND c.public_slug = ? AND c.is_public = 1
-        ", [$userSlug, $colonySlug]);
+        ", [$lang, $userSlug, $colonySlug]);
     }
 
     public static function togglePublic($id, $isPublic, $slug = null) {

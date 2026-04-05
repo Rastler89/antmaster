@@ -13,7 +13,77 @@ define('DB_PASS', $env_db_pass);
 // Configuración de la Aplicación
 define('APP_NAME', 'AntMaster Pro');
 define('APP_VERSION', '1.1.0');
-define('BASE_URL', getenv('APP_ENV') === 'docker' ? '' : '/laravel'); // Ajustar según la carpeta en Laragon / Docker
+
+// Detección de BASE_URL más robusta
+$baseUrl = str_replace('/index.php', '', $_SERVER['SCRIPT_NAME'] ?? '');
+$baseUrl = str_replace('/public', '', $baseUrl);
+define('BASE_URL', $baseUrl);
+
+// --- Soporte Multi-idioma (i18n) ---
+$available_langs = ['es', 'en', 'fr'];
+$default_lang = 'es';
+
+// 1. Determinar el idioma actual (Session > Cookie > Browser > Default)
+if (isset($_GET['lang']) && in_array($_GET['lang'], $available_langs)) {
+    $_SESSION['lang'] = $_GET['lang'];
+    setcookie('lang', $_GET['lang'], time() + (86400 * 30), "/"); // 30 días
+}
+
+if (!isset($_SESSION['lang'])) {
+    if (isset($_COOKIE['lang']) && in_array($_COOKIE['lang'], $available_langs)) {
+        $_SESSION['lang'] = $_COOKIE['lang'];
+    } else {
+        // Detección por navegador
+        $browser_lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? 'es', 0, 2);
+        $_SESSION['lang'] = in_array($browser_lang, $available_langs) ? $browser_lang : $default_lang;
+    }
+}
+
+define('APP_LANG', $_SESSION['lang']);
+
+// 2. Cargar diccionario
+$lang_file = __DIR__ . "/app/Lang/" . APP_LANG . "/messages.php";
+$translations = file_exists($lang_file) ? require $lang_file : [];
+
+/**
+ * Función de traducción global
+ * @param string $key Clave de la traducción
+ * @param array $params Parámetros para sustituir (ej: ['name' => 'John'])
+ * @return string Texto traducido
+ */
+function __($key, $params = []) {
+    global $translations;
+    $text = $translations[$key] ?? $key;
+    
+    foreach ($params as $k => $v) {
+        $text = str_replace(":$k", $v, $text);
+    }
+    return $text;
+}
+// -----------------------------------
+
+// Configuración de SEO
+define('APP_DESCRIPTION', __('seo_description'));
+define('APP_KEYWORDS', __('seo_keywords'));
+define('APP_IMAGE', 'assets/img/og-preview.png'); // Sin barra inicial
+
+// Función para manejar assets (CSS, JS, Imágenes)
+function asset($path) {
+    $path = ltrim($path, '/');
+    $fullPath = __DIR__ . '/public/' . $path;
+    
+    // Si el archivo existe físicamente en /public
+    if (file_exists($fullPath)) {
+        // Si ya estamos sirviendo desde la carpeta /public (común en despliegues)
+        if (strpos($_SERVER['SCRIPT_NAME'] ?? '', '/public/') === false) {
+             // Si el script actual NO está en /public pero el servidor redirige allí
+             // (como en el .htaccess de la raíz), devolvemos la ruta simple
+             return BASE_URL . '/' . $path;
+        }
+        return BASE_URL . '/public/' . $path;
+    }
+    return BASE_URL . '/' . $path;
+}
 
 
 // Conexión PDO
@@ -79,18 +149,18 @@ function require_admin()
 
 function get_time_elapsed($date_string)
 {
-    if (!$date_string) return 'N/A';
+    if (!$date_string) return __('time_na');
     
     $start = new DateTime($date_string);
     $now = new DateTime();
     $interval = $start->diff($now);
 
     $parts = [];
-    if ($interval->y > 0) $parts[] = $interval->y . 'a';
-    if ($interval->m > 0) $parts[] = $interval->m . 'm';
-    if ($interval->d > 0) $parts[] = $interval->d . 'd';
+    if ($interval->y > 0) $parts[] = $interval->y . __('time_years_short');
+    if ($interval->m > 0) $parts[] = $interval->m . __('time_months_short');
+    if ($interval->d > 0) $parts[] = $interval->d . __('time_days_short');
 
-    if (empty($parts)) return 'Hoy';
+    if (empty($parts)) return __('time_today');
 
     return implode(' ', $parts);
 }

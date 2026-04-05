@@ -11,7 +11,31 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= htmlspecialchars($title ?? (defined('APP_NAME') ? APP_NAME : 'AntMaster Pro')) ?></title>
+    <!-- Meta Tags -->
+    <title><?= htmlspecialchars(($title ?? '') . ' - ' . APP_NAME) ?></title>
+    <meta name="description" content="<?= htmlspecialchars($description ?? APP_DESCRIPTION) ?>">
+    <meta name="keywords" content="<?= htmlspecialchars($keywords ?? APP_KEYWORDS) ?>">
+    <meta name="author" content="AntMaster Team">
+    <link rel="canonical" href="<?= (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" ?>">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="<?= (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" ?>">
+    <meta property="og:title" content="<?= htmlspecialchars(($title ?? '') . ' - ' . APP_NAME) ?>">
+    <meta property="og:description" content="<?= htmlspecialchars($description ?? APP_DESCRIPTION) ?>">
+    <meta property="og:image" content="<?= asset(APP_IMAGE) ?>">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="<?= (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" ?>">
+    <meta property="twitter:title" content="<?= htmlspecialchars(($title ?? '') . ' - ' . APP_NAME) ?>">
+    <meta property="twitter:description" content="<?= htmlspecialchars($description ?? APP_DESCRIPTION) ?>">
+    <meta property="twitter:image" content="<?= asset(APP_IMAGE) ?>">
+
+    <!-- Tipografía: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style><?= $themeVariables ?></style>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -46,7 +70,7 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
         body {
             background-color: var(--theme-background);
             color: var(--theme-foreground);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-family: 'Outfit', sans-serif;
             margin: 0;
             min-height: 100vh;
             display: flex;

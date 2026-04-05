@@ -4,7 +4,10 @@ require_once '../app/Models/Stock.php';
 
 class DashboardController extends Controller {
     public function index() {
-        require_login();
+        if (!is_logged_in()) {
+            $this->view('home', ['title' => 'Bienvenido a AntMaster Pro - Gestión de Hormigas']);
+            return;
+        }
         
         $userId = $_SESSION['user_id'];
         $range = $_GET['range'] ?? 30; // '30', '90', '180', 'all'

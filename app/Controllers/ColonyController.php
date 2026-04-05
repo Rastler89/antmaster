@@ -130,7 +130,8 @@ class ColonyController extends Controller {
             'trend'   => $trend,
             'userSlug'=> $userSlug,
             'averageHistory' => $averageHistory,
-            'title'   => $colony['nombre'] . ' | AntMaster Pro'
+            'title'   => $colony['nombre'] . ' | AntMaster Pro',
+            'description' => 'Sigue el progreso de ' . $colony['nombre'] . ' (' . $colony['especie_nombre'] . ') en AntMaster Pro. Población actual: ' . $colony['poblacion_actual'] . ' hormigas.'
         ];
         
         $this->view('colony/show', $data);

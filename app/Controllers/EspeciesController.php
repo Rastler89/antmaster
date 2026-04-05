@@ -27,7 +27,8 @@ class EspeciesController extends Controller {
         
         $data = [
             'especie' => $species,
-            'title'   => $species['nombre_cientifico'] . ' | AntMaster Pro'
+            'title'   => $species['nombre_cientifico'] . ' (' . $species['nombre'] . ') | AntMaster Pro',
+            'description' => 'Guía de cría completa para ' . $species['nombre_cientifico'] . '. Aprende sobre su alimentación, temperatura, humedad y cuidados específicos.'
         ];
         
         $this->view('especies/show', $data);

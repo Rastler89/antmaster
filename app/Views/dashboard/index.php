@@ -2,14 +2,14 @@
 <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
     <div>
         <h1 class="text-3xl font-black text-white">
-            Hola, <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500"><?= htmlspecialchars($userName) ?></span> 👋
+            <?= __('dashboard_welcome', ['name' => '<span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500">' . htmlspecialchars($userName) . '</span>']) ?> 👋
         </h1>
-        <p class="text-zinc-500 text-sm mt-1">Aquí tienes el estado actual de tu imperio mirmecológico.</p>
+        <p class="text-zinc-500 text-sm mt-1"><?= __('dashboard_tagline') ?></p>
     </div>
     <div class="flex items-center gap-3">
         <a href="<?= BASE_URL ?>/colonias/nueva" class="magic-btn shadow-lg shadow-blue-500/20 active:scale-95 transition-all">
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-            Nueva Colonia
+            <?= __('nav_new_colony') ?>
         </a>
     </div>
 </div>
@@ -18,7 +18,7 @@
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
     <div class="glass-card p-6 border-blue-500/10 overflow-hidden relative group hover:bg-blue-500/5 transition-all">
         <div class="absolute -right-4 -top-4 w-24 h-24 bg-blue-500/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
-        <p class="text-[10px] uppercase font-black text-zinc-500 tracking-widest mb-3">Población Total</p>
+        <p class="text-[10px] uppercase font-black text-zinc-500 tracking-widest mb-3"><?= __('kpi_total_ants') ?></p>
         <div class="flex items-end justify-between">
             <h3 class="text-4xl font-black text-white"><?= number_format($totalAnts) ?></h3>
             <div class="p-3 bg-blue-500/10 rounded-2xl text-blue-400 border border-blue-500/10">
@@ -29,7 +29,7 @@
 
     <div class="glass-card p-6 border-purple-500/10 overflow-hidden relative group hover:bg-purple-500/5 transition-all">
         <div class="absolute -right-4 -top-4 w-24 h-24 bg-purple-500/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
-        <p class="text-[10px] uppercase font-black text-zinc-500 tracking-widest mb-3">Colonias Activas</p>
+        <p class="text-[10px] uppercase font-black text-zinc-500 tracking-widest mb-3"><?= __('kpi_active_colonies') ?></p>
         <div class="flex items-end justify-between">
             <h3 class="text-4xl font-black text-white"><?= count($colonies) ?></h3>
             <div class="p-3 bg-purple-500/10 rounded-2xl text-purple-400 border border-purple-500/10">
@@ -40,7 +40,7 @@
 
     <div class="glass-card p-6 border-pink-500/10 overflow-hidden relative group hover:bg-pink-500/5 transition-all">
         <div class="absolute -right-4 -top-4 w-24 h-24 bg-pink-500/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
-        <p class="text-[10px] uppercase font-black text-zinc-500 tracking-widest mb-3">Especies Distintas</p>
+        <p class="text-[10px] uppercase font-black text-zinc-500 tracking-widest mb-3"><?= __('kpi_species') ?></p>
         <div class="flex items-end justify-between">
             <h3 class="text-4xl font-black text-white"><?= $totalSpecies ?></h3>
             <div class="p-3 bg-pink-500/10 rounded-2xl text-pink-400 border border-pink-500/10">
@@ -48,6 +48,7 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -58,12 +59,12 @@
                 <div>
                     <h3 class="text-xl font-bold text-white flex items-center gap-2">
                         <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path></svg>
-                        Crecimiento del Imperio
+                        <?= __('chart_empire_growth') ?>
                     </h3>
-                    <p class="text-xs text-zinc-500 mt-1">Evolución agregada de todas tus hormigas</p>
+                    <p class="text-xs text-zinc-500 mt-1"><?= __('chart_empire_tagline') ?></p>
                 </div>
                 <div class="flex p-1 bg-black/40 rounded-xl border border-white/5">
-                    <?php $ranges = [30 => '30D', 90 => '90D', 180 => '180D', 'all' => 'Todo']; ?>
+                    <?php $ranges = [30 => __('range_30d'), 90 => __('range_90d'), 180 => __('range_180d'), 'all' => __('range_all')]; ?>
                     <?php foreach ($ranges as $val => $label): ?>
                         <a href="?range=<?= $val ?>" 
                            class="px-3 py-1.5 text-[10px] font-black rounded-lg transition-all <?= ($range == $val) ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20' : 'text-zinc-500 hover:text-white' ?>">
@@ -81,16 +82,16 @@
         <!-- Tabla de Colonias Estilizada -->
         <div class="glass-card p-0 border-white/5 overflow-hidden">
             <div class="p-6 border-b border-white/5 flex items-center justify-between">
-                <h3 class="text-lg font-bold text-white">Inventario</h3>
-                <span class="text-[10px] font-black text-zinc-500 uppercase tracking-widest bg-white/5 px-3 py-1 rounded-full border border-white/5"><?= count($colonies) ?> <span class="hidden sm:inline">Colonias</span></span>
+                <h3 class="text-lg font-bold text-white"><?= __('inventory_title') ?></h3>
+                <span class="text-[10px] font-black text-zinc-500 uppercase tracking-widest bg-white/5 px-3 py-1 rounded-full border border-white/5"><?= count($colonies) ?> <span class="hidden sm:inline"><?= __('inventory_colonies') ?></span></span>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-left">
                     <thead class="bg-white/[0.02] text-[10px] uppercase font-black tracking-widest text-zinc-500">
                         <tr>
-                            <th class="px-6 md:px-8 py-4">Colonia</th>
-                            <th class="hidden sm:table-cell px-8 py-4">Especie</th>
-                            <th class="px-6 md:px-8 py-4 text-center">Población</th>
+                            <th class="px-6 md:px-8 py-4"><?= __('table_colony') ?></th>
+                            <th class="hidden sm:table-cell px-8 py-4"><?= __('table_species') ?></th>
+                            <th class="px-6 md:px-8 py-4 text-center"><?= __('table_population') ?></th>
                             <th class="px-6 md:px-8 py-4 text-right"></th>
                         </tr>
                     </thead>
@@ -138,7 +139,7 @@
         <div class="glass-card p-6 md:p-8 border-white/5">
             <h3 class="text-lg font-bold text-white mb-6 flex items-center gap-2">
                 <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path></svg>
-                Diversidad
+                <?= __('diversity_title') ?>
             </h3>
             <div class="h-[180px] md:h-[200px] mb-6">
                 <canvas id="speciesChart"></canvas>
@@ -161,13 +162,13 @@
                         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                         <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
                     </span>
-                    Stock Crítico
+                    <?= __('stock_critical_title') ?>
                 </h3>
             </div>
             
             <?php if (empty($lowStock)): ?>
                 <div class="text-center py-6 bg-white/5 rounded-2xl border border-white/5">
-                    <p class="text-[10px] uppercase font-black text-emerald-400 tracking-widest">Suministros OK</p>
+                    <p class="text-[10px] uppercase font-black text-emerald-400 tracking-widest"><?= __('stock_ok') ?></p>
                 </div>
             <?php else: ?>
                 <div class="space-y-4">
@@ -175,7 +176,7 @@
                         <div class="relative group p-4 rounded-2xl bg-red-500/5 hover:bg-red-500/10 border border-red-500/10 transition-all flex items-center justify-between">
                             <div>
                                 <h4 class="text-sm font-bold text-white"><?= htmlspecialchars($s['nombre']) ?></h4>
-                                <p class="text-[10px] font-bold text-red-400/80 uppercase tracking-tighter">Bajo Mínimos</p>
+                                <p class="text-[10px] font-bold text-red-400/80 uppercase tracking-tighter"><?= __('stock_low') ?></p>
                             </div>
                             <div class="flex flex-col items-end">
                                 <span class="text-lg font-black text-white"><?= $s['cantidad'] ?></span>
@@ -185,7 +186,7 @@
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>
-            <a href="<?= BASE_URL ?>/stock" class="block w-full text-center py-4 mt-6 rounded-2xl bg-white/5 border border-white/5 text-[10px] font-black uppercase text-zinc-400 hover:text-white transition-all">Ver Almacén Completo</a>
+            <a href="<?= BASE_URL ?>/stock" class="block w-full text-center py-4 mt-6 rounded-2xl bg-white/5 border border-white/5 text-[10px] font-black uppercase text-zinc-400 hover:text-white transition-all"><?= __('stock_view_all') ?></a>
         </div>
     </div>
 </div>
@@ -218,9 +219,9 @@ document.addEventListener('DOMContentLoaded', function() {
     new Chart(ctxEmpire, {
         type: 'line',
         data: {
-            labels: labels.map(d => new Date(d).toLocaleDateString('es-ES', {day:'2-digit', month:'short'})),
+            labels: labels.map(d => new Date(d).toLocaleDateString('<?= APP_LANG ?>-<?= strtoupper(APP_LANG) ?>', {day:'2-digit', month:'short'})),
             datasets: [{
-                label: 'Hormigas Totales',
+                label: '<?= __('chart_ants_label') ?>',
                 data: data,
                 borderColor: '#3b82f6',
                 borderWidth: 3,

@@ -1,11 +1,11 @@
     <div class="flex items-center justify-between mb-8">
         <div>
-            <h1 class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">Mis Colonias</h1>
-            <p class="text-muted text-sm mt-1">Gestiona y supervisa el progreso de tus colonias.</p>
+            <h1 class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500"><?= __('colonies_title') ?></h1>
+            <p class="text-muted text-sm mt-1"><?= __('colonies_tagline') ?></p>
         </div>
         <a href="<?= BASE_URL ?>/colonias/nueva" class="magic-btn shadow-lg shadow-blue-500/20">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-            Nueva Colonia
+            <?= __('nav_new_colony') ?>
         </a>
     </div>
 
@@ -14,10 +14,10 @@
             <div class="text-blue-400/30 mb-4 flex justify-center">
                 <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
             </div>
-            <h3 class="text-xl font-medium text-main mb-2">No tienes colonias registradas</h3>
-            <p class="text-muted mb-6">Empieza registrando tu primera colonia para llevar el control.</p>
+            <h3 class="text-xl font-medium text-main mb-2"><?= __('colony_empty_title') ?></h3>
+            <p class="text-muted mb-6"><?= __('colony_empty_desc') ?></p>
             <a href="<?= BASE_URL ?>/colonias/nueva" class="text-blue-400 hover:text-blue-300 font-medium transition flex items-center justify-center gap-2">
-                Crear ahora <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                <?= __('colony_create_now') ?> <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
             </a>
         </div>
     <?php else: ?>
@@ -45,11 +45,11 @@
 
                     <div class="space-y-3 mb-6">
                         <div class="flex items-center justify-between text-sm">
-                            <span class="text-muted">Población:</span>
-                            <span class="text-main font-medium"><?= number_format($c['poblacion_actual']) ?> obreras</span>
+                            <span class="text-muted"><?= __('colony_card_population') ?></span>
+                            <span class="text-main font-medium"><?= number_format($c['poblacion_actual']) ?> <?= __('colony_card_workers') ?></span>
                         </div>
                         <div class="flex items-center justify-between text-sm">
-                            <span class="text-muted">Antigüedad:</span>
+                            <span class="text-muted"><?= __('colony_card_age') ?></span>
                             <span class="text-main font-medium">
                                 <?= get_time_elapsed($c['fecha_adquisicion']) ?>
                             </span>
@@ -58,7 +58,7 @@
 
                     <div class="flex justify-end pt-4 border-t border-white/5">
                         <span class="text-blue-400 text-xs font-medium flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-                            Ver detalles <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            <?= __('colony_card_details') ?> <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                         </span>
                     </div>
                 </div>

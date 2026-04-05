@@ -1,4 +1,4 @@
-<html lang="es" class="dark">
+<html lang="<?= APP_LANG ?>" class="dark">
 <?php
 require_once '../core/ThemeManager.php';
 $defaults = ['theme' => 'messor', 'high_contrast' => false, 'reduced_motion' => false, 'colorblind_mode' => 'none'];
@@ -11,7 +11,31 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= htmlspecialchars($title ?? (defined('APP_NAME') ? APP_NAME : 'AntMaster Pro')) ?></title>
+    <!-- Meta Tags -->
+    <title><?= htmlspecialchars(($title ?? '') . ' - ' . APP_NAME) ?></title>
+    <meta name="description" content="<?= htmlspecialchars($description ?? APP_DESCRIPTION) ?>">
+    <meta name="keywords" content="<?= htmlspecialchars($keywords ?? APP_KEYWORDS) ?>">
+    <meta name="author" content="AntMaster Team">
+    <link rel="canonical" href="<?= (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" ?>">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="<?= (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" ?>">
+    <meta property="og:title" content="<?= htmlspecialchars(($title ?? '') . ' - ' . APP_NAME) ?>">
+    <meta property="og:description" content="<?= htmlspecialchars($description ?? APP_DESCRIPTION) ?>">
+    <meta property="og:image" content="<?= asset(APP_IMAGE) ?>">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="<?= (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" ?>">
+    <meta property="twitter:title" content="<?= htmlspecialchars(($title ?? '') . ' - ' . APP_NAME) ?>">
+    <meta property="twitter:description" content="<?= htmlspecialchars($description ?? APP_DESCRIPTION) ?>">
+    <meta property="twitter:image" content="<?= asset(APP_IMAGE) ?>">
+
+    <!-- Tipografía: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style><?= $themeVariables ?></style>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -52,7 +76,7 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
         body {
             background-color: var(--theme-background);
             color: var(--theme-foreground);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-family: 'Outfit', sans-serif;
             margin: 0;
             min-height: 100vh;
             overflow-x: hidden;
@@ -183,49 +207,70 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
     <nav class="sticky top-0 z-50 border-b border-border bg-background/70 backdrop-blur-xl">
         <div class="max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
-                <div class="flex items-center gap-2">
-                    <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500 cursor-default">
-                        <?= defined('APP_NAME') ? APP_NAME : 'AntMaster Pro' ?>
-                    </span>
+                <div class="flex items-center gap-3">
+                    <a href="<?= BASE_URL ?>/" class="flex items-center gap-2 group">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 p-0.5 shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform">
+                            <div class="w-full h-full bg-background rounded-[10px] flex items-center justify-center overflow-hidden">
+                                <img src="<?= asset('assets/img/logo.png') ?>" alt="AntMaster" class="w-8 h-8 object-contain">
+                            </div>
+                        </div>
+                        <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500 tracking-tight">
+                            <?= APP_NAME ?>
+                        </span>
+                    </a>
                 </div>
                 <!-- Desktop Menu -->
                 <div class="hidden md:flex items-center gap-6">
-                    <a href="<?= BASE_URL ?>/" class="text-sm text-muted hover:text-main transition">Dashboard</a>
-                    <a href="<?= BASE_URL ?>/colonias" class="text-sm text-muted hover:text-main transition">Colonias</a>
-                    <a href="<?= BASE_URL ?>/especies" class="text-sm text-muted hover:text-main transition">Fichas de Cría</a>
-                    <a href="<?= BASE_URL ?>/stock" class="text-sm text-muted hover:text-main transition">Stock</a>
-                    <?php if (is_admin()): ?>
-                        <a href="<?= BASE_URL ?>/admin/dashboard" class="px-3 py-2 text-muted hover:text-red-400 transition-colors flex items-center gap-1.5" title="Panel de Administración">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                    <!-- Language Switcher -->
+                    <div class="flex items-center gap-1 bg-white/5 p-1 rounded-lg border border-white/10 mr-2">
+                        <a href="?lang=es" class="px-2 py-0.5 text-[10px] font-black rounded <?= APP_LANG == 'es' ? 'bg-blue-500 text-white' : 'text-zinc-500 hover:text-white' ?>">ES</a>
+                        <a href="?lang=en" class="px-2 py-0.5 text-[10px] font-black rounded <?= APP_LANG == 'en' ? 'bg-blue-500 text-white' : 'text-zinc-500 hover:text-white' ?>">EN</a>
+                        <a href="?lang=fr" class="px-2 py-0.5 text-[10px] font-black rounded <?= APP_LANG == 'fr' ? 'bg-blue-500 text-white' : 'text-zinc-500 hover:text-white' ?>">FR</a>
+                    </div>
+
+                    <?php if (is_logged_in()): ?>
+                        <a href="<?= BASE_URL ?>/" class="text-sm text-muted hover:text-main transition"><?= __('nav_dashboard') ?></a>
+                        <a href="<?= BASE_URL ?>/colonias" class="text-sm text-muted hover:text-main transition"><?= __('nav_colonies') ?></a>
+                        <a href="<?= BASE_URL ?>/especies" class="text-sm text-muted hover:text-main transition"><?= __('nav_species') ?></a>
+                        <a href="<?= BASE_URL ?>/stock" class="text-sm text-muted hover:text-main transition"><?= __('nav_stock') ?></a>
+                        <?php if (is_admin()): ?>
+                            <a href="<?= BASE_URL ?>/admin/dashboard" class="px-3 py-2 text-muted hover:text-red-400 transition-colors flex items-center gap-1.5" title="Panel de Administración">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                            </a>
+                        <?php endif; ?>
+                        
+                        <a href="<?= BASE_URL ?>/logout" class="px-3 py-2 text-muted hover:text-red-400 transition-colors" title="<?= __('nav_logout') ?>">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
                         </a>
-                        <a href="<?= BASE_URL ?>/admin/revisiones" class="px-3 py-2 text-muted hover:text-main transition-colors flex items-center gap-1.5" title="Revisiones Pendientes">
-                            <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        
+                        <a href="<?= BASE_URL ?>/settings" class="p-2 bg-white/5 border border-white/10 text-muted rounded-lg hover:text-main hover:bg-white/10 transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                         </a>
+                    <?php else: ?>
+                        <a href="<?= BASE_URL ?>/login" class="text-sm font-medium text-muted hover:text-main transition"><?= __('nav_login') ?></a>
+                        <a href="<?= BASE_URL ?>/register" class="magic-btn text-sm"><?= __('nav_register') ?></a>
                     <?php endif; ?>
-                    
-                    <a href="<?= BASE_URL ?>/logout" class="px-3 py-2 text-muted hover:text-main transition-colors" title="Cerrar Sesión">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                    </a>
-                    
-                    <a href="<?= BASE_URL ?>/settings" class="p-2 bg-white/5 border border-white/10 text-muted rounded-lg hover:text-main hover:bg-white/10 transition" title="Ajustes de Accesibilidad">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                    </a>
                 </div>
 
                 <!-- Mobile Header Icons -->
                 <div class="flex md:hidden items-center gap-4">
-                    <a href="<?= BASE_URL ?>/logout" class="p-2 text-muted hover:text-red-400">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                    </a>
-                    <a href="<?= BASE_URL ?>/settings" class="p-2 text-muted hover:text-main">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                    </a>
+                    <?php if (is_logged_in()): ?>
+                        <a href="<?= BASE_URL ?>/logout" class="p-2 text-muted hover:text-red-400">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                        </a>
+                        <a href="<?= BASE_URL ?>/settings" class="p-2 text-muted hover:text-main">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        </a>
+                    <?php else: ?>
+                        <a href="<?= BASE_URL ?>/login" class="text-xs font-bold text-muted uppercase tracking-widest"><?= __('nav_login') ?></a>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
     </nav>
 
     <!-- Bottom Navigation Bar (Mobile Only) -->
+    <?php if (is_logged_in()): ?>
     <div class="fixed bottom-0 left-0 right-0 z-[60] md:hidden">
         <!-- Blur Background -->
         <div class="absolute inset-x-0 bottom-0 h-24 bg-background/60 backdrop-blur-2xl border-t border-white/5 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]"></div>
@@ -235,31 +280,32 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
                 <div class="<?= current_url() == '/' ? 'text-blue-400 bg-blue-500/10' : 'text-zinc-500' ?> p-2 rounded-xl transition-all active:scale-90">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                 </div>
-                <span class="text-[9px] font-black uppercase tracking-widest <?= current_url() == '/' ? 'text-blue-400' : 'text-zinc-600' ?>">Inicio</span>
+                <span class="text-[9px] font-black uppercase tracking-widest <?= current_url() == '/' ? 'text-blue-400' : 'text-zinc-600' ?>"><?= __('nav_home') ?></span>
             </a>
 
             <a href="<?= BASE_URL ?>/colonias" class="group flex flex-col items-center gap-1">
                 <div class="<?= str_contains(current_url(), '/colonias') ? 'text-emerald-400 bg-emerald-500/10' : 'text-zinc-500' ?> p-2 rounded-xl transition-all active:scale-90">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                 </div>
-                <span class="text-[9px] font-black uppercase tracking-widest <?= str_contains(current_url(), '/colonias') ? 'text-emerald-400' : 'text-zinc-600' ?>">Colonias</span>
+                <span class="text-[9px] font-black uppercase tracking-widest <?= str_contains(current_url(), '/colonias') ? 'text-emerald-400' : 'text-zinc-600' ?>"><?= __('nav_colonies') ?></span>
             </a>
 
             <a href="<?= BASE_URL ?>/especies" class="group flex flex-col items-center gap-1">
                 <div class="<?= str_contains(current_url(), '/especies') ? 'text-purple-400 bg-purple-500/10' : 'text-zinc-500' ?> p-2 rounded-xl transition-all active:scale-90">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.168.477 4 1.253m0-13C13.168 5.477 14.754 5 16.5 5S19.832 5.477 21 6.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4 1.253"></path></svg>
                 </div>
-                <span class="text-[9px] font-black uppercase tracking-widest <?= str_contains(current_url(), '/especies') ? 'text-purple-400' : 'text-zinc-600' ?>">Guías</span>
+                <span class="text-[9px] font-black uppercase tracking-widest <?= str_contains(current_url(), '/especies') ? 'text-purple-400' : 'text-zinc-600' ?>"><?= __('nav_species') ?></span>
             </a>
 
             <a href="<?= BASE_URL ?>/stock" class="group flex flex-col items-center gap-1">
                 <div class="<?= str_contains(current_url(), '/stock') ? 'text-orange-400 bg-orange-500/10' : 'text-zinc-500' ?> p-2 rounded-xl transition-all active:scale-90">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
                 </div>
-                <span class="text-[9px] font-black uppercase tracking-widest <?= str_contains(current_url(), '/stock') ? 'text-orange-400' : 'text-zinc-600' ?>">Stock</span>
+                <span class="text-[9px] font-black uppercase tracking-widest <?= str_contains(current_url(), '/stock') ? 'text-orange-400' : 'text-zinc-600' ?>"><?= __('nav_stock') ?></span>
             </a>
         </div>
     </div>
+    <?php endif; ?>
 
     <!-- Main Content -->
     <main class="max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 pb-32 md:pb-12 animate-fade-in relative z-10 min-h-[calc(100vh-4rem)]">
