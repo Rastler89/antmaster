@@ -19,7 +19,7 @@ if ($colony['poblacion_detallada']) {
     <!-- Header Hero -->
     <div class="relative h-64 md:h-[450px] rounded-[3.5rem] overflow-hidden mb-10 group shadow-2xl ring-1 ring-white/10">
         <?php if ($colony['imagen']): ?>
-            <img src="<?= BASE_URL ?>/uploads/colonies/<?= $colony['imagen'] ?>" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+            <img src="<?= BASE_URL ?>/public/uploads/colonies/<?= $colony['imagen'] ?>" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
         <?php else: ?>
             <div class="w-full h-full bg-gradient-to-br from-zinc-900 via-blue-950 to-zinc-900 flex flex-col items-center justify-center relative overflow-hidden">
                 <div class="absolute inset-0 opacity-20 pointer-events-none">
@@ -211,8 +211,8 @@ if ($colony['poblacion_detallada']) {
                     <?php else: ?>
                         <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
                             <?php foreach ($media as $item): ?>
-                                <div class="relative aspect-square rounded-2xl overflow-hidden border border-white/5 group bg-zinc-900 cursor-zoom-in" onclick="openLightbox('<?= BASE_URL ?>/<?= $item['url'] ?>')">
-                                    <img src="<?= BASE_URL ?>/<?= $item['url'] ?>" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                                <div class="relative aspect-square rounded-2xl overflow-hidden border border-white/5 group bg-zinc-900 cursor-zoom-in" onclick="openLightbox('<?= BASE_URL ?>/<?= str_contains($item['url'], 'public/') ? $item['url'] : 'public/' . $item['url'] ?>')">
+                                    <img src="<?= BASE_URL ?>/<?= str_contains($item['url'], 'public/') ? $item['url'] : 'public/' . $item['url'] ?>" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                                     <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
                                         <span class="text-[8px] font-black uppercase text-white tracking-widest"><?= date('d/m/Y', strtotime($item['fecha'])) ?></span>
                                         <span class="text-[10px] text-blue-300 font-bold truncate"><?= htmlspecialchars($item['tipo']) ?></span>

@@ -16,9 +16,11 @@ define('APP_NAME', 'AntMaster Pro');
 define('APP_VERSION', '1.1.2');
 
 // Detección de BASE_URL más robusta
-$baseUrl = str_replace('/index.php', '', $_SERVER['SCRIPT_NAME'] ?? '');
-$baseUrl = str_replace('/public', '', $baseUrl);
-define('BASE_URL', $baseUrl);
+$protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? "https" : "http";
+$host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+$scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
+$baseUrl = str_replace(['/public/index.php', '/index.php', '/public/check_uploads.php', '/check_uploads.php'], '', $scriptName);
+define('BASE_URL', $protocol . "://" . $host . $baseUrl);
 
 // Rutas de Archivos y Subidas
 define('UPLOAD_PATH', ROOT_PATH . '/public/uploads');
