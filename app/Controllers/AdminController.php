@@ -41,7 +41,44 @@ class AdminController extends Controller {
         // Listado de usuarios para gestionar
         $users = $pdo->query("SELECT id, nombre, email, rol, fecha_registro, last_login, is_banned FROM usuarios ORDER BY id DESC")->fetchAll();
 
-        $this->view('admin/dashboard', ['stats' => $stats, 'users' => $users]);
+        // --- Datos para Gráficos ---
+        
+        // 1. Crecimiento de Usuarios (Últimos 12 meses)
+        $user_growth_raw = $pdo->query("
+            SELECT DATE_FORMAT(fecha_registro, '%Y-%m') as mes, COUNT(*) as total 
+            FROM usuarios 
+            GROUP BY mes 
+            ORDER BY mes ASC 
+            LIMIT 12
+        ")->fetchAll();
+        
+        $chart_user_growth = [
+            'labels' => array_column($user_growth_raw, 'mes'),
+            'data'   => array_column($user_growth_raw, 'total')
+        ];
+
+        // 2. Distribución de Especies (Top 10)
+        // Usamos el nombre científico para evitar ambigüedades
+        $species_dist_raw = $pdo->query("
+            SELECT e.nombre_cientifico as etiqueta, COUNT(c.id) as total 
+            FROM colonias c 
+            JOIN especies e ON c.especie_id = e.id 
+            GROUP BY e.id 
+            ORDER BY total DESC 
+            LIMIT 10
+        ")->fetchAll();
+
+        $chart_species_dist = [
+            'labels' => array_column($species_dist_raw, 'etiqueta'),
+            'data'   => array_column($species_dist_raw, 'total')
+        ];
+
+        $this->view('admin/dashboard', [
+            'stats' => $stats, 
+            'users' => $users,
+            'chart_user_growth' => $chart_user_growth,
+            'chart_species_dist' => $chart_species_dist
+        ]);
     }
 
     public function toggleBan($id) {

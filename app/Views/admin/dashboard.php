@@ -6,6 +6,12 @@
         </h1>
         <p class="text-zinc-500 text-sm mt-1">Visión general del estado del sistema y gestión de usuarios.</p>
     </div>
+    <div class="flex items-center gap-3">
+        <a href="<?= BASE_URL ?>/admin/especies" class="px-5 py-2.5 bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 rounded-2xl hover:bg-indigo-500 hover:text-white transition-all text-xs font-black uppercase flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path></svg>
+            Gestionar Traducciones
+        </a>
+    </div>
 </div>
 
 <!-- KPI Cards -->
@@ -53,9 +59,122 @@
             </div>
         </div>
     </div>
+    </div>
 </div>
 
+<!-- Scripts de Chart.js (Solo en esta vista) -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Gráficos del Sistema -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-8">
+    
+    <!-- Crecimiento de Usuarios (60% del ancho en desktop) -->
+    <div class="lg:col-span-8 glass-card p-6 border-blue-500/10 flex flex-col">
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h3 class="text-white font-bold text-lg">Crecimiento de Usuarios</h3>
+                <p class="text-[10px] text-zinc-500 uppercase tracking-widest font-black">Registros mensuales (Últimos 12 meses)</p>
+            </div>
+            <div class="p-2 bg-blue-500/10 rounded-lg text-blue-400">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path></svg>
+            </div>
+        </div>
+        <div class="flex-grow min-h-[300px]">
+            <canvas id="userGrowthChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Distribución de Especies (40% del ancho en desktop) -->
+    <div class="lg:col-span-4 glass-card p-6 border-purple-500/10 flex flex-col">
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h3 class="text-white font-bold text-lg">Especies Comunes</h3>
+                <p class="text-[10px] text-zinc-500 uppercase tracking-widest font-black">Top 10 especies criadas</p>
+            </div>
+            <div class="p-2 bg-purple-500/10 rounded-lg text-purple-400">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path></svg>
+            </div>
+        </div>
+        <div class="flex-grow flex items-center justify-center min-h-[300px]">
+            <canvas id="speciesDistChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 1. Gráfico de Crecimiento de Usuarios
+    const growthCtx = document.getElementById('userGrowthChart').getContext('2d');
+    new Chart(growthCtx, {
+        type: 'line',
+        data: {
+            labels: <?= json_encode($chart_user_growth['labels']) ?>,
+            datasets: [{
+                label: 'Usuarios Registrados',
+                data: <?= json_encode($chart_user_growth['data']) ?>,
+                borderColor: '#3b82f6',
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                borderWidth: 3,
+                tension: 0.4,
+                fill: true,
+                pointBackgroundColor: '#09090b',
+                pointBorderColor: '#3b82f6',
+                pointBorderWidth: 2,
+                pointRadius: 4,
+                pointHoverRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: { 
+                    beginAtZero: true, 
+                    grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                    ticks: { color: '#71717a', font: { size: 10 } }
+                },
+                x: { 
+                    grid: { display: false },
+                    ticks: { color: '#71717a', font: { size: 10 } }
+                }
+            }
+        }
+    });
+
+    // 2. Gráfico de Distribución de Especies
+    const speciesCtx = document.getElementById('speciesDistChart').getContext('2d');
+    new Chart(speciesCtx, {
+        type: 'doughnut',
+        data: {
+            labels: <?= json_encode($chart_species_dist['labels']) ?>,
+            datasets: [{
+                data: <?= json_encode($chart_species_dist['data']) ?>,
+                backgroundColor: [
+                    '#3b82f6', '#8b5cf6', '#ec4899', '#f43f5e', 
+                    '#f59e0b', '#10b981', '#06b6d4', '#6366f1',
+                    '#a855f7', '#64748b'
+                ],
+                borderWidth: 0,
+                hoverOffset: 15
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '75%',
+            plugins: {
+                legend: { display: false }
+            }
+        }
+    });
+});
+</script>
+
 <div class="glass-card p-0 border-white/5 overflow-hidden">
+
     <div class="p-6 border-b border-white/5 flex items-center justify-between">
         <h3 class="text-lg font-bold text-white">Gestión de Usuarios</h3>
         <span class="text-[10px] font-black text-zinc-500 uppercase tracking-widest bg-white/5 px-3 py-1 rounded-full border border-white/5">Media: <?= $stats['avg_colonies_per_user'] ?> col/user</span>

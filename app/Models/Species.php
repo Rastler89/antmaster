@@ -45,4 +45,47 @@ class Species extends Model {
         $stmt->execute([$lang, $id]);
         return $stmt->fetch();
     }
+
+    /**
+     * Obtener todas las especies junto con una lista de las traducciones disponibles
+     */
+    public static function allWithTranslationStats() {
+        $sql = "SELECT e.id, e.nombre_cientifico, e.nombre as nombre_es,
+                       GROUP_CONCAT(t.idioma) as idiomas_traducidos
+                FROM especies e
+                LEFT JOIN especies_traducciones t ON e.id = t.especie_id
+                GROUP BY e.id
+                ORDER BY e.nombre_cientifico ASC";
+        
+        return static::db()->query($sql)->fetchAll();
+    }
+
+    /**
+     * Obtener los datos de traducción para una especie e idioma específicos
+     */
+    public static function getTranslation($id, $lang) {
+        $stmt = static::db()->prepare("SELECT * FROM especies_traducciones WHERE especie_id = ? AND idioma = ?");
+        $stmt->execute([$id, $lang]);
+        return $stmt->fetch();
+    }
+
+    /**
+     * Crear o actualizar una traducción
+     */
+    public static function updateOrCreateTranslation($species_id, $lang, $data) {
+        $sql = "REPLACE INTO especies_traducciones (especie_id, idioma, nombre, descripcion, alimentacion, consejos_cria, localizacion) 
+                VALUES (?, ?, ?, ?, ?, ?, ?)";
+        
+        $stmt = static::db()->prepare($sql);
+        return $stmt->execute([
+            $species_id,
+            $lang,
+            $data['nombre'] ?? null,
+            $data['descripcion'] ?? null,
+            $data['alimentacion'] ?? null,
+            $data['consejos_cria'] ?? null,
+            $data['localizacion'] ?? null
+        ]);
+    }
 }
+

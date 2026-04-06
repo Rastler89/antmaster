@@ -54,6 +54,11 @@ $router->put('/admin/revisiones/{id}', 'EspeciesController@resolveRevision');
 $router->get('/admin/dashboard', 'AdminController@dashboard');
 $router->post('/admin/usuarios/ban/{id}', 'AdminController@toggleBan');
 
+// Gestión de Especies y Traducciones (Admin)
+$router->get('/admin/especies', 'AdminEspeciesController@index');
+$router->get('/admin/especies/traducir/{id}', 'AdminEspeciesController@translate');
+$router->post('/admin/especies/traducir/{id}', 'AdminEspeciesController@storeTranslation');
+
 // Rutas Públicas (Logs Compartibles)
 $router->get('/log/{user}/{colony}', 'PublicLogController@show');
 
