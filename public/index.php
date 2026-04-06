@@ -2,6 +2,15 @@
 session_start();
 
 require_once '../config.php';
+
+// Forzar HTTPS (Compatible con Proxies como Dokploy/Traefik)
+$isHttps = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') || 
+           (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
+
+if (!$isHttps && $_SERVER['HTTP_HOST'] !== 'localhost' && $_SERVER['HTTP_HOST'] !== '127.0.0.1') {
+    header('Location: https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'], true, 301);
+    exit;
+}
 require_once '../core/Database.php';
 require_once '../core/Router.php';
 require_once '../core/View.php';

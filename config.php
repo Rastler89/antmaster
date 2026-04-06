@@ -15,8 +15,8 @@ define('DB_PASS', $env_db_pass);
 define('APP_NAME', 'AntMaster Pro');
 define('APP_VERSION', '1.1.2');
 
-// Detección de BASE_URL más robusta
-$protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? "https" : "http";
+// Detección de BASE_URL forzada a HTTPS
+$protocol = "https";
 $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
 $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
 $baseUrl = str_replace(['/public/index.php', '/index.php', '/public/check_uploads.php', '/check_uploads.php'], '', $scriptName);
