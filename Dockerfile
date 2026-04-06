@@ -3,11 +3,15 @@ FROM php:8.2-apache
 # Habilitar mod_rewrite de Apache para usar .htaccess
 RUN a2enmod rewrite
 
-# Instalar dependencias para las extensiones de PHP y la extensión pdo_mysql
+# Instalar dependencias para las extensiones de PHP y la extensión pdo_mysql / gd
 RUN apt-get update && apt-get install -y \
     libzip-dev \
     zip \
-  && docker-php-ext-install pdo pdo_mysql \
+    libpng-dev \
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
+  && docker-php-ext-configure gd --with-freetype --with-jpeg \
+  && docker-php-ext-install pdo pdo_mysql gd zip \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 

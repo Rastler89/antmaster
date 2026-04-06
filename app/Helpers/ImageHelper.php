@@ -27,30 +27,43 @@ class ImageHelper {
         $mime = $imageInfo['mime'];
 
         // Create image source based on mime type
+        $srcImage = null;
         switch ($mime) {
             case 'image/jpeg':
-                $srcImage = imagecreatefromjpeg($tmpName);
+                if (function_exists('imagecreatefromjpeg')) {
+                    $srcImage = imagecreatefromjpeg($tmpName);
+                }
                 break;
             case 'image/png':
-                $srcImage = imagecreatefrompng($tmpName);
-                imagepalettetotruecolor($srcImage);
-                imagealphablending($srcImage, true);
-                imagesavealpha($srcImage, true);
+                if (function_exists('imagecreatefrompng')) {
+                    $srcImage = imagecreatefrompng($tmpName);
+                }
+                if ($srcImage) {
+                    imagepalettetotruecolor($srcImage);
+                    imagealphablending($srcImage, true);
+                    imagesavealpha($srcImage, true);
+                }
                 break;
             case 'image/webp':
-                $srcImage = imagecreatefromwebp($tmpName);
+                if (function_exists('imagecreatefromwebp')) {
+                    $srcImage = imagecreatefromwebp($tmpName);
+                }
                 break;
-            default:
-                return false;
         }
 
+        // FALLBACK: If GD is missing or image creation failed, just move the file
         if (!$srcImage) {
-            return false;
+            $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+            $filename = uniqid('raw_', true) . '.' . $extension;
+            $destination = rtrim($destinationFolder, '/') . '/' . $filename;
+            if (!is_dir($destinationFolder)) mkdir($destinationFolder, 0777, true);
+            return move_uploaded_file($tmpName, $destination) ? $filename : false;
         }
 
         // Calculate new dimensions maintain ratio
         $newWidth = $width;
         $newHeight = $height;
+...
 
         if ($width > $maxWidth || $height > $maxWidth) {
             if ($width > $height) {
