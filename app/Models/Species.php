@@ -87,5 +87,25 @@ class Species extends Model {
             $data['localizacion'] ?? null
         ]);
     }
+
+    /**
+     * Buscar especies por nombre o nombre científico
+     */
+    public static function search($query) {
+        $lang = defined('APP_LANG') ? APP_LANG : 'es';
+        $query = "%$query%";
+        
+        $sql = "SELECT e.*, 
+                       COALESCE(t.nombre, e.nombre) as nombre
+                FROM especies e
+                LEFT JOIN especies_traducciones t ON e.id = t.especie_id AND t.idioma = ?
+                WHERE e.nombre_cientifico LIKE ? OR e.nombre LIKE ? OR t.nombre LIKE ?
+                ORDER BY e.nombre_cientifico ASC
+                LIMIT 10";
+        
+        $stmt = static::db()->prepare($sql);
+        $stmt->execute([$lang, $query, $query, $query]);
+        return $stmt->fetchAll();
+    }
 }
 

@@ -34,17 +34,31 @@
                     <input type="text" name="nombre" required value="<?= htmlspecialchars($colony['nombre']) ?>" class="magic-input text-main">
                 </div>
                 
-                <!-- Especie -->
-                <div class="space-y-1.5">
+                <!-- Especie con Buscador en Vivo -->
+                <div class="space-y-1.5 relative" id="species-search-container">
                     <label class="block text-sm font-medium text-muted">Especie</label>
-                    <div class="relative">
-                        <select name="especie_id" required class="magic-input appearance-none w-full text-main">
-                            <?php foreach ($species as $s): ?>
-                                <option value="<?= $s['id'] ?>" <?= $s['id'] == $colony['especie_id'] ? 'selected' : '' ?>>
-                                    <?= htmlspecialchars($s['nombre_cientifico']) ?> (<?= htmlspecialchars($s['nombre']) ?>)
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
+                    <div class="relative group">
+                        <div class="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-blue-400 transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        </div>
+                        <input type="text" id="species-search-input" 
+                               value="<?= htmlspecialchars($colony['especie_nombre_cientifico'] ?? $colony['nombre_cientifico']) ?> (<?= htmlspecialchars($colony['especie_nombre'] ?? $colony['nombre']) ?>)"
+                               placeholder="Buscar especie..." class="magic-input !pl-11 w-full text-main" autocomplete="off">
+                        <input type="hidden" name="especie_id" id="especie_id_hidden" value="<?= $colony['especie_id'] ?>" required>
+                    </div>
+                    
+                    <!-- Dropdown de Resultados -->
+                    <div id="species-results" class="hidden absolute left-0 right-0 top-full mt-2 bg-zinc-900/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl z-50 max-h-60 overflow-y-auto custom-scrollbar">
+                        <?php foreach ($species as $s): ?>
+                            <div class="species-option px-4 py-3 hover:bg-blue-500/10 cursor-pointer border-b border-white/5 last:border-none transition-colors" 
+                                 data-id="<?= $s['id'] ?>" 
+                                 data-name="<?= htmlspecialchars($s['nombre']) ?>" 
+                                 data-scientific="<?= htmlspecialchars($s['nombre_cientifico']) ?>">
+                                <p class="text-sm font-bold text-white"><?= htmlspecialchars($s['nombre_cientifico']) ?></p>
+                                <p class="text-[10px] text-zinc-500 uppercase font-black tracking-widest"><?= htmlspecialchars($s['nombre']) ?></p>
+                            </div>
+                        <?php endforeach; ?>
+                        <div id="no-results" class="hidden px-4 py-8 text-center text-zinc-500 text-xs italic">No se encontraron especies</div>
                     </div>
                 </div>
                 
@@ -113,7 +127,66 @@
     </div>
 </div>
 
+<style>
+.custom-scrollbar::-webkit-scrollbar { width: 6px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(59, 130, 246, 0.2); border-radius: 10px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(59, 130, 246, 0.4); }
+</style>
+
 <script>
+// Lógica del Buscador de Especies (Igual que en Create)
+const searchInput = document.getElementById('species-search-input');
+const resultsDiv = document.getElementById('species-results');
+const hiddenInput = document.getElementById('especie_id_hidden');
+const options = document.querySelectorAll('.species-option');
+const noResults = document.getElementById('no-results');
+
+searchInput.addEventListener('focus', () => {
+    resultsDiv.classList.remove('hidden');
+});
+
+document.addEventListener('click', (e) => {
+    if (!document.getElementById('species-search-container').contains(e.target)) {
+        resultsDiv.classList.add('hidden');
+    }
+});
+
+searchInput.addEventListener('input', (e) => {
+    const term = e.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    let count = 0;
+    
+    options.forEach(opt => {
+        const name = opt.getAttribute('data-name').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        const scientific = opt.getAttribute('data-scientific').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        
+        if (name.includes(term) || scientific.includes(term)) {
+            opt.classList.remove('hidden');
+            count++;
+        } else {
+            opt.classList.add('hidden');
+        }
+    });
+
+    noResults.classList.toggle('hidden', count > 0);
+    resultsDiv.classList.remove('hidden');
+});
+
+options.forEach(opt => {
+    opt.addEventListener('click', () => {
+        const id = opt.getAttribute('data-id');
+        const scientific = opt.getAttribute('data-scientific');
+        const name = opt.getAttribute('data-name');
+        
+        searchInput.value = `${scientific} (${name})`;
+        hiddenInput.value = id;
+        resultsDiv.classList.add('hidden');
+        
+        // Efecto visual de seleccionado
+        searchInput.classList.add('border-blue-500/50', 'bg-blue-500/5');
+    });
+});
+
 function previewImage(input) {
     if (input.files && input.files[0]) {
         var reader = new FileReader();

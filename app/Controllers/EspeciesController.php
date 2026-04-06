@@ -187,4 +187,12 @@ class EspeciesController extends Controller {
         
         $this->redirect('/admin/revisiones');
     }
+    public static function search() {
+        require_login();
+        $q = $_GET['q'] ?? '';
+        $results = Species::search($q);
+        header('Content-Type: application/json');
+        echo json_encode($results);
+        exit;
+    }
 }

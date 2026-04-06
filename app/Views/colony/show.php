@@ -17,39 +17,50 @@ if ($colony['poblacion_detallada']) {
 
 <div class="colony-profile-container animate-fade-in">
     <!-- Header Hero -->
-    <div class="relative h-64 md:h-96 rounded-[3rem] overflow-hidden mb-10 group shadow-2xl ring-1 ring-white/10">
+    <div class="relative h-64 md:h-[450px] rounded-[3.5rem] overflow-hidden mb-10 group shadow-2xl ring-1 ring-white/10">
         <?php if ($colony['imagen']): ?>
             <img src="<?= BASE_URL ?>/uploads/colonies/<?= $colony['imagen'] ?>" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
         <?php else: ?>
-            <div class="w-full h-full bg-gradient-to-br from-blue-900/40 to-purple-900/40 flex items-center justify-center">
-                <svg class="w-24 h-24 text-blue-500/20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            <div class="w-full h-full bg-gradient-to-br from-zinc-900 via-blue-950 to-zinc-900 flex flex-col items-center justify-center relative overflow-hidden">
+                <div class="absolute inset-0 opacity-20 pointer-events-none">
+                    <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0 100 C 20 0 50 0 100 100" fill="none" stroke="currentColor" stroke-width="0.1" class="text-blue-500"></path></svg>
+                </div>
+                <div class="p-8 bg-blue-500/10 rounded-full border border-blue-500/20 mb-4 animate-pulse">
+                    <svg class="w-16 h-16 text-blue-400/40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                </div>
+                <a href="<?= BASE_URL ?>/colonias/editar/<?= $colony['id'] ?>" class="px-5 py-2.5 bg-blue-500/20 hover:bg-blue-500 text-blue-300 hover:text-white rounded-full text-[10px] font-black uppercase tracking-widest transition-all border border-blue-500/30">Añadir Foto de Perfil</a>
             </div>
         <?php endif; ?>
-        <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
         
-        <div class="absolute bottom-0 left-0 p-8 md:p-12 flex flex-col md:flex-row items-start md:items-end justify-between w-full gap-8">
-            <div class="flex-1">
-                <a href="<?= BASE_URL ?>/colonias" class="inline-flex items-center gap-2 text-white/60 hover:text-white mb-4 text-sm font-bold transition-all hover:-translate-x-1">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                    Volver a mis colonias
-                </a>
-                <h1 class="text-4xl md:text-7xl font-black text-white drop-shadow-2xl tracking-tight leading-none mb-2"><?= htmlspecialchars($colony['nombre']) ?></h1>
-                <div class="flex items-center gap-3">
-                    <span class="px-4 py-1.5 bg-blue-500/20 backdrop-blur-md rounded-full text-blue-300 text-xs font-black uppercase tracking-widest border border-blue-500/20">
-                        <?= htmlspecialchars($colony['especie_nombre']) ?>
-                    </span>
-                </div>
-            </div>
-            
-            <div class="flex items-center gap-3 bg-black/20 backdrop-blur-md p-2 rounded-2xl border border-white/5">
-                <a href="<?= BASE_URL ?>/colonias/editar/<?= $colony['id'] ?>" class="p-4 bg-white/5 hover:bg-white/10 rounded-xl text-white transition-all shadow-lg border border-white/5" title="Editar">
+        <!-- Top Navigation (Back & Actions Unified) -->
+        <div class="absolute top-0 left-0 right-0 p-8 flex items-center justify-between z-20">
+            <a href="<?= BASE_URL ?>/colonias" class="group flex items-center gap-3 px-5 py-3 bg-black/40 backdrop-blur-xl rounded-2xl border border-white/10 text-white/80 hover:text-white transition-all hover:bg-black/60 shadow-2xl">
+                <svg class="w-5 h-5 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                <span class="text-xs font-black uppercase tracking-widest">Volver</span>
+            </a>
+
+            <div class="flex items-center gap-2">
+                <a href="<?= BASE_URL ?>/colonias/editar/<?= $colony['id'] ?>" class="p-3.5 bg-white/10 hover:bg-white backdrop-blur-xl rounded-2xl text-white hover:text-black transition-all border border-white/10 shadow-2xl group" title="Editar">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                 </a>
-                <form action="<?= BASE_URL ?>/colonias/borrar/<?= $colony['id'] ?>" method="POST" onsubmit="return confirm('¿Estás seguro?')" class="inline">
-                    <button type="submit" class="p-4 bg-red-500/10 hover:bg-red-500/20 rounded-xl text-red-500 transition-all border border-red-500/10" title="Eliminar">
+                <form action="<?= BASE_URL ?>/colonias/borrar/<?= $colony['id'] ?>" method="POST" onsubmit="return confirm('¿Estás seguro de eliminar esta colonia? Este proceso es irreversible.')" class="inline">
+                    <button type="submit" class="p-3.5 bg-red-500/10 hover:bg-red-500 backdrop-blur-xl rounded-2xl text-red-500 hover:text-white transition-all border border-red-500/20 shadow-2xl" title="Eliminar">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                     </button>
                 </form>
+            </div>
+        </div>
+
+        <div class="absolute bottom-0 left-0 p-8 md:p-12 w-full">
+            <h1 class="text-5xl md:text-8xl font-black text-white drop-shadow-2xl tracking-tighter leading-none mb-4"><?= htmlspecialchars($colony['nombre']) ?></h1>
+            <div class="flex items-center gap-3">
+                <span class="px-5 py-2 bg-blue-500 text-white backdrop-blur-md rounded-xl text-[10px] font-black uppercase tracking-[0.2em] shadow-xl shadow-blue-500/40 border border-white/20">
+                    <?= htmlspecialchars($colony['especie_nombre']) ?>
+                </span>
+                <?php if ($colony['is_public']): ?>
+                    <span class="px-5 py-2 bg-emerald-500/20 backdrop-blur-md rounded-xl text-emerald-400 text-[10px] font-black uppercase tracking-[0.2em] border border-emerald-500/40">🌍 Público</span>
+                <?php endif; ?>
             </div>
         </div>
     </div>

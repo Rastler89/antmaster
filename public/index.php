@@ -45,6 +45,7 @@ $router->get('/especies/proponer', 'EspeciesController@proposeNew');
 $router->post('/especies/proponer', 'EspeciesController@storeNewProposal');
 $router->get('/especies/editar/{id}', 'EspeciesController@edit');
 $router->post('/especies/editar/{id}', 'EspeciesController@proposeEdit');
+$router->get('/especies/search', 'EspeciesController@search');
 
 $router->get('/admin/revisiones', 'EspeciesController@pendingRevisions');
 $router->get('/admin/revisiones/historial', 'EspeciesController@historyRevisions');

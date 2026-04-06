@@ -7,6 +7,13 @@
             <h1 class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-blue-500"><?= __('species_title') ?></h1>
             <p class="text-muted text-sm mt-1"><?= __('species_tagline') ?></p>
         </div>
+        
+        <!-- Live Search Bar -->
+        <div class="hidden sm:flex items-center bg-white/5 border border-white/10 rounded-2xl px-4 py-2 focus-within:border-emerald-500/50 transition-all max-w-sm w-full mx-4">
+            <svg class="w-4 h-4 text-zinc-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            <input type="text" id="species-search-input" placeholder="Buscar especie..." class="bg-transparent border-none focus:ring-0 text-sm text-white w-full placeholder:text-zinc-600">
+        </div>
+
         <a href="<?= BASE_URL ?>/especies/proponer" class="magic-btn shadow-lg shadow-emerald-500/20 !from-emerald-500 !to-teal-500 active:scale-95 transition-all flex items-center gap-2 whitespace-nowrap">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
             <span class="hidden sm:inline"><?= __('species_btn_new') ?></span>
@@ -79,3 +86,22 @@
         <?php endforeach; ?>
     </div>
 </div>
+
+<script>
+document.getElementById('species-search-input')?.addEventListener('input', function(e) {
+    const term = e.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    const cards = document.querySelectorAll('.glass-card');
+    
+    cards.forEach(card => {
+        const h2 = card.querySelector('h2').textContent.toLowerCase();
+        const p = card.querySelector('p.italic').textContent.toLowerCase();
+        const content = card.textContent.toLowerCase();
+        
+        if (h2.includes(term) || p.includes(term) || content.includes(term)) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+});
+</script>
