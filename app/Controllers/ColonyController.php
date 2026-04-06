@@ -2,6 +2,7 @@
 require_once '../app/Models/Colony.php';
 require_once '../app/Models/Species.php';
 require_once '../app/Models/Stock.php';
+require_once '../app/Helpers/ImageHelper.php';
 
 class ColonyController extends Controller {
     public function index() {
@@ -30,17 +31,17 @@ class ColonyController extends Controller {
         require_login();
         
         $imagePath = null;
-        if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = UPLOAD_PATH . '/colonies/';
-            if (!is_dir($uploadDir)) {
-                mkdir($uploadDir, 0777, true);
-            }
-            $extension = pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION);
-            $filename = uniqid() . '.' . $extension;
-            if (move_uploaded_file($_FILES['imagen']['tmp_name'], $uploadDir . $filename)) {
-                $imagePath = $filename;
+        if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] !== UPLOAD_ERR_NO_FILE) {
+            if ($_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
+                $uploadDir = UPLOAD_PATH . '/colonies/';
+                $filename = ImageHelper::compress($_FILES['imagen'], $uploadDir);
+                if ($filename) {
+                    $imagePath = $filename;
+                } else {
+                    $_SESSION['error'] = "No se pudo procesar la imagen. Verifica el formato.";
+                }
             } else {
-                $_SESSION['error'] = "No se pudo guardar la imagen. Revisa los permisos de la carpeta uploads.";
+                $_SESSION['error'] = "Error al subir imagen: " . ImageHelper::getUploadErrorMessage($_FILES['imagen']['error']);
             }
         }
 
@@ -66,8 +67,10 @@ class ColonyController extends Controller {
         ];
         
         if (Colony::create($data)) {
+            $_SESSION['success'] = "Colonia creada correctamente.";
             $this->redirect('/colonias');
         } else {
+            $_SESSION['error'] = "Error al guardar la colonia en la base de datos.";
             $this->redirect('/colonias/nueva');
         }
     }
@@ -177,17 +180,17 @@ class ColonyController extends Controller {
         }
 
         $imagePath = null;
-        if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = UPLOAD_PATH . '/diary/';
-            if (!is_dir($uploadDir)) {
-                mkdir($uploadDir, 0777, true);
-            }
-            $extension = pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION);
-            $filename = uniqid() . '.' . $extension;
-            if (move_uploaded_file($_FILES['imagen']['tmp_name'], $uploadDir . $filename)) {
-                $imagePath = $filename;
+        if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] !== UPLOAD_ERR_NO_FILE) {
+            if ($_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
+                $uploadDir = UPLOAD_PATH . '/diary/';
+                $filename = ImageHelper::compress($_FILES['imagen'], $uploadDir);
+                if ($filename) {
+                    $imagePath = $filename;
+                } else {
+                    $_SESSION['error'] = "No se pudo procesar la imagen del diario.";
+                }
             } else {
-                $_SESSION['error'] = "Error al subir la imagen del diario.";
+                $_SESSION['error'] = "Error al subir imagen del diario: " . ImageHelper::getUploadErrorMessage($_FILES['imagen']['error']);
             }
         }
 
@@ -220,7 +223,11 @@ class ColonyController extends Controller {
             'imagen_url'    => $imagePath
         ];
         
-        Colony::addDiaryEntry($id, $data);
+        if (Colony::addDiaryEntry($id, $data)) {
+            $_SESSION['success'] = "Entrada al diario añadida correctamente" . ($imagePath ? " e imagen optimizada" : "");
+        } else {
+            $_SESSION['error'] = "Error al guardar la entrada en el diario.";
+        }
         
         $this->redirect('/colonias/ver/' . $id);
     }
@@ -286,17 +293,21 @@ class ColonyController extends Controller {
         }
 
         $imagePath = $colony['imagen'];
-        if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = UPLOAD_PATH . '/colonies/';
-            if (!is_dir($uploadDir)) {
-                mkdir($uploadDir, 0777, true);
-            }
-            $extension = pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION);
-            $filename = uniqid() . '.' . $extension;
-            if (move_uploaded_file($_FILES['imagen']['tmp_name'], $uploadDir . $filename)) {
-                $imagePath = $filename;
+        if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] !== UPLOAD_ERR_NO_FILE) {
+            if ($_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
+                $uploadDir = UPLOAD_PATH . '/colonies/';
+                $filename = ImageHelper::compress($_FILES['imagen'], $uploadDir);
+                if ($filename) {
+                    // Opcional: borrar imagen anterior si cambia
+                    if ($colony['imagen'] && $colony['imagen'] !== $filename) {
+                        @unlink($uploadDir . $colony['imagen']);
+                    }
+                    $imagePath = $filename;
+                } else {
+                    $_SESSION['error'] = "No se pudo procesar la nueva imagen.";
+                }
             } else {
-                $_SESSION['error'] = "No se pudo actualizar la imagen.";
+                $_SESSION['error'] = "Error al actualizar imagen: " . ImageHelper::getUploadErrorMessage($_FILES['imagen']['error']);
             }
         }
 
@@ -321,8 +332,10 @@ class ColonyController extends Controller {
         ];
         
         if (Colony::update($id, $data)) {
+            $_SESSION['success'] = "Colonia actualizada correctamente.";
             $this->redirect('/colonias/ver/' . $id);
         } else {
+            $_SESSION['error'] = "Error al actualizar los datos en la base de datos.";
             $this->redirect('/colonias/editar/' . $id);
         }
     }

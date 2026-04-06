@@ -6,6 +6,15 @@ echo "<b>ROOT_PATH:</b> " . ROOT_PATH . "<br>";
 echo "<b>UPLOAD_PATH:</b> " . UPLOAD_PATH . "<br>";
 echo "<b>UPLOAD_URL:</b> " . UPLOAD_URL . "<br><br>";
 
+echo "<h3>Límites del Servidor</h3>";
+echo "<b>post_max_size:</b> " . ini_get('post_max_size') . "<br>";
+echo "<b>upload_max_filesize:</b> " . ini_get('upload_max_filesize') . "<br>";
+echo "<b>memory_limit:</b> " . ini_get('memory_limit') . "<br><br>";
+
+echo "<h3>Librerías</h3>";
+$gdInfo = extension_loaded('gd') ? "<span style='color:green;'>SÍ (Activada)</span>" : "<span style='color:red;'>NO (Desactivada)</span>";
+echo "<b>GD Library:</b> " . $gdInfo . "<br><br>";
+
 if (!is_dir(UPLOAD_PATH)) {
     echo "<span style='color:red;'>ERROR: El directorio de subidas NO existe. Intentando crear...</span><br>";
     if (mkdir(UPLOAD_PATH, 0777, true)) {
