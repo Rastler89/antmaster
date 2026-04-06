@@ -2,6 +2,7 @@
 
 require_once '../app/Models/User.php';
 require_once '../app/Models/Colony.php';
+require_once '../app/Models/SpeciesRevision.php';
 
 class AdminController extends Controller {
 
@@ -73,11 +74,16 @@ class AdminController extends Controller {
             'data'   => array_column($species_dist_raw, 'total')
         ];
 
+        // 3. Revisiones Pendientes (NUEVO)
+        $pending_revisions = SpeciesRevision::getPendingWithDetails();
+        $stats['pending_revisions'] = count($pending_revisions);
+
         $this->view('admin/dashboard', [
             'stats' => $stats, 
             'users' => $users,
             'chart_user_growth' => $chart_user_growth,
-            'chart_species_dist' => $chart_species_dist
+            'chart_species_dist' => $chart_species_dist,
+            'pending_revisions' => array_slice($pending_revisions, 0, 5) // Mostramos solo las 5 más recientes
         ]);
     }
 

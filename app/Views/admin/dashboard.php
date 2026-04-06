@@ -15,7 +15,7 @@
 </div>
 
 <!-- KPI Cards -->
-<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+<div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
     <div class="glass-card p-6 border-blue-500/10 overflow-hidden relative group hover:bg-blue-500/5 transition-all">
         <div class="absolute -right-4 -top-4 w-24 h-24 bg-blue-500/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
         <p class="text-[10px] uppercase font-black text-zinc-500 tracking-widest mb-3">Total Usuarios</p>
@@ -29,7 +29,7 @@
 
     <div class="glass-card p-6 border-emerald-500/10 overflow-hidden relative group hover:bg-emerald-500/5 transition-all">
         <div class="absolute -right-4 -top-4 w-24 h-24 bg-emerald-500/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
-        <p class="text-[10px] uppercase font-black text-zinc-500 tracking-widest mb-3">Usuarios Activos (30D)</p>
+        <p class="text-[10px] uppercase font-black text-zinc-500 tracking-widest mb-3">Activos (30D)</p>
         <div class="flex items-end justify-between">
             <h3 class="text-4xl font-black text-white"><?= number_format($stats['active_users']) ?></h3>
             <div class="p-3 bg-emerald-500/10 rounded-2xl text-emerald-400 border border-emerald-500/10">
@@ -59,7 +59,17 @@
             </div>
         </div>
     </div>
-    </div>
+
+    <a href="<?= BASE_URL ?>/admin/revisiones" class="glass-card p-6 border-orange-500/20 overflow-hidden relative group hover:bg-orange-500/10 hover:border-orange-500/40 transition-all cursor-pointer">
+        <div class="absolute -right-4 -top-4 w-24 h-24 bg-orange-500/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
+        <p class="text-[10px] uppercase font-black text-zinc-500 tracking-widest mb-3 group-hover:text-orange-400 transition-colors">Revisiones Guías</p>
+        <div class="flex items-end justify-between">
+            <h3 class="text-4xl font-black text-white"><?= number_format($stats['pending_revisions'] ?? 0) ?></h3>
+            <div class="p-3 bg-orange-500/10 rounded-2xl text-orange-400 border border-orange-500/10 group-hover:bg-orange-500 group-hover:text-white transition-all">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+            </div>
+        </div>
+    </a>
 </div>
 
 <!-- Scripts de Chart.js (Solo en esta vista) -->
@@ -172,6 +182,72 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+
+<!-- Modificaciones de Guías Pendientes -->
+<div class="grid grid-cols-1 gap-8 mb-8">
+    <div class="glass-card p-0 border-orange-500/10 overflow-hidden">
+        <div class="p-6 border-b border-white/5 flex items-center justify-between bg-orange-500/5">
+            <div>
+                <h3 class="text-lg font-bold text-white">Revisiones de Guías Pendientes</h3>
+                <p class="text-[10px] text-zinc-500 uppercase tracking-widest font-black">Sugerencias de la comunidad esperando aprobación</p>
+            </div>
+            <a href="<?= BASE_URL ?>/admin/revisiones" class="px-4 py-2 bg-orange-500/10 border border-orange-500/20 text-orange-400 rounded-xl hover:bg-orange-500 hover:text-white transition-all text-[10px] font-black uppercase">
+                Ver Todas
+            </a>
+        </div>
+        
+        <?php if (empty($pending_revisions)): ?>
+            <div class="p-12 text-center">
+                <div class="w-16 h-16 bg-zinc-500/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-white/5">
+                    <svg class="w-8 h-8 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                </div>
+                <p class="text-zinc-500 text-sm italic">No hay revisiones pendientes. ¡Todo al día!</p>
+            </div>
+        <?php else: ?>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead class="bg-white/[0.02] text-[10px] uppercase font-black tracking-widest text-zinc-500">
+                        <tr>
+                            <th class="px-6 md:px-8 py-4">Usuario</th>
+                            <th class="px-6 py-4">Especie</th>
+                            <th class="px-6 py-4">Tipo</th>
+                            <th class="px-6 py-4">Fecha</th>
+                            <th class="px-6 py-4 text-right">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-white/5">
+                        <?php foreach ($pending_revisions as $rev): ?>
+                            <tr class="group hover:bg-white/[0.03] transition-colors">
+                                <td class="px-6 md:px-8 py-5">
+                                    <span class="font-bold text-white text-sm"><?= htmlspecialchars($rev['usuario_nombre']) ?></span>
+                                </td>
+                                <td class="px-6 py-5">
+                                    <span class="text-sm text-zinc-300"><?= htmlspecialchars($rev['especie_nombre'] ?? 'Nueva Especie') ?></span>
+                                </td>
+                                <td class="px-6 py-5">
+                                    <?php if (is_null($rev['especie_id'])): ?>
+                                        <span class="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-500 text-[10px] font-black border border-emerald-500/20">NUEVA</span>
+                                    <?php else: ?>
+                                        <span class="px-2 py-0.5 rounded-md bg-blue-500/10 text-blue-500 text-[10px] font-black border border-blue-500/20">EDICIÓN</span>
+                                    <?php endif; ?>
+                                </td>
+                                <td class="px-6 py-5">
+                                    <span class="text-xs text-zinc-500"><?= date('d/m/Y H:i', strtotime($rev['fecha_creacion'])) ?></span>
+                                </td>
+                                <td class="px-6 py-5 text-right">
+                                    <a href="<?= BASE_URL ?>/admin/revisiones" class="p-2 bg-white/5 border border-white/10 text-zinc-400 rounded-lg hover:bg-white/10 hover:text-white transition-all inline-flex items-center gap-2 text-[10px] font-black uppercase">
+                                        Revisar
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                    </a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        <?php endif; ?>
+    </div>
+</div>
 
 <div class="glass-card p-0 border-white/5 overflow-hidden">
 
