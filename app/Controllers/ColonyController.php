@@ -54,7 +54,7 @@ class ColonyController extends Controller {
         $data = [
             'usuario_id'         => $_SESSION['user_id'],
             'nombre'             => $_POST['nombre'] ?? '',
-            'especie_id'         => $_POST['especie_id'] ?? '',
+            'especie_id'         => $_POST['especie_id'] !== '' ? $_POST['especie_id'] : null,
             'fecha_adquisicion'  => $_POST['fecha_adquisicion'] ?? date('Y-m-d'),
             'tipo_hormiguero'    => $_POST['tipo_hormiguero'] ?? '',
             'descripcion'        => $_POST['descripcion'] ?? '',
@@ -209,7 +209,7 @@ class ColonyController extends Controller {
 
         $data = [
             'tipo_evento'   => $tipoEvento,
-            'stock_id'      => $stockId,
+            'stock_id'      => $stockId !== '' ? $stockId : null,
             'cantidad_usada'=> $cantidadUsada > 0 ? $cantidadUsada : null,
             'entrada'       => $_POST['entrada'] ?? '',
             'fecha_entrada' => $_POST['fecha_entrada'] ?? date('Y-m-d'),
