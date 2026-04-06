@@ -40,23 +40,31 @@ if ($colony['poblacion_detallada']) {
                 <span class="text-xs font-black uppercase tracking-widest">Volver</span>
             </a>
 
-            <div class="flex items-center gap-2">
-                <a href="<?= BASE_URL ?>/colonias/editar/<?= $colony['id'] ?>" class="p-3.5 bg-white/10 hover:bg-white backdrop-blur-xl rounded-2xl text-white hover:text-black transition-all border border-white/10 shadow-2xl group" title="Editar">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+            <div class="flex items-center h-12 bg-black/40 backdrop-blur-xl rounded-2xl border border-white/10 p-0.5 shadow-2xl overflow-hidden">
+                <a href="<?= BASE_URL ?>/colonias/editar/<?= $colony['id'] ?>" class="flex items-center justify-center w-11 h-11 text-white/70 hover:text-white hover:bg-white/10 rounded-xl transition-all" title="Editar">
+                    <div class="flex items-center justify-center w-5 h-5 mb-0">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                    </div>
                 </a>
-                <form action="<?= BASE_URL ?>/colonias/borrar/<?= $colony['id'] ?>" method="POST" onsubmit="return confirm('¿Estás seguro de eliminar esta colonia? Este proceso es irreversible.')" class="inline">
-                    <button type="submit" class="p-3.5 bg-red-500/10 hover:bg-red-500 backdrop-blur-xl rounded-2xl text-red-500 hover:text-white transition-all border border-red-500/20 shadow-2xl" title="Eliminar">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                <div class="w-[1px] h-4 bg-white/10 shrink-0"></div>
+                <form action="<?= BASE_URL ?>/colonias/borrar/<?= $colony['id'] ?>" method="POST" onsubmit="return confirm('¿Estás seguro de eliminar esta colonia? Este proceso es irreversible.')" class="m-0 p-0 flex items-center">
+                    <button type="submit" class="flex items-center justify-center w-11 h-11 text-red-500/70 hover:text-red-500 hover:bg-red-500/10 rounded-xl transition-all border-none bg-transparent cursor-pointer p-0 m-0" title="Eliminar">
+                        <div class="flex items-center justify-center w-5 h-5 mb-0">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                        </div>
                     </button>
                 </form>
             </div>
         </div>
 
         <div class="absolute bottom-0 left-0 p-8 md:p-12 w-full">
-            <h1 class="text-5xl md:text-8xl font-black text-white drop-shadow-2xl tracking-tighter leading-none mb-4"><?= htmlspecialchars($colony['nombre']) ?></h1>
+            <h1 class="text-5xl md:text-8xl font-black text-white drop-shadow-2xl tracking-tighter leading-none mb-4">
+                <?= htmlspecialchars($colony['nombre']) ?>
+            </h1>
             <div class="flex items-center gap-3">
                 <span class="px-5 py-2 bg-blue-500 text-white backdrop-blur-md rounded-xl text-[10px] font-black uppercase tracking-[0.2em] shadow-xl shadow-blue-500/40 border border-white/20">
-                    <?= htmlspecialchars($colony['especie_nombre']) ?>
+                    <?= htmlspecialchars($colony['especie_nombre']) ?> 
+                    <span class="opacity-70 font-light ml-1 italic">(<?= htmlspecialchars($colony['especie_nombre_cientifico']) ?>)</span>
                 </span>
                 <?php if ($colony['is_public']): ?>
                     <span class="px-5 py-2 bg-emerald-500/20 backdrop-blur-md rounded-xl text-emerald-400 text-[10px] font-black uppercase tracking-[0.2em] border border-emerald-500/40">🌍 Público</span>

@@ -7,7 +7,7 @@ class Colony extends Model {
     public static function getUserColonies($userId) {
         $lang = defined('APP_LANG') ? APP_LANG : 'es';
         return self::query("
-            SELECT c.*, COALESCE(t.nombre, e.nombre) as especie_nombre 
+            SELECT c.*, COALESCE(t.nombre, e.nombre) as especie_nombre, e.nombre_cientifico as especie_nombre_cientifico
             FROM colonias c 
             JOIN especies e ON c.especie_id = e.id 
             LEFT JOIN especies_traducciones t ON e.id = t.especie_id AND t.idioma = ?
@@ -18,7 +18,7 @@ class Colony extends Model {
     public static function findWithSpecies($id, $userId) {
         $lang = defined('APP_LANG') ? APP_LANG : 'es';
         $result = self::query("
-            SELECT c.*, COALESCE(t.nombre, e.nombre) as especie_nombre 
+            SELECT c.*, COALESCE(t.nombre, e.nombre) as especie_nombre, e.nombre_cientifico as especie_nombre_cientifico
             FROM colonias c 
             JOIN especies e ON c.especie_id = e.id 
             LEFT JOIN especies_traducciones t ON e.id = t.especie_id AND t.idioma = ?
