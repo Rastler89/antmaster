@@ -32,6 +32,21 @@ CREATE TABLE IF NOT EXISTS especies (
     consejos_cria TEXT
 );
 
+-- Traducciones de Especies (i18n)
+CREATE TABLE IF NOT EXISTS especies_traducciones (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    especie_id INT NOT NULL,
+    idioma CHAR(2) NOT NULL,
+    nombre VARCHAR(100),
+    descripcion TEXT,
+    alimentacion TEXT,
+    consejos_cria TEXT,
+    localizacion TEXT,
+    UNIQUE INDEX (especie_id, idioma),
+    FOREIGN KEY (especie_id) REFERENCES especies(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 -- Revisiones de Fichas (Wiki features)
 CREATE TABLE IF NOT EXISTS revisiones_especies (
     id INT AUTO_INCREMENT PRIMARY KEY,

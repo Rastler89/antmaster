@@ -12,7 +12,7 @@ define('DB_PASS', $env_db_pass);
 
 // Configuración de la Aplicación
 define('APP_NAME', 'AntMaster Pro');
-define('APP_VERSION', '1.1.0');
+define('APP_VERSION', '1.1.1');
 
 // Detección de BASE_URL más robusta
 $baseUrl = str_replace('/index.php', '', $_SERVER['SCRIPT_NAME'] ?? '');
