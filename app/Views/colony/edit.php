@@ -22,7 +22,7 @@
                             </div>
                             <span class="text-xs text-muted">Clic para cambiar la foto</span>
                         </div>
-                        <img id="image-render" src="<?= $colony['imagen'] ? BASE_URL . '/uploads/colonies/' . $colony['imagen'] : '' ?>" class="<?= $colony['imagen'] ? '' : 'hidden' ?> absolute inset-0 w-full h-full object-cover">
+                        <img id="image-render" src="<?= $colony['imagen'] ? asset('uploads/colonies/' . $colony['imagen']) : '' ?>" class="<?= $colony['imagen'] ? '' : 'hidden' ?> absolute inset-0 w-full h-full object-cover">
                     </label>
                 </div>
             </div>

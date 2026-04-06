@@ -34,7 +34,7 @@
             <div class="group relative aspect-square glass-card !p-0 overflow-hidden cursor-pointer active:scale-95 transition-all rounded-2xl" 
                  onclick="openLightbox(<?= $index ?>)">
                 <!-- Imagen -->
-                <img src="<?= BASE_URL . '/' . $item['url'] ?>" 
+                <img src="<?= $item['url'] ?>" 
                      alt="Foto de la colonia" 
                      class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                 
@@ -66,7 +66,6 @@
 
 <script>
 const media = <?= json_encode($media) ?>;
-const baseUrl = '<?= BASE_URL ?>/';
 
 function openLightbox(index) {
     const item = media[index];
@@ -76,7 +75,7 @@ function openLightbox(index) {
     const date = document.getElementById('lightbox-date');
     const desc = document.getElementById('lightbox-desc');
 
-    img.src = baseUrl + item.url;
+    img.src = item.url;
     tag.innerText = item.tipo;
     date.innerText = new Date(item.fecha).toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' });
     desc.innerText = item.descripcion;

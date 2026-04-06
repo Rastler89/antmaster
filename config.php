@@ -22,9 +22,28 @@ $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
 $baseUrl = str_replace(['/public/index.php', '/index.php', '/public/check_uploads.php', '/check_uploads.php'], '', $scriptName);
 define('BASE_URL', $protocol . "://" . $host . $baseUrl);
 
+// Función para manejar assets (CSS, JS, Imágenes)
+function asset($path) {
+    if (defined('BASE_URL')) {
+        $path = ltrim($path, '/');
+        $fullPath = ROOT_PATH . '/public/' . $path;
+        
+        // Si el archivo existe físicamente en /public
+        if (file_exists($fullPath)) {
+            // Si ya estamos sirviendo desde la carpeta /public (común en despliegues)
+            if (strpos($_SERVER['SCRIPT_NAME'] ?? '', '/public/') === false) {
+                 return BASE_URL . '/' . $path;
+            }
+            return BASE_URL . '/public/' . $path;
+        }
+        return BASE_URL . '/' . $path;
+    }
+    return $path;
+}
+
 // Rutas de Archivos y Subidas
 define('UPLOAD_PATH', ROOT_PATH . '/public/uploads');
-define('UPLOAD_URL', BASE_URL . '/public/uploads');
+define('UPLOAD_URL', asset('uploads'));
 
 // --- Soporte Multi-idioma (i18n) ---
 $available_langs = ['es', 'en', 'fr'];
@@ -73,25 +92,6 @@ function __($key, $params = []) {
 define('APP_DESCRIPTION', __('seo_description'));
 define('APP_KEYWORDS', __('seo_keywords'));
 define('APP_IMAGE', 'assets/img/og-preview.png'); // Sin barra inicial
-
-// Función para manejar assets (CSS, JS, Imágenes)
-function asset($path) {
-    $path = ltrim($path, '/');
-    $fullPath = __DIR__ . '/public/' . $path;
-    
-    // Si el archivo existe físicamente en /public
-    if (file_exists($fullPath)) {
-        // Si ya estamos sirviendo desde la carpeta /public (común en despliegues)
-        if (strpos($_SERVER['SCRIPT_NAME'] ?? '', '/public/') === false) {
-             // Si el script actual NO está en /public pero el servidor redirige allí
-             // (como en el .htaccess de la raíz), devolvemos la ruta simple
-             return BASE_URL . '/' . $path;
-        }
-        return BASE_URL . '/public/' . $path;
-    }
-    return BASE_URL . '/' . $path;
-}
-
 
 // Conexión PDO
 try {
