@@ -31,7 +31,7 @@ class ColonyController extends Controller {
         
         $imagePath = null;
         if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = 'uploads/colonies/';
+            $uploadDir = ROOT_PATH . '/public/uploads/colonies/';
             if (!is_dir($uploadDir)) {
                 mkdir($uploadDir, 0777, true);
             }
@@ -39,6 +39,8 @@ class ColonyController extends Controller {
             $filename = uniqid() . '.' . $extension;
             if (move_uploaded_file($_FILES['imagen']['tmp_name'], $uploadDir . $filename)) {
                 $imagePath = $filename;
+            } else {
+                $_SESSION['error'] = "No se pudo guardar la imagen. Revisa los permisos de la carpeta uploads.";
             }
         }
 
@@ -176,7 +178,7 @@ class ColonyController extends Controller {
 
         $imagePath = null;
         if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = 'uploads/diary/';
+            $uploadDir = ROOT_PATH . '/public/uploads/diary/';
             if (!is_dir($uploadDir)) {
                 mkdir($uploadDir, 0777, true);
             }
@@ -184,6 +186,8 @@ class ColonyController extends Controller {
             $filename = uniqid() . '.' . $extension;
             if (move_uploaded_file($_FILES['imagen']['tmp_name'], $uploadDir . $filename)) {
                 $imagePath = $filename;
+            } else {
+                $_SESSION['error'] = "Error al subir la imagen del diario.";
             }
         }
 
@@ -283,20 +287,16 @@ class ColonyController extends Controller {
 
         $imagePath = $colony['imagen'];
         if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = 'uploads/colonies/';
+            $uploadDir = ROOT_PATH . '/public/uploads/colonies/';
             if (!is_dir($uploadDir)) {
                 mkdir($uploadDir, 0777, true);
             }
             $extension = pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION);
             $filename = uniqid() . '.' . $extension;
             if (move_uploaded_file($_FILES['imagen']['tmp_name'], $uploadDir . $filename)) {
-                // Opcional: Borrar imagen vieja si existe
-                /*
-                if ($colony['imagen'] && file_exists($uploadDir . $colony['imagen'])) {
-                    @unlink($uploadDir . $colony['imagen']);
-                }
-                */
                 $imagePath = $filename;
+            } else {
+                $_SESSION['error'] = "No se pudo actualizar la imagen.";
             }
         }
 

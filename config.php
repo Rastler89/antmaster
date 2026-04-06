@@ -1,4 +1,5 @@
 <?php
+define('ROOT_PATH', __DIR__);
 // Configuración de la Base de Datos
 $env_db_host = getenv('DB_HOST') ?: ($_ENV['DB_HOST'] ?? $_SERVER['DB_HOST'] ?? 'localhost');
 $env_db_name = getenv('DB_NAME') ?: ($_ENV['DB_NAME'] ?? $_SERVER['DB_NAME'] ?? 'gestor_hormigas');

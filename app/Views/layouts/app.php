@@ -309,6 +309,24 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
 
     <!-- Main Content -->
     <main class="max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 pb-32 md:pb-12 animate-fade-in relative z-10 min-h-[calc(100vh-4rem)]">
+        <?php if (isset($_SESSION['error'])): ?>
+            <div class="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl flex items-center gap-3 animate-fade-in">
+                <span class="p-2 bg-red-500/20 rounded-lg text-red-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </span>
+                <p class="text-sm font-medium text-red-200"><?= $_SESSION['error']; unset($_SESSION['error']); ?></p>
+            </div>
+        <?php endif; ?>
+
+        <?php if (isset($_SESSION['success'])): ?>
+            <div class="mb-6 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl flex items-center gap-3 animate-fade-in">
+                <span class="p-2 bg-emerald-500/20 rounded-lg text-emerald-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                </span>
+                <p class="text-sm font-medium text-emerald-200"><?= $_SESSION['success']; unset($_SESSION['success']); ?></p>
+            </div>
+        <?php endif; ?>
+
         <?= isset($content) ? $content : '' ?>
     </main>
 
