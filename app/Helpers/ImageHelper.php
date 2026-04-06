@@ -63,7 +63,6 @@ class ImageHelper {
         // Calculate new dimensions maintain ratio
         $newWidth = $width;
         $newHeight = $height;
-...
 
         if ($width > $maxWidth || $height > $maxWidth) {
             if ($width > $height) {
