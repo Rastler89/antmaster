@@ -20,6 +20,10 @@ $baseUrl = str_replace('/index.php', '', $_SERVER['SCRIPT_NAME'] ?? '');
 $baseUrl = str_replace('/public', '', $baseUrl);
 define('BASE_URL', $baseUrl);
 
+// Rutas de Archivos y Subidas
+define('UPLOAD_PATH', ROOT_PATH . '/public/uploads');
+define('UPLOAD_URL', BASE_URL . '/public/uploads');
+
 // --- Soporte Multi-idioma (i18n) ---
 $available_langs = ['es', 'en', 'fr'];
 $default_lang = 'es';

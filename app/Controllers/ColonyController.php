@@ -31,7 +31,7 @@ class ColonyController extends Controller {
         
         $imagePath = null;
         if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = ROOT_PATH . '/public/uploads/colonies/';
+            $uploadDir = UPLOAD_PATH . '/colonies/';
             if (!is_dir($uploadDir)) {
                 mkdir($uploadDir, 0777, true);
             }
@@ -178,7 +178,7 @@ class ColonyController extends Controller {
 
         $imagePath = null;
         if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = ROOT_PATH . '/public/uploads/diary/';
+            $uploadDir = UPLOAD_PATH . '/diary/';
             if (!is_dir($uploadDir)) {
                 mkdir($uploadDir, 0777, true);
             }
@@ -287,7 +287,7 @@ class ColonyController extends Controller {
 
         $imagePath = $colony['imagen'];
         if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = ROOT_PATH . '/public/uploads/colonies/';
+            $uploadDir = UPLOAD_PATH . '/colonies/';
             if (!is_dir($uploadDir)) {
                 mkdir($uploadDir, 0777, true);
             }
