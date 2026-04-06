@@ -357,7 +357,7 @@ class ColonyController extends Controller {
         // Imagen principal de la colonia
         if ($colony['imagen']) {
             $media[] = [
-                'url' => 'uploads/colonies/' . $colony['imagen'],
+                'url' => 'public/uploads/colonies/' . $colony['imagen'],
                 'fecha' => $colony['fecha_adquisicion'],
                 'tipo' => 'Foto de Perfil',
                 'descripcion' => 'Imagen principal de la colonia.'
@@ -368,7 +368,7 @@ class ColonyController extends Controller {
         foreach ($diary as $entry) {
             if ($entry['imagen_url']) {
                 $media[] = [
-                    'url' => 'uploads/diary/' . $entry['imagen_url'],
+                    'url' => 'public/uploads/diary/' . $entry['imagen_url'],
                     'fecha' => $entry['fecha_entrada'],
                     'tipo' => $entry['tipo_evento'],
                     'descripcion' => $entry['entrada']

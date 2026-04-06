@@ -190,7 +190,7 @@ if ($colony['poblacion_detallada']) {
                                     <p class="text-zinc-300 leading-relaxed mb-6 italic"><?= nl2br(htmlspecialchars($entry['entrada'])) ?></p>
                                     <?php if ($entry['imagen_url']): ?>
                                         <div class="rounded-3xl overflow-hidden border border-white/5 bg-zinc-900/50">
-                                            <img src="<?= BASE_URL ?>/uploads/diary/<?= $entry['imagen_url'] ?>" class="w-full h-auto object-cover max-h-[500px] hover:scale-[1.02] transition-transform duration-700 cursor-zoom-in" onclick="openLightbox(this.src)">
+                                            <img src="<?= BASE_URL ?>/public/uploads/diary/<?= $entry['imagen_url'] ?>" class="w-full h-auto object-cover max-h-[500px] hover:scale-[1.02] transition-transform duration-700 cursor-zoom-in" onclick="openLightbox(this.src)">
                                         </div>
                                     <?php endif; ?>
                                 </div>

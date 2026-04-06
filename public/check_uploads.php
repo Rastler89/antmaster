@@ -1,5 +1,5 @@
 <?php
-require_once 'config.php';
+require_once '../config.php';
 
 echo "<h1>Diagnóstico de Subidas - AntMaster Pro</h1>";
 echo "<b>ROOT_PATH:</b> " . ROOT_PATH . "<br>";
