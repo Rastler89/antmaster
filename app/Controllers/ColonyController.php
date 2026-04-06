@@ -257,10 +257,10 @@ class ColonyController extends Controller {
     public function edit($id) {
         require_login();
         
-        $colony = Colony::find($id);
+        $colony = Colony::findWithSpecies($id, $_SESSION['user_id']);
         
         // Verificar dueño
-        if (!$colony || $colony['usuario_id'] != $_SESSION['user_id']) {
+        if (!$colony) {
             $this->redirect('/colonias');
         }
         

@@ -42,7 +42,7 @@
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                         </div>
                         <input type="text" id="species-search-input" 
-                               value="<?= htmlspecialchars($colony['especie_nombre_cientifico'] ?? $colony['nombre_cientifico']) ?> (<?= htmlspecialchars($colony['especie_nombre'] ?? $colony['nombre']) ?>)"
+                               value="<?= htmlspecialchars(($colony['especie_nombre_cientifico'] ?? ($colony['nombre_cientifico'] ?? ''))) ?> (<?= htmlspecialchars(($colony['especie_nombre'] ?? ($colony['nombre'] ?? ''))) ?>)"
                                placeholder="Buscar especie..." class="magic-input !pl-11 w-full text-main" autocomplete="off">
                         <input type="hidden" name="especie_id" id="especie_id_hidden" value="<?= $colony['especie_id'] ?>" required>
                     </div>
