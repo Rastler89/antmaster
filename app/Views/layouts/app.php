@@ -373,6 +373,7 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
                     <ul class="space-y-4">
                         <li><a href="<?= BASE_URL ?>/acerca-de" class="text-sm text-zinc-500 hover:text-white transition-colors">Sobre el proyecto</a></li>
                         <li><a href="<?= BASE_URL ?>/guia-de-uso" class="text-sm text-zinc-500 hover:text-white transition-colors">Guía de Uso</a></li>
+                        <li><a href="<?= BASE_URL ?>/changelog" class="text-sm text-zinc-500 hover:text-white transition-colors">Historial (Changelog)</a></li>
                     </ul>
                 </div>
 

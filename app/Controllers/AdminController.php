@@ -18,7 +18,8 @@ class AdminController extends Controller {
             'active_users' => 0, // logueados en los últimos 30 días
             'banned_users' => 0,
             'total_colonies' => 0,
-            'avg_colonies_per_user' => 0
+            'avg_colonies_per_user' => 0,
+            'draft_species_count' => 0
         ];
 
         // Usuarios totales y baneados
@@ -40,8 +41,18 @@ class AdminController extends Controller {
             $stats['avg_colonies_per_user'] = round($stats['total_colonies'] / $stats['total_users'], 2);
         }
 
-        // Listado de usuarios para gestionar
-        $users = $pdo->query("SELECT id, nombre, email, rol, fecha_registro, last_login, is_banned FROM usuarios ORDER BY id DESC")->fetchAll();
+        // Conteo de especies borrador
+        $drafts_data = $pdo->query("SELECT COUNT(*) as total FROM especies WHERE is_draft = 1")->fetch();
+        $stats['draft_species_count'] = $drafts_data['total'] ?? 0;
+
+        // Listado de usuarios para gestionar con estadísticas de compromiso
+        $users = $pdo->query("
+            SELECT u.id, u.nombre, u.email, u.rol, u.fecha_registro, u.last_login, u.is_banned,
+                   (SELECT COUNT(*) FROM colonias WHERE usuario_id = u.id) as colonies_count,
+                   (SELECT COUNT(*) FROM diario d JOIN colonias c ON d.colonia_id = c.id WHERE c.usuario_id = u.id) as diary_count
+            FROM usuarios u 
+            ORDER BY u.id DESC
+        ")->fetchAll();
 
         // --- Datos para Gráficos ---
         

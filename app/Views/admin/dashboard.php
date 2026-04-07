@@ -15,7 +15,7 @@
 </div>
 
 <!-- KPI Cards -->
-<div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6 mb-8">
     <div class="glass-card p-6 border-blue-500/10 overflow-hidden relative group hover:bg-blue-500/5 transition-all">
         <div class="absolute -right-4 -top-4 w-24 h-24 bg-blue-500/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
         <p class="text-[10px] uppercase font-black text-zinc-500 tracking-widest mb-3">Total Usuarios</p>
@@ -67,6 +67,17 @@
             <h3 class="text-4xl font-black text-white"><?= number_format($stats['pending_revisions'] ?? 0) ?></h3>
             <div class="p-3 bg-orange-500/10 rounded-2xl text-orange-400 border border-orange-500/10 group-hover:bg-orange-500 group-hover:text-white transition-all">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+            </div>
+        </div>
+    </a>
+
+    <a href="<?= BASE_URL ?>/admin/especies" class="glass-card p-6 border-amber-500/20 overflow-hidden relative group hover:bg-amber-500/10 hover:border-amber-500/40 transition-all cursor-pointer">
+        <div class="absolute -right-4 -top-4 w-24 h-24 bg-amber-500/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
+        <p class="text-[10px] uppercase font-black text-zinc-500 tracking-widest mb-3 group-hover:text-amber-400 transition-colors">Especies Draft</p>
+        <div class="flex items-end justify-between">
+            <h3 class="text-4xl font-black text-white"><?= number_format($stats['draft_species_count'] ?? 0) ?></h3>
+            <div class="p-3 bg-amber-500/10 rounded-2xl text-amber-400 border border-amber-500/10 group-hover:bg-amber-500 group-hover:text-white transition-all">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
             </div>
         </div>
     </a>
@@ -261,8 +272,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 <tr>
                     <th class="px-6 md:px-8 py-4">Usuario</th>
                     <th class="px-6 py-4">Rol</th>
-                    <th class="px-6 py-4">Registro</th>
-                    <th class="px-6 py-4">Última Conex.</th>
+                    <th class="px-6 py-4 text-center">Colonias</th>
+                    <th class="px-6 py-4 text-center">Diario</th>
+                    <th class="px-6 py-4">Registro / Conex.</th>
                     <th class="px-6 py-4 text-center">Estado</th>
                     <th class="px-6 py-4 text-right">Acciones</th>
                 </tr>
@@ -281,13 +293,21 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <?= htmlspecialchars($u['rol']) ?>
                             </span>
                         </td>
-                        <td class="px-6 py-5">
-                            <span class="text-sm text-white"><?= date('d M Y', strtotime($u['fecha_registro'])) ?></span>
+                        <td class="px-6 py-5 text-center">
+                            <span class="text-sm font-black text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-lg border border-blue-500/20">
+                                <?= $u['colonies_count'] ?>
+                            </span>
+                        </td>
+                        <td class="px-6 py-5 text-center">
+                            <span class="text-sm font-black text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded-lg border border-purple-500/20">
+                                <?= $u['diary_count'] ?>
+                            </span>
                         </td>
                         <td class="px-6 py-5">
-                            <span class="text-sm text-zinc-400">
-                                <?= $u['last_login'] ? get_time_elapsed($u['last_login']) . ' ago' : 'Nunca' ?>
-                            </span>
+                            <div class="flex flex-col">
+                                <span class="text-xs text-white"><?= date('d M Y', strtotime($u['fecha_registro'])) ?></span>
+                                <span class="text-[10px] text-zinc-500 italic lowercase"><?= $u['last_login'] ? get_time_elapsed($u['last_login']) . ' ago' : 'Nunca' ?></span>
+                            </div>
                         </td>
                         <td class="px-6 py-5 text-center">
                             <?php if ($u['is_banned']): ?>
@@ -297,19 +317,19 @@ document.addEventListener('DOMContentLoaded', function() {
                             <?php endif; ?>
                         </td>
                         <td class="px-6 py-5 text-right">
-                            <div class="flex items-center justify-end gap-2">
-                                <a href="<?= BASE_URL ?>/admin/usuarios/ver/<?= $u['id'] ?>" class="p-2 md:p-2.5 rounded-xl transition-all border inline-flex items-center text-[10px] font-black uppercase bg-blue-500/10 text-blue-500 border-blue-500/20 hover:bg-blue-500 hover:text-white" title="Ver Detalles">
+                            <div class="grid grid-flow-col items-center justify-end gap-2">
+                                <a href="<?= BASE_URL ?>/admin/usuarios/ver/<?= $u['id'] ?>" 
+                                   class="flex items-center justify-center h-9 w-9 rounded-xl transition-all border bg-blue-500/10 text-blue-500 border-blue-500/20 hover:bg-blue-500 hover:text-white" title="Ver Detalles">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                                 </a>
                                 <?php if ($u['id'] != $_SESSION['user_id']): ?>
-                                    <form action="<?= BASE_URL ?>/admin/usuarios/ban/<?= $u['id'] ?>" method="POST" class="inline" onsubmit="return confirm('¿Estás seguro de efectuar esta acción contra este usuario?');">
-                                        <button type="submit" class="p-2 md:p-2.5 rounded-xl transition-all border inline-flex items-center text-[10px] font-black uppercase
-                                            <?= $u['is_banned'] ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20 hover:bg-emerald-500 hover:text-white' : 'bg-red-500/10 text-red-500 border-red-500/20 hover:bg-red-500 hover:text-white' ?>">
+                                    <form action="<?= BASE_URL ?>/admin/usuarios/ban/<?= $u['id'] ?>" method="POST" class="m-0 flex items-center h-9" onsubmit="return confirm('¿Estás seguro de efectuar esta acción contra este usuario?');">
+                                        <button type="submit" class="flex items-center justify-center h-9 px-4 rounded-xl transition-all border text-[10px] font-black uppercase leading-none <?= $u['is_banned'] ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20 hover:bg-emerald-500 hover:text-white' : 'bg-red-500/10 text-red-500 border-red-500/20 hover:bg-red-500 hover:text-white' ?>">
                                             <?= $u['is_banned'] ? 'Reactivar' : 'Banear' ?>
                                         </button>
                                     </form>
                                 <?php else: ?>
-                                    <span class="text-[10px] text-zinc-500 uppercase tracking-widest font-black ml-2">Tú</span>
+                                    <span class="flex items-center h-9 px-4 text-[10px] text-zinc-500 uppercase tracking-widest font-black leading-none">Tú</span>
                                 <?php endif; ?>
                             </div>
                         </td>

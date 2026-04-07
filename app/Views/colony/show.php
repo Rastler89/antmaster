@@ -263,7 +263,7 @@ if ($colony['poblacion_detallada']) {
                         <div class="flex flex-col md:flex-row items-center gap-8">
                             <div class="p-4 bg-white rounded-3xl shadow-2xl">
                                 <?php 
-                                $quickUrl = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]" . BASE_URL . "/colonias/ver/" . $colony['id'] . "?quick_entry=1";
+                                $quickUrl = BASE_URL . "/colonias/ver/" . $colony['id'] . "?quick_entry=1";
                                 $qrApi = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" . urlencode($quickUrl);
                                 ?>
                                 <img src="<?= $qrApi ?>" class="w-32 h-32">
@@ -501,6 +501,12 @@ document.getElementById('stock_id_select')?.addEventListener('change', function(
 
 // Chart.js implementation
 document.addEventListener('DOMContentLoaded', () => {
+    // Verificar si viene del QR para abrir el formulario automáticamente
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('quick_entry') === '1') {
+        toggleDiaryForm();
+    }
+
     const ctx = document.getElementById('evolutionChart').getContext('2d');
     const historyData = <?= json_encode($history) ?>;
     const labels = historyData.map(h => {
@@ -545,8 +551,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function printLabel() {
-    // Implementación similar a la anterior pero adaptada
-    const qrUrl = "<?= (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]" . BASE_URL . "/colonias/ver/" . $colony['id'] . "?quick_entry=1" ?>";
+    // URL limpia usando BASE_URL
+    const qrUrl = "<?= BASE_URL ?>/colonias/ver/<?= $colony['id'] ?>?quick_entry=1";
     window.open("https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(qrUrl), "_blank");
 }
 </script>

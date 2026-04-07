@@ -81,4 +81,62 @@ class AdminEspeciesController extends Controller {
 
         $this->redirect("/admin/especies/traducir/$id?lang=$lang");
     }
+
+    /**
+     * Publicar una especie (quitar estado draft)
+     */
+    public function publish($id) {
+        require_admin();
+        if (Species::publish($id)) {
+            $_SESSION['success'] = "Especie publicada correctamente. Ahora es visible para todos.";
+        } else {
+            $_SESSION['error'] = "Error al publicar la especie.";
+        }
+        $this->redirect('/admin/especies');
+    }
+
+    /**
+     * Formulario para editar los datos base de una especie
+     */
+    public function edit($id) {
+        require_admin();
+        $species = Species::find($id);
+        if (!$species) {
+            $this->redirect('/admin/especies');
+        }
+
+        $this->view('admin/especies/edit', [
+            'species' => $species,
+            'title'   => 'Editar Base: ' . $species['nombre_cientifico']
+        ]);
+    }
+
+    /**
+     * Actualizar los datos base de una especie
+     */
+    public function update($id) {
+        require_admin();
+        
+        $data = [
+            'nombre'                => $_POST['nombre'] ?? '',
+            'nombre_cientifico'     => $_POST['nombre_cientifico'] ?? '',
+            'dificultad'            => $_POST['dificultad'] ?? 'Principiante',
+            'temperatura'           => $_POST['temperatura'] ?? '',
+            'humedad'               => $_POST['humedad'] ?? '',
+            'velocidad_crecimiento' => $_POST['velocidad_crecimiento'] ?? '',
+            'tamano'                => $_POST['tamano'] ?? '',
+            'castas'                => $_POST['castas'] ?? '',
+            'reproduccion'          => $_POST['reproduccion'] ?? '',
+            'vuelos'                => $_POST['vuelos'] ?? '',
+            'is_draft'              => isset($_POST['is_draft']) ? (int)$_POST['is_draft'] : 0
+        ];
+
+        if (Species::update($id, $data)) {
+            $_SESSION['success'] = "Datos base actualizados correctamente.";
+            $this->redirect('/admin/especies');
+        } else {
+            $_SESSION['error'] = "Error al actualizar los datos base.";
+            $this->redirect("/admin/especies/editar/$id");
+        }
+    }
 }

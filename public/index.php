@@ -35,6 +35,7 @@ $router->get('/logout', 'AuthController@logout');
 // Páginas de Información (Públicas)
 $router->get('/acerca-de', 'PageController@about');
 $router->get('/guia-de-uso', 'PageController@guide');
+$router->get('/changelog', 'PageController@changelog');
 
 $router->get('/colonias', 'ColonyController@index');
 $router->get('/colonias/nueva', 'ColonyController@create');
@@ -76,6 +77,9 @@ $router->post('/admin/usuarios/colonia/borrar/{id}', 'AdminController@deleteUser
 
 // Gestión de Especies y Traducciones (Admin)
 $router->get('/admin/especies', 'AdminEspeciesController@index');
+$router->post('/admin/especies/publicar/{id}', 'AdminEspeciesController@publish');
+$router->get('/admin/especies/editar/{id}', 'AdminEspeciesController@edit');
+$router->post('/admin/especies/editar/{id}', 'AdminEspeciesController@update');
 $router->get('/admin/especies/traducir/{id}', 'AdminEspeciesController@translate');
 $router->post('/admin/especies/traducir/{id}', 'AdminEspeciesController@storeTranslation');
 

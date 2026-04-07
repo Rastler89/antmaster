@@ -16,4 +16,12 @@ class PageController extends Controller {
         ];
         $this->view('pages/guide', $data);
     }
+
+    public function changelog() {
+        $data = [
+            'title' => 'Changelog - Historial de Versiones',
+            'description' => 'Explora la evolución de AntMaster Pro. Registro detallado de nuevas funcionalidades, mejoras y correcciones en cada versión.'
+        ];
+        $this->view('pages/changelog', $data);
+    }
 }

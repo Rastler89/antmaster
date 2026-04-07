@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
     rol ENUM('usuario', 'admin') DEFAULT 'usuario',
     last_login TIMESTAMP NULL DEFAULT NULL,
     is_banned TINYINT(1) DEFAULT 0,
+    settings TEXT NULL,
     fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -29,7 +30,8 @@ CREATE TABLE IF NOT EXISTS especies (
     vuelos VARCHAR(100),
     descripcion TEXT,
     alimentacion TEXT,
-    consejos_cria TEXT
+    consejos_cria TEXT,
+    is_draft TINYINT(1) DEFAULT 0
 );
 
 -- Traducciones de Especies (i18n)

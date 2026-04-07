@@ -54,10 +54,16 @@ class ColonyController extends Controller {
             $poblacionDetallada = json_encode($castas);
         }
 
+        $especieId = $_POST['especie_id'] ?? '';
+        if (str_starts_with($especieId, 'NEW:')) {
+            $nuevoNombre = substr($especieId, 4);
+            $especieId = Species::createDraft($nuevoNombre);
+        }
+
         $data = [
             'usuario_id'         => $_SESSION['user_id'],
             'nombre'             => $_POST['nombre'] ?? '',
-            'especie_id'         => $_POST['especie_id'] !== '' ? $_POST['especie_id'] : null,
+            'especie_id'         => !empty($especieId) ? $especieId : null,
             'fecha_adquisicion'  => $_POST['fecha_adquisicion'] ?? date('Y-m-d'),
             'tipo_hormiguero'    => $_POST['tipo_hormiguero'] ?? '',
             'descripcion'        => $_POST['descripcion'] ?? '',
@@ -325,9 +331,15 @@ class ColonyController extends Controller {
             $poblacionDetallada = json_encode($castas);
         }
 
+        $especieId = $_POST['especie_id'] ?? '';
+        if (str_starts_with($especieId, 'NEW:')) {
+            $nuevoNombre = substr($especieId, 4);
+            $especieId = Species::createDraft($nuevoNombre);
+        }
+
         $data = [
             'nombre'             => $_POST['nombre'] ?? '',
-            'especie_id'         => $_POST['especie_id'] ?? '',
+            'especie_id'         => !empty($especieId) ? $especieId : '',
             'fecha_adquisicion'  => $_POST['fecha_adquisicion'] ?? date('Y-m-d'),
             'tipo_hormiguero'    => $_POST['tipo_hormiguero'] ?? '',
             'descripcion'        => $_POST['descripcion'] ?? '',

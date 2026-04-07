@@ -9,9 +9,9 @@ AntMaster Pro es una aplicación web integral (CMS/Panel de Control) diseñada p
 - **Control de Alimentación y Stock**: Administra tu inventario de alimento (agua miel, insectos, semillas). Registra en el diario cuándo y cuánto has alimentado a cada colonia descontándolo del stock automáticamente.
 - **Módulo de Especies (Wiki)**: Fichas de cría detalladas para diversas especies con información de humedad, temperatura, dificultad, etc.
 - **Sistema Multi-Idioma (i18n)**: Soporte completo para Español, Inglés y Francés, tanto en la interfaz (UI) como en el contenido dinámico de la base de datos (traducción de especies).
-- **Panel de Administración Avanzado**: Supervisión total de usuarios, roles y datos. Permite a los administradores gestionar directamente las colonias y el stock de cualquier usuario para soporte técnico o moderación.
-- **Módulo de Especies (Wiki)**: Fichas de cría detalladas para diversas especies con información de humedad, temperatura, dificultad, etc. Incluye un flujo de revisiones para propuestas comunitarias.
-- **Sistema de Ayuda Contextual**: Secciones de ayuda "dismissible" (cerrables) en cada módulo principal que utilizan `localStorage` para recordar la preferencia del usuario.
+- **Gestión de Especies (Drafts)**: Permite a los usuarios añadir especies nuevas durante el registro de colonias. Estas entradas generan una notificación de "Borrador" para el administrador.
+- **Panel de Administración Pro**: Herramientas avanzadas para editar parámetros base de las especies, traducir fichas y publicar oficialmente las sugerencias de los usuarios.
+- **Sistema de Ayuda Contextual**: Tarjetas informativas cerrables en cada módulo principal que utilizan `localStorage` para recordar la preferencia del usuario.
 - **Páginas de Información y Guía**: Secciones dedicadas de "Acerca de" y "Guía de Inicio" con capturas de pantalla reales del sistema para facilitar el onboarding.
 - **Gestión de Errores Tematizada**: Páginas personalizadas para errores 404 y 403 con temática de mirmecología.
 - **Sistema Multi-Idioma (i18n)**: Soporte completo para Español, Inglés y Francés.
@@ -101,5 +101,5 @@ Si necesitas cargar o debugear las traducciones o la base de datos por primera v
 - **Control de Acceso Administrativo**: Funciones centralizadas (`require_admin`, `is_admin`) para validar permisos antes de realizar acciones críticas.
 
 ---
-*Documentación actualizada para AntMaster Pro v1.1.5.*
+*Documentación actualizada para AntMaster Pro v1.1.6.*
 

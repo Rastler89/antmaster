@@ -18,6 +18,7 @@ class Species extends Model {
                        COALESCE(t.localizacion, e.localizacion) as localizacion
                 FROM especies e
                 LEFT JOIN especies_traducciones t ON e.id = t.especie_id AND t.idioma = ?
+                WHERE e.is_draft = 0
                 ORDER BY e.nombre_cientifico ASC";
         
         $stmt = static::db()->prepare($sql);
@@ -50,7 +51,7 @@ class Species extends Model {
      * Obtener todas las especies junto con una lista de las traducciones disponibles
      */
     public static function allWithTranslationStats() {
-        $sql = "SELECT e.id, e.nombre_cientifico, e.nombre as nombre_es,
+        $sql = "SELECT e.id, e.nombre_cientifico, e.nombre as nombre_es, e.is_draft,
                        GROUP_CONCAT(t.idioma) as idiomas_traducidos
                 FROM especies e
                 LEFT JOIN especies_traducciones t ON e.id = t.especie_id
@@ -99,13 +100,42 @@ class Species extends Model {
                        COALESCE(t.nombre, e.nombre) as nombre
                 FROM especies e
                 LEFT JOIN especies_traducciones t ON e.id = t.especie_id AND t.idioma = ?
-                WHERE e.nombre_cientifico LIKE ? OR e.nombre LIKE ? OR t.nombre LIKE ?
+                WHERE e.is_draft = 0 
+                AND (e.nombre_cientifico LIKE ? OR e.nombre LIKE ? OR t.nombre LIKE ?)
                 ORDER BY e.nombre_cientifico ASC
                 LIMIT 10";
         
         $stmt = static::db()->prepare($sql);
         $stmt->execute([$lang, $query, $query, $query]);
         return $stmt->fetchAll();
+    }
+
+    /**
+     * Crear una especie borrador (draft) desde el registro de colonias
+     */
+    public static function createDraft($name) {
+        // Sanitizar y verificar duplicados por nombre científico
+        $existing = static::query("SELECT id FROM especies WHERE nombre_cientifico = ?", [$name]);
+        if ($existing) return $existing[0]['id'];
+
+        $sql = "INSERT INTO especies (nombre, nombre_cientifico, is_draft) VALUES (?, ?, 1)";
+        $stmt = static::db()->prepare($sql);
+        $stmt->execute([$name, $name]);
+        return static::db()->lastInsertId();
+    }
+
+    /**
+     * Publicar una especie (quitar estado draft)
+     */
+    public static function publish($id) {
+        return static::update($id, ['is_draft' => 0]);
+    }
+
+    /**
+     * Obtener todas las especies borrador para el administrador
+     */
+    public static function getDrafts() {
+        return static::query("SELECT * FROM especies WHERE is_draft = 1 ORDER BY id DESC");
     }
 }
 

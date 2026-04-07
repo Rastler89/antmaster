@@ -56,6 +56,19 @@
                                 <p class="text-[10px] text-zinc-500 uppercase font-black tracking-widest"><?= htmlspecialchars($s['nombre']) ?></p>
                             </div>
                         <?php endforeach; ?>
+                        <!-- Opción de Nueva Especie -->
+                        <div id="add-new-species-option" class="hidden px-4 py-4 hover:bg-emerald-500/10 cursor-pointer border-t border-white/5 transition-colors group">
+                            <div class="flex items-center gap-3">
+                                <div class="p-2 bg-emerald-500/20 rounded-lg text-emerald-400 group-hover:scale-110 transition-transform">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-bold text-emerald-400">¿No la encuentras?</p>
+                                    <p class="text-sm text-white">Usar "<span class="new-species-name font-italic"></span>" como nueva especie</p>
+                                </div>
+                            </div>
+                        </div>
+
                         <div id="no-results" class="hidden px-4 py-8 text-center text-zinc-500 text-xs italic">No se encontraron especies</div>
                     </div>
                 </div>
@@ -158,9 +171,14 @@ document.addEventListener('click', (e) => {
 });
 
 searchInput.addEventListener('input', (e) => {
-    const term = e.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    const originalTerm = e.target.value;
+    const term = originalTerm.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     let count = 0;
     
+    // Reset selection if typing
+    hiddenInput.value = '';
+    searchInput.classList.remove('border-blue-500/50', 'bg-blue-500/5');
+
     options.forEach(opt => {
         const name = opt.getAttribute('data-name').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         const scientific = opt.getAttribute('data-scientific').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -173,8 +191,26 @@ searchInput.addEventListener('input', (e) => {
         }
     });
 
-    noResults.classList.toggle('hidden', count > 0);
+    const addOption = document.getElementById('add-new-species-option');
+    if (originalTerm.trim().length >= 3) {
+        addOption.querySelector('.new-species-name').textContent = originalTerm;
+        addOption.classList.remove('hidden');
+    } else {
+        addOption.classList.add('hidden');
+    }
+
+    noResults.classList.toggle('hidden', (count > 0 || originalTerm.trim().length >= 3));
     resultsDiv.classList.remove('hidden');
+});
+
+document.getElementById('add-new-species-option').addEventListener('click', function() {
+    const name = searchInput.value;
+    // Marcamos que es una nueva especie usando un valor especial o un flag
+    // Usaremos el propio nombre en el hiddenInput pero con un prefijo o simplemente
+    // dejaremos que el controlador lo maneje si especie_id está vacío pero el texto tiene valor.
+    hiddenInput.value = 'NEW:' + name; 
+    resultsDiv.classList.add('hidden');
+    searchInput.classList.add('border-emerald-500/50', 'bg-emerald-500/5');
 });
 
 options.forEach(opt => {
