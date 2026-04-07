@@ -9,6 +9,24 @@
         <p class="text-zinc-500 text-xs font-medium uppercase tracking-[0.2em] sm:ml-auto"><?= __('stock_subtitle') ?></p>
     </div>
 
+    <!-- Sección de Ayuda (Cerrable) -->
+    <div class="glass-card p-6 border-orange-500/20 mb-8 relative overflow-hidden group transition-all duration-300" data-help-id="stock_index">
+        <button onclick="dismissHelp('stock_index')" class="absolute top-4 right-4 p-2 text-zinc-500 hover:text-white transition-colors" title="Cerrar Ayuda">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+        <div class="flex items-start gap-4">
+            <div class="p-3 bg-orange-500/10 rounded-2xl text-orange-400 border border-orange-500/10">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+            </div>
+            <div>
+                <h3 class="text-lg font-bold text-white mb-1">Gestión de Despensa</h3>
+                <p class="text-sm text-zinc-400 leading-relaxed max-w-2xl">
+                    Mantén un registro de tus insectos alimentarios, jarabes y semillas. Al añadir stock aquí, recibirás alertas en tu Dashboard cuando las cantidades sean críticas (< 10 unidades/gramos), asegurando que tus colonias nunca se queden sin recursos.
+                </p>
+            </div>
+        </div>
+    </div>
+
     <!-- Mensajes de éxito o error -->
     <div class="mb-4">
         <?php if (!empty($success)): ?>

@@ -14,6 +14,24 @@
     </div>
 </div>
 
+<!-- Sección de Ayuda (Cerrable) -->
+<div class="glass-card p-6 border-blue-500/20 mb-8 relative overflow-hidden group transition-all duration-300" data-help-id="dashboard_main">
+    <button onclick="dismissHelp('dashboard_main')" class="absolute top-4 right-4 p-2 text-zinc-500 hover:text-white transition-colors" title="Cerrar Ayuda">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+    </button>
+    <div class="flex items-start gap-4">
+        <div class="p-3 bg-blue-500/10 rounded-2xl text-blue-400 border border-blue-500/10">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        </div>
+        <div>
+            <h3 class="text-lg font-bold text-white mb-1">¿Cómo leer tu analítica?</h3>
+            <p class="text-sm text-zinc-400 leading-relaxed max-w-2xl">
+                Este panel resume el estado global de tu imperio. Las gráficas de la izquierda muestran el crecimiento acumulado de todas tus colonias, mientras que a la derecha verás alertas críticas de stock y la diversidad de especies que posees.
+            </p>
+        </div>
+    </div>
+</div>
+
 <!-- KPI Cards -->
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
     <div class="glass-card p-6 border-blue-500/10 overflow-hidden relative group hover:bg-blue-500/5 transition-all">

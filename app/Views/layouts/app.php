@@ -330,5 +330,108 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
         <?= isset($content) ? $content : '' ?>
     </main>
 
+    <!-- Ko-fi Widget -->
+    <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
+    <script>
+    kofiWidgetOverlay.draw('rastler', {
+        'type': 'floating-chat',
+        'floating-chat.donateButton.text': 'Support me',
+        'floating-chat.donateButton.background-color': '#00b9fe',
+        'floating-chat.donateButton.text-color': '#fff'
+    });
+    </script>
+
+    <!-- Footer -->
+    <footer class="mt-auto py-12 border-t border-white/5 bg-zinc-950/20 backdrop-blur-md relative z-10">
+        <div class="max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 p-0.5">
+                            <div class="w-full h-full bg-background rounded-[7px] flex items-center justify-center overflow-hidden">
+                                <img src="<?= asset('assets/img/logo.png') ?>" alt="AntMaster" class="w-6 h-6 object-contain">
+                            </div>
+                        </div>
+                        <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
+                            <?= APP_NAME ?>
+                        </span>
+                    </div>
+                    <p class="text-sm text-zinc-500 max-w-sm mb-6 leading-relaxed">
+                        La plataforma definitiva para el seguimiento y gestión de colonias de hormigas. Diseñada para entusiastas de la mirmecología que buscan precisión y comunidad.
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <a href="https://rastler.dev" target="_blank" class="text-zinc-500 hover:text-blue-400 transition-colors">
+                            <span class="text-xs font-black uppercase tracking-widest">rastler.dev</span>
+                        </a>
+                        <span class="text-zinc-800">|</span>
+                        <span class="text-xs text-zinc-600">v<?= APP_VERSION ?></span>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-xs font-black uppercase tracking-widest text-white mb-6">Explorar</h4>
+                    <ul class="space-y-4">
+                        <li><a href="<?= BASE_URL ?>/acerca-de" class="text-sm text-zinc-500 hover:text-white transition-colors">Sobre el proyecto</a></li>
+                        <li><a href="<?= BASE_URL ?>/guia-de-uso" class="text-sm text-zinc-500 hover:text-white transition-colors">Guía de Uso</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-xs font-black uppercase tracking-widest text-white mb-6">Comunidad</h4>
+                    <div class="space-y-4">
+                        <p class="text-xs text-zinc-600 leading-relaxed italic">
+                            "Desarrollado con pasión para ayudar a crecer tus colonias."
+                        </p>
+                        <!-- Ko-fi integration if you want it here -->
+                        <div class="pt-2">
+                             <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
+                             <script>
+                             kofiWidgetOverlay.draw('rastler', {
+                                 'type': 'floating-chat',
+                                 'floating-chat.donateButton.text': 'Tip Me',
+                                 'floating-chat.donateButton.background-color': '#00b9fe',
+                                 'floating-chat.donateButton.text-color': '#fff'
+                             });
+                             </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-12 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-[10px] text-zinc-600 uppercase font-black tracking-widest">
+                    &copy; <?= date('Y') ?> AntMaster Pro. Desarrollado por <a href="https://rastler.dev" class="text-zinc-500 hover:text-blue-400 underline decoration-blue-500/20 underline-offset-4">Rastler</a>.
+                </p>
+                <div class="flex items-center gap-6">
+                    <span class="text-[10px] text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 font-black">SISTEMA ONLINE</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Global JS for Dismissible Help Sections -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const helpSections = document.querySelectorAll('[data-help-id]');
+        
+        helpSections.forEach(section => {
+            const helpId = section.getAttribute('data-help-id');
+            if (localStorage.getItem('help_dismissed_' + helpId)) {
+                section.style.display = 'none';
+            }
+        });
+
+        window.dismissHelp = function(helpId) {
+            const section = document.querySelector(`[data-help-id="${helpId}"]`);
+            if (section) {
+                section.classList.add('opacity-0', 'scale-95');
+                setTimeout(() => {
+                    section.style.display = 'none';
+                    localStorage.setItem('help_dismissed_' + helpId, 'true');
+                }, 300);
+            }
+        };
+    });
+    </script>
 </body>
 </html>

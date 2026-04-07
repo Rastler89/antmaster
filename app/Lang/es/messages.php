@@ -1,7 +1,7 @@
 <?php
 return [
-    'seo_description' => 'La herramienta definitiva para la gestión de colonias de hormigas. Registra población, castas, alimentación y comparte tus progresos con la comunidad.',
-    'seo_keywords' => 'hormigas, antkeeping, gestión de colonias, cría de hormigas, mirmecología, AntMaster',
+    'seo_description' => 'AntMaster Pro: La plataforma definitiva para mirmecólogos. Gestiona tus colonias de hormigas, controla stock de alimento, consulta fichas de cría y comparte tu pasión con una comunidad de confianza.',
+    'seo_keywords' => 'hormigas, mirmecología, gestión de colonias, antkeeping, criar hormigas, guía de hormigas, stock alimento hormigas, AntMaster Pro, rastler.dev',
     'nav_dashboard' => 'Panel de Control',
     'nav_colonies' => 'Mis Colonias',
     'nav_species' => 'Fichas de Cría',

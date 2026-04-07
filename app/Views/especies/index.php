@@ -20,6 +20,24 @@
         </a>
     </div>
 
+    <!-- Sección de Ayuda (Cerrable) -->
+    <div class="glass-card p-6 border-emerald-500/20 mb-8 relative overflow-hidden group transition-all duration-300" data-help-id="species_index">
+        <button onclick="dismissHelp('species_index')" class="absolute top-4 right-4 p-2 text-zinc-500 hover:text-white transition-colors" title="Cerrar Ayuda">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+        <div class="flex items-start gap-4">
+            <div class="p-3 bg-emerald-500/10 rounded-2xl text-emerald-400 border border-emerald-500/10">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.168.477 4 1.253m0-13C13.168 5.477 14.754 5 16.5 5S19.832 5.477 21 6.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4 1.253"></path></svg>
+            </div>
+            <div>
+                <h3 class="text-lg font-bold text-white mb-1">Mirmeco-Wikipedia</h3>
+                <p class="text-sm text-zinc-400 leading-relaxed max-w-2xl">
+                    Consulta las fichas de cría para saber qué temperatura, humedad y alimentación necesita cada especie. Si tienes una especie que no aparece en la lista, puedes "Proponer Especie" y los administradores la validarán para toda la comunidad.
+                </p>
+            </div>
+        </div>
+    </div>
+
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <?php foreach ($especies as $e): ?>
             <div class="glass-card p-6 relative overflow-hidden group">

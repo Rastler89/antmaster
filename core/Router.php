@@ -59,6 +59,10 @@ class Router {
         }
 
         http_response_code(404);
-        echo "404 Not Found: " . htmlspecialchars($uri);
+        if (class_exists('View')) {
+            View::render('errors/404', ['title' => '404 - Ruta Moviéndose']);
+        } else {
+            echo "404 Not Found";
+        }
     }
 }

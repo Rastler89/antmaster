@@ -3,6 +3,7 @@
 require_once '../app/Models/User.php';
 require_once '../app/Models/Colony.php';
 require_once '../app/Models/SpeciesRevision.php';
+require_once '../app/Models/Stock.php';
 
 class AdminController extends Controller {
 
@@ -104,5 +105,68 @@ class AdminController extends Controller {
         }
 
         $this->redirect('/admin/dashboard');
+    }
+
+    public function viewUser($id) {
+        require_admin();
+
+        $user = User::find($id);
+        if (!$user) {
+            $this->redirect('/admin/dashboard');
+        }
+
+        $data = [
+            'user'     => $user,
+            'colonies' => Colony::getUserColonies($id),
+            'stock'    => Stock::where('usuario_id', '=', $id),
+            'title'    => 'Detalle de Usuario | Admin'
+        ];
+
+        $this->view('admin/user_detail', $data);
+    }
+
+    public function editUserStock($stockId) {
+        require_admin();
+        
+        $stock = Stock::whereOne('id', '=', $stockId);
+        if ($stock) {
+            $cantidad = (float)($_POST['cantidad'] ?? $stock['cantidad']);
+            Stock::update($stockId, ['cantidad' => $cantidad]);
+            $_SESSION['success'] = "Stock del usuario actualizado (Admin).";
+            $this->redirect('/admin/usuarios/ver/' . $stock['usuario_id']);
+        } else {
+            $this->redirect('/admin/dashboard');
+        }
+    }
+
+    public function deleteUserStock($stockId) {
+        require_admin();
+        
+        $stock = Stock::whereOne('id', '=', $stockId);
+        if ($stock) {
+            $userId = $stock['usuario_id'];
+            Stock::delete($stockId);
+            $_SESSION['success'] = "Stock eliminado (Admin).";
+            $this->redirect('/admin/usuarios/ver/' . $userId);
+        } else {
+            $this->redirect('/admin/dashboard');
+        }
+    }
+
+    public function deleteUserColony($colonyId) {
+        require_admin();
+        
+        $colony = Colony::find($colonyId);
+        if ($colony) {
+            $userId = $colony['usuario_id'];
+            if ($colony['imagen']) {
+                @unlink('uploads/colonies/' . $colony['imagen']);
+            }
+            Colony::delete($colonyId);
+            $_SESSION['success'] = "Colonia eliminada (Admin).";
+            $this->redirect('/admin/usuarios/ver/' . $userId);
+        } else {
+            $this->redirect('/admin/dashboard');
+        }
     }
 }

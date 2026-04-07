@@ -15,8 +15,13 @@ define('DB_PASS', $env_db_pass);
 define('APP_NAME', 'AntMaster Pro');
 define('APP_VERSION', '1.1.2');
 
-// Detección de BASE_URL forzada a HTTPS
-$protocol = "https";
+// Detección del Protocolo
+$isLocal = preg_match('/^(localhost|127\.0\.0\.1)(:\d+)?$/', $_SERVER['HTTP_HOST'] ?? '');
+$isHttps = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') || 
+           (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
+
+$protocol = ($isHttps || !$isLocal) ? "https" : "http";
+
 $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
 $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
 $baseUrl = str_replace(['/public/index.php', '/index.php', '/public/check_uploads.php', '/check_uploads.php'], '', $scriptName);
@@ -149,7 +154,11 @@ function require_admin()
 {
     if (!is_admin()) {
         header('HTTP/1.0 403 Forbidden');
-        echo "403 Forbidden: Permisos de Administrador requeridos.";
+        if (class_exists('View')) {
+            View::render('errors/403', ['title' => '403 - Cámaras Reales']);
+        } else {
+            echo "403 Forbidden: Permisos de Administrador requeridos.";
+        }
         exit;
     }
 }

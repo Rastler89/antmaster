@@ -7,7 +7,9 @@ require_once '../config.php';
 $isHttps = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') || 
            (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
 
-if (!$isHttps && $_SERVER['HTTP_HOST'] !== 'localhost' && $_SERVER['HTTP_HOST'] !== '127.0.0.1') {
+$isLocal = preg_match('/^(localhost|127\.0\.0\.1)(:\d+)?$/', $_SERVER['HTTP_HOST'] ?? '');
+
+if (!$isHttps && !$isLocal) {
     header('Location: https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'], true, 301);
     exit;
 }
@@ -29,6 +31,10 @@ $router->post('/login', 'AuthController@login');
 $router->get('/register', 'AuthController@registerForm');
 $router->post('/register', 'AuthController@register');
 $router->get('/logout', 'AuthController@logout');
+
+// Páginas de Información (Públicas)
+$router->get('/acerca-de', 'PageController@about');
+$router->get('/guia-de-uso', 'PageController@guide');
 
 $router->get('/colonias', 'ColonyController@index');
 $router->get('/colonias/nueva', 'ColonyController@create');
@@ -63,6 +69,10 @@ $router->put('/admin/revisiones/{id}', 'EspeciesController@resolveRevision');
 // Panel de Administración (Usuarios y Estadísticas)
 $router->get('/admin/dashboard', 'AdminController@dashboard');
 $router->post('/admin/usuarios/ban/{id}', 'AdminController@toggleBan');
+$router->get('/admin/usuarios/ver/{id}', 'AdminController@viewUser');
+$router->post('/admin/usuarios/stock/editar/{id}', 'AdminController@editUserStock');
+$router->post('/admin/usuarios/stock/borrar/{id}', 'AdminController@deleteUserStock');
+$router->post('/admin/usuarios/colonia/borrar/{id}', 'AdminController@deleteUserColony');
 
 // Gestión de Especies y Traducciones (Admin)
 $router->get('/admin/especies', 'AdminEspeciesController@index');

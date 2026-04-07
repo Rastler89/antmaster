@@ -9,6 +9,24 @@
         </a>
     </div>
 
+    <!-- Sección de Ayuda (Cerrable) -->
+    <div class="glass-card p-6 border-purple-500/20 mb-8 relative overflow-hidden group transition-all duration-300" data-help-id="colony_index">
+        <button onclick="dismissHelp('colony_index')" class="absolute top-4 right-4 p-2 text-zinc-500 hover:text-white transition-colors" title="Cerrar Ayuda">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+        <div class="flex items-start gap-4">
+            <div class="p-3 bg-purple-500/10 rounded-2xl text-purple-400 border border-purple-500/10">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+            </div>
+            <div>
+                <h3 class="text-lg font-bold text-white mb-1">Tus Reinas y su Progreso</h3>
+                <p class="text-sm text-zinc-400 leading-relaxed max-w-2xl">
+                    Aquí puedes gestionar cada una de tus colonias. Haz clic en una tarjeta para ver su diario de crecimiento, galería de fotos y detalles técnicos. No olvides registrar los nacimientos periódicamente para mantener al día tus estadísticas.
+                </p>
+            </div>
+        </div>
+    </div>
+
     <?php if (empty($colonies)): ?>
         <div class="glass-card p-12 text-center">
             <div class="text-blue-400/30 mb-4 flex justify-center">

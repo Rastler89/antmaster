@@ -297,16 +297,21 @@ document.addEventListener('DOMContentLoaded', function() {
                             <?php endif; ?>
                         </td>
                         <td class="px-6 py-5 text-right">
-                            <?php if ($u['id'] != $_SESSION['user_id']): ?>
-                                <form action="<?= BASE_URL ?>/admin/usuarios/ban/<?= $u['id'] ?>" method="POST" onsubmit="return confirm('¿Estás seguro de efectuar esta acción contra este usuario?');">
-                                    <button type="submit" class="p-2 md:p-2.5 rounded-xl transition-all border inline-flex items-center text-[10px] font-black uppercase
-                                        <?= $u['is_banned'] ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20 hover:bg-emerald-500 hover:text-white' : 'bg-red-500/10 text-red-500 border-red-500/20 hover:bg-red-500 hover:text-white' ?>">
-                                        <?= $u['is_banned'] ? 'Reactivar' : 'Banear' ?>
-                                    </button>
-                                </form>
-                            <?php else: ?>
-                                <span class="text-[10px] text-zinc-500 uppercase tracking-widest font-black">Tú</span>
-                            <?php endif; ?>
+                            <div class="flex items-center justify-end gap-2">
+                                <a href="<?= BASE_URL ?>/admin/usuarios/ver/<?= $u['id'] ?>" class="p-2 md:p-2.5 rounded-xl transition-all border inline-flex items-center text-[10px] font-black uppercase bg-blue-500/10 text-blue-500 border-blue-500/20 hover:bg-blue-500 hover:text-white" title="Ver Detalles">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                </a>
+                                <?php if ($u['id'] != $_SESSION['user_id']): ?>
+                                    <form action="<?= BASE_URL ?>/admin/usuarios/ban/<?= $u['id'] ?>" method="POST" class="inline" onsubmit="return confirm('¿Estás seguro de efectuar esta acción contra este usuario?');">
+                                        <button type="submit" class="p-2 md:p-2.5 rounded-xl transition-all border inline-flex items-center text-[10px] font-black uppercase
+                                            <?= $u['is_banned'] ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20 hover:bg-emerald-500 hover:text-white' : 'bg-red-500/10 text-red-500 border-red-500/20 hover:bg-red-500 hover:text-white' ?>">
+                                            <?= $u['is_banned'] ? 'Reactivar' : 'Banear' ?>
+                                        </button>
+                                    </form>
+                                <?php else: ?>
+                                    <span class="text-[10px] text-zinc-500 uppercase tracking-widest font-black ml-2">Tú</span>
+                                <?php endif; ?>
+                            </div>
                         </td>
                     </tr>
                 <?php endforeach; ?>

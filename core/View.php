@@ -12,7 +12,7 @@ class View {
             $content = ob_get_clean();
 
             // Determinar el layout según el directorio de la vista
-            if (strpos($view, 'auth/') === 0) {
+            if (strpos($view, 'auth/') === 0 || strpos($view, 'errors/') === 0) {
                 $layout = "../app/Views/layouts/auth.php";
             } else {
                 $layout = "../app/Views/layouts/app.php";

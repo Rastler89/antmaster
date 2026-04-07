@@ -78,7 +78,7 @@ class ColonyController extends Controller {
     public function show($id) {
         require_login();
         
-        $colony = Colony::findWithSpecies($id, $_SESSION['user_id']);
+        $colony = Colony::findWithSpecies($id, is_admin() ? null : $_SESSION['user_id']);
         
         if (!$colony) {
             $this->redirect('/');
@@ -145,7 +145,7 @@ class ColonyController extends Controller {
     public function togglePublic($id) {
         require_login();
         $colony = Colony::find($id);
-        if ($colony && $colony['usuario_id'] == $_SESSION['user_id']) {
+        if ($colony && ($colony['usuario_id'] == $_SESSION['user_id'] || is_admin())) {
             $isPublic = (int)($_POST['is_public'] ?? 0);
             Colony::togglePublic($id, $isPublic);
         }
@@ -159,7 +159,12 @@ class ColonyController extends Controller {
             SELECT d.id FROM diario d 
             JOIN colonias c ON d.colonia_id = c.id 
             WHERE d.id = ? AND c.usuario_id = ?
-        ", [$id, $_SESSION['user_id']]);
+        ", [$id, is_admin() ? -1 : $_SESSION['user_id']]);
+
+        // Si es admin obtenemos el id sin restricción de usuario
+        if (!$result && is_admin()) {
+            $result = Colony::query("SELECT id FROM diario WHERE id = ?", [$id]);
+        }
 
         if ($result) {
             $isVisible = (int)($_POST['is_visible'] ?? 1);
@@ -175,7 +180,7 @@ class ColonyController extends Controller {
         require_login();
         
         $colony = Colony::find($id);
-        if (!$colony || $colony['usuario_id'] != $_SESSION['user_id']) {
+        if (!$colony || ($colony['usuario_id'] != $_SESSION['user_id'] && !is_admin())) {
             $this->redirect('/colonias');
         }
 
@@ -201,7 +206,7 @@ class ColonyController extends Controller {
         // Lógica de Stock para Alimentación
         if ($tipoEvento === 'Alimentación' && !empty($stockId)) {
             $stock = Stock::whereOne('id', '=', $stockId);
-            if ($stock && $stock['usuario_id'] == $_SESSION['user_id']) {
+            if ($stock && ($stock['usuario_id'] == $_SESSION['user_id'] || is_admin())) {
                 if ($stock['cantidad'] >= $cantidadUsada) {
                     $nuevaCantidad = $stock['cantidad'] - $cantidadUsada;
                     Stock::update($stockId, ['cantidad' => $nuevaCantidad]);
@@ -236,7 +241,7 @@ class ColonyController extends Controller {
         require_login();
         
         $colony = Colony::find($id);
-        if (!$colony || $colony['usuario_id'] != $_SESSION['user_id']) {
+        if (!$colony || ($colony['usuario_id'] != $_SESSION['user_id'] && !is_admin())) {
             $this->redirect('/colonias');
         }
 
@@ -268,9 +273,9 @@ class ColonyController extends Controller {
     public function edit($id) {
         require_login();
         
-        $colony = Colony::findWithSpecies($id, $_SESSION['user_id']);
+        $colony = Colony::findWithSpecies($id, is_admin() ? null : $_SESSION['user_id']);
         
-        // Verificar dueño
+        // Verificar dueño o si es admin
         if (!$colony) {
             $this->redirect('/colonias');
         }
@@ -288,7 +293,7 @@ class ColonyController extends Controller {
         require_login();
         
         $colony = Colony::find($id);
-        if (!$colony || $colony['usuario_id'] != $_SESSION['user_id']) {
+        if (!$colony || ($colony['usuario_id'] != $_SESSION['user_id'] && !is_admin())) {
             $this->redirect('/colonias');
         }
 
@@ -344,7 +349,7 @@ class ColonyController extends Controller {
         require_login();
         
         $colony = Colony::find($id);
-        if ($colony && $colony['usuario_id'] == $_SESSION['user_id']) {
+        if ($colony && ($colony['usuario_id'] == $_SESSION['user_id'] || is_admin())) {
             // Borrar imagen si existe
             if ($colony['imagen']) {
                 @unlink('uploads/colonies/' . $colony['imagen']);
@@ -359,7 +364,7 @@ class ColonyController extends Controller {
         require_login();
         
         $colony = Colony::find($id);
-        if (!$colony || $colony['usuario_id'] != $_SESSION['user_id']) {
+        if (!$colony || ($colony['usuario_id'] != $_SESSION['user_id'] && !is_admin())) {
             $this->redirect('/colonias');
         }
 

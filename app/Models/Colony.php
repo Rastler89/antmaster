@@ -15,15 +15,24 @@ class Colony extends Model {
         ", [$lang, $userId]);
     }
 
-    public static function findWithSpecies($id, $userId) {
+    public static function findWithSpecies($id, $userId = null) {
         $lang = defined('APP_LANG') ? APP_LANG : 'es';
-        $result = self::query("
+        
+        $sql = "
             SELECT c.*, COALESCE(t.nombre, e.nombre) as especie_nombre, e.nombre_cientifico as especie_nombre_cientifico
             FROM colonias c 
             JOIN especies e ON c.especie_id = e.id 
             LEFT JOIN especies_traducciones t ON e.id = t.especie_id AND t.idioma = ?
-            WHERE c.id = ? AND c.usuario_id = ?
-        ", [$lang, $id, $userId]);
+            WHERE c.id = ?
+        ";
+        $params = [$lang, $id];
+
+        if ($userId !== null) {
+            $sql .= " AND c.usuario_id = ?";
+            $params[] = $userId;
+        }
+
+        $result = self::query($sql, $params);
         return $result ? $result[0] : null;
     }
 

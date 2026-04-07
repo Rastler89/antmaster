@@ -158,7 +158,7 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
         .reduce-motion .animate-blob { animation: none !important; }
     </style>
 </head>
-<body class="antialiased selection:bg-primary/30 selection:text-white relative transition-colors duration-500 <?= $colorblindClass ?> <?= $reducedMotionClass ?>">
+<body class="antialiased selection:bg-primary/30 selection:text-white relative transition-colors duration-500 <?= $colorblindClass ?> <?= $reducedMotionClass ?> flex-col">
     
     <div class="blobs-container">
         <div class="blob-center animate-blob duration-[15000ms]"></div>
@@ -169,5 +169,16 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
         <?= isset($content) ? $content : '' ?>
     </main>
 
+    <!-- Footer -->
+    <footer class="mt-8 py-6 text-center border-t border-white/5 w-full max-w-md">
+        <div class="flex justify-center gap-4 mb-4">
+            <a href="<?= BASE_URL ?>/guia-de-uso" class="text-[10px] uppercase font-black tracking-widest text-zinc-500 hover:text-white transition-colors">Guía de Inicio</a>
+            <span class="text-zinc-800">•</span>
+            <a href="https://rastler.dev" target="_blank" class="text-[10px] uppercase font-black tracking-widest text-zinc-500 hover:text-blue-400 transition-colors">rastler.dev</a>
+        </div>
+        <p class="text-[9px] text-zinc-600 uppercase font-black tracking-[0.2em]">
+            &copy; <?= date('Y') ?> AntMaster Pro
+        </p>
+    </footer>
 </body>
 </html>
