@@ -98,6 +98,11 @@ $router->post('/api/sync', 'ApiController@sync');
 // Rutas Públicas (Logs Compartibles)
 $router->get('/log/{user}/{colony}', 'PublicLogController@show');
 
+// Rutas de Perfil y Gamificación
+$router->get('/u/{slug}', 'ProfileController@show');
+$router->get('/perfil/editar', 'ProfileController@edit');
+$router->post('/perfil/actualizar', 'ProfileController@update');
+
 // Gestión de Privacidad
 $router->post('/colonias/publico/{id}', 'ColonyController@togglePublic');
 $router->post('/diario/visibilidad/{id}', 'ColonyController@toggleDiaryVisibility');

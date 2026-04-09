@@ -177,6 +177,11 @@ class EspeciesController extends Controller {
                 SpeciesRevision::update($id, ['estado' => 'aprobada']);
                 $_SESSION['success'] = 'Revisión aprobada y ficha actualizada permanentemente.';
             }
+
+            // Gamificación: Otorgar XP al autor de la sugerencia
+            require_once '../app/Helpers/GamificationHelper.php';
+            GamificationHelper::addXP($revision['usuario_id'], 250);
+            GamificationHelper::checkAndAwardBadges($revision['usuario_id']);
         } else {
             SpeciesRevision::update($id, [
                 'estado' => 'rechazada',

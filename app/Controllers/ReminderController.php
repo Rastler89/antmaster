@@ -36,6 +36,11 @@ class ReminderController extends Controller {
     public function complete($id) {
         require_login();
         if (Reminder::complete($id)) {
+            // Gamificación: +15 XP
+            require_once '../app/Helpers/GamificationHelper.php';
+            GamificationHelper::addXP($_SESSION['user_id'], 15);
+            GamificationHelper::checkAndAwardBadges($_SESSION['user_id']);
+
             $_SESSION['success'] = "¡Tarea completada!";
         } else {
             $_SESSION['error'] = "No se pudo actualizar la tarea.";

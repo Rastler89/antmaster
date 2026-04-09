@@ -153,6 +153,31 @@
 
     <!-- Widgets Laterales -->
     <div class="space-y-8 pb-12 lg:pb-0">
+        <!-- User Rank Widget -->
+        <div class="glass-card p-8 border-blue-500/20 relative overflow-hidden group">
+            <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-blue-500/5 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-1000"></div>
+            <div class="flex items-center gap-4 mb-6 relative z-10">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-600 to-purple-700 flex items-center justify-center text-3xl shadow-xl shadow-blue-500/20">
+                    🐜
+                </div>
+                <div>
+                    <span class="text-[10px] uppercase font-black text-zinc-500 tracking-widest block mb-1">Tu Rango</span>
+                    <h4 class="text-xl font-black text-white leading-none"><?= $userRank ?></h4>
+                </div>
+            </div>
+            <div class="space-y-2 relative z-10">
+                <div class="flex items-center justify-between text-[10px] font-black uppercase tracking-tighter">
+                    <span class="text-blue-400"><?= $userXP ?> XP</span>
+                    <span class="text-zinc-600">Siguiente Nivel</span>
+                </div>
+                <div class="h-2 w-full bg-white/5 rounded-full overflow-hidden border border-white/5">
+                    <?php $progress = ($userXP % 500) / 5; ?>
+                    <div class="h-full bg-gradient-to-r from-blue-500 to-purple-600" style="width: <?= $progress ?>%"></div>
+                </div>
+                <a href="<?= BASE_URL ?>/u/<?= $userSlug ?>" class="block text-center pt-2 text-[9px] font-black text-zinc-500 hover:text-white uppercase tracking-[0.2em] transition-colors">Ver Perfil Público →</a>
+            </div>
+        </div>
+
         <!-- Distribución de Especies -->
         <div class="glass-card p-6 md:p-8 border-white/5">
             <h3 class="text-lg font-bold text-white mb-6 flex items-center gap-2">

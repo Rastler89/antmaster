@@ -27,6 +27,10 @@ class DashboardController extends Controller {
         require_once '../app/Models/Reminder.php';
         $pendingReminders = Reminder::getPendingForUser($userId);
 
+        require_once '../app/Models/User.php';
+        $userModel = User::find($userId);
+        $userObj = new User($userModel);
+
         $data = [
             'colonies'    => $colonies,
             'totalAnts'   => $totalAnts,
@@ -38,6 +42,9 @@ class DashboardController extends Controller {
             'globalHistory' => Colony::getGlobalHistory($userId, $range),
             'range'       => $range,
             'userName'    => $_SESSION['user_name'],
+            'userRank'    => $userObj->getRank(),
+            'userXP'      => $userModel['xp'],
+            'userSlug'    => $userModel['slug'],
             'title'       => 'Dashboard Analítico | AntMaster Pro'
         ];
         
