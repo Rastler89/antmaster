@@ -1,0 +1,13 @@
+{
+    "name": "antmaster/app",
+    "description": "AntMaster Pro Management",
+    "type": "project",
+    "require": {
+        "minishlink/web-push": "9.0"
+    },
+    "authors": [
+        {
+            "name": "AntMaster Team"
+        }
+    ]
+}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sin Conexión | AntMaster Pro</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Outfit', sans-serif; background-color: #09090b; color: #fafafa; }
+        .glass-card { background: rgba(24, 24, 27, 0.4); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 2rem; }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-6 text-center">
+    <div class="blobs-container absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-[100px]"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-[100px]"></div>
+    </div>
+
+    <div class="glass-card p-12 max-w-md w-full shadow-2xl animate-fade-in">
+        <div class="w-24 h-24 bg-zinc-800/50 rounded-3xl flex items-center justify-center mx-auto mb-8 border border-white/10 shadow-inner">
+            <svg class="w-12 h-12 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m-1.414 5.658a9 9 0 01-2.167-9.238m7.824 2.167a1 1 0 111.414 1.414m-1.414-1.414L3 3m8.293 8.293l1.414 1.414"></path></svg>
+        </div>
+        
+        <h1 class="text-3xl font-black text-white mb-4 tracking-tight">Vaya, estás sin red</h1>
+        <p class="text-zinc-500 mb-8 leading-relaxed">No te preocupes, AntMaster Pro sigue registrando tus datos localmente. Tus cambios se sincronizarán cuando recuperes la conexión.</p>
+        
+        <div class="space-y-4">
+            <button onclick="window.location.reload()" class="w-full py-4 bg-blue-500 text-white font-black uppercase tracking-widest rounded-2xl shadow-xl shadow-blue-500/20 active:scale-95 transition-all">Reintentar Conexión</button>
+            <a href="/" class="block w-full py-4 bg-white/5 text-zinc-400 font-bold rounded-2xl hover:text-white transition-colors uppercase text-xs tracking-widest">Ir al Dashboard local</a>
+        </div>
+    </div>
+    
+    <div class="mt-8">
+        <p class="text-[10px] text-zinc-600 uppercase font-black tracking-widest">&copy; 2026 AntMaster Pro</p>
+    </div>
+
+    <script>
+        // Si detecta que vuelve la conexión, recarga automáticamente
+        window.addEventListener('online', () => {
+            window.location.reload();
+        });
+    </script>
+</body>
+</html>

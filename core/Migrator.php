@@ -18,15 +18,10 @@ class Migrator {
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )");
 
-        // 2. Verificación rápida de Versión
+        // 2. Escaneo de archivos de migración
         $stmt = $pdo->prepare("SELECT setting_value FROM system_settings WHERE setting_key = 'db_version'");
         $stmt->execute();
         $dbVersion = $stmt->fetchColumn();
-
-        // Si la versión es correcta (y existe el registro), saltar el escaneo por rendimiento
-        if (!$force && $dbVersion && defined('APP_VERSION') && $dbVersion === APP_VERSION) {
-            return;
-        }
 
         // 3. Escaneo de archivos de migración
         $migrationsDir = __DIR__ . '/../database/migrations/';

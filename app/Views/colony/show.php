@@ -126,6 +126,9 @@ if ($colony['poblacion_detallada']) {
                 <button onclick="showTab('extras')" id="btn-tab-extras" class="tab-btn px-6 py-3 rounded-[1.2rem] text-xs font-black uppercase tracking-widest transition-all text-zinc-500 hover:text-white hover:bg-white/5">
                     ⚙️ Extras
                 </button>
+                <button onclick="showTab('recordatorios')" id="btn-tab-recordatorios" class="tab-btn px-6 py-3 rounded-[1.2rem] text-xs font-black uppercase tracking-widest transition-all text-zinc-500 hover:text-white hover:bg-white/5">
+                    🔔 Avisos
+                </button>
             </div>
 
             <!-- Tab Contents -->
@@ -254,7 +257,7 @@ if ($colony['poblacion_detallada']) {
                         </div>
                     </div>
 
-                    <!-- Identificación QR -->
+            <!-- QR Section -->
                     <div class="glass-card p-8 border-purple-500/20">
                         <h3 class="text-lg font-black text-white mb-6 flex items-center gap-3">
                             <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1l-3 3h-6v-6h6l3 3v1m0 0l3-3h6v6h-6l-3-3m0 0v6M5 8h2m-2 2h2m2-2h2m-2 2h2m7-2h2m-2 2h2m2-2h2m-2 2h2"></path></svg>
@@ -274,6 +277,63 @@ if ($colony['poblacion_detallada']) {
                             </div>
                         </div>
                     </div>
+                </div>
+
+                <!-- Recordatorios Tab -->
+                <div id="section-recordatorios" class="tab-section hidden space-y-8">
+                    <div class="flex items-center justify-between mb-8">
+                        <h2 class="text-2xl font-black text-white">Gestión de Avisos</h2>
+                        <button onclick="toggleReminderModal()" class="bg-purple-500 hover:bg-purple-400 text-white px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-xl shadow-purple-500/20">+ Programar Aviso</button>
+                    </div>
+
+                    <?php if (empty($reminders)): ?>
+                        <div class="glass-card p-12 text-center">
+                            <div class="w-16 h-16 bg-zinc-800/50 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">🔔</div>
+                            <p class="text-zinc-500 font-medium">No hay avisos programados para esta colonia.</p>
+                            <p class="text-xs text-zinc-600 mt-2 uppercase tracking-widest font-bold">Mantén tu mantenimiento al día</p>
+                        </div>
+                    <?php else: ?>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <?php 
+                            $claseIcons = [
+                                'humedad' => '💧',
+                                'limpieza' => '✨',
+                                'antifugas' => '🛡️',
+                                'hibernacion' => '❄️',
+                                'alimentacion' => '🍖',
+                                'otros' => '🔔'
+                            ];
+                            foreach ($reminders as $r): 
+                                $isOverdue = strtotime($r['fecha_proxima']) < strtotime('today');
+                            ?>
+                                <div class="glass-card p-6 border-white/5 hover:border-white/10 transition-all flex items-center justify-between group">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-12 h-12 rounded-2xl bg-zinc-800 flex items-center justify-center text-xl shadow-inner border border-white/5">
+                                            <?= $claseIcons[$r['clase']] ?? '🔔' ?>
+                                        </div>
+                                        <div>
+                                            <h4 class="text-white font-bold tracking-tight"><?= htmlspecialchars($r['titulo']) ?></h4>
+                                            <div class="flex items-center gap-2">
+                                                <span class="text-[9px] font-black uppercase tracking-widest <?= $isOverdue ? 'text-red-400' : 'text-zinc-500' ?>">
+                                                    📅 <?= date('d M, Y', strtotime($r['fecha_proxima'])) ?>
+                                                </span>
+                                                <?php if ($r['frecuencia'] !== 'unica'): ?>
+                                                    <span class="text-[8px] px-1.5 py-0.5 bg-blue-500/10 text-blue-400 rounded-md uppercase font-black tracking-tighter">
+                                                        🔁 <?= $r['frecuencia'] ?>
+                                                    </span>
+                                                <?php endif; ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <form action="<?= BASE_URL ?>/reminders/complete/<?= $r['id'] ?>" method="POST">
+                                        <button type="submit" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-zinc-500 hover:bg-emerald-500 hover:text-white hover:border-emerald-500 transition-all shadow-lg" title="Marcar como hecho">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                                        </button>
+                                    </form>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -337,7 +397,7 @@ if ($colony['poblacion_detallada']) {
     <div class="absolute inset-0 bg-black/80 backdrop-blur-xl" onclick="toggleDiaryForm()"></div>
     <div class="relative w-full max-w-2xl bg-zinc-900 border border-white/10 rounded-[2.5rem] shadow-2xl p-8 overflow-y-auto max-h-[90vh]">
         <h3 class="text-2xl font-black text-white mb-8">Añadir a la historia</h3>
-        <form action="<?= BASE_URL ?>/colonias/diario/<?= $colony['id'] ?>" method="POST" enctype="multipart/form-data" class="space-y-6">
+        <form id="pwa-diary-form" action="<?= BASE_URL ?>/colonias/diario/<?= $colony['id'] ?>" method="POST" enctype="multipart/form-data" class="space-y-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label class="text-[10px] uppercase font-black text-zinc-500 mb-2 block tracking-widest pl-1">Tipo de Evento</label>
@@ -413,7 +473,7 @@ if ($colony['poblacion_detallada']) {
         <h3 class="text-3xl font-black text-white mb-2 text-center">Nuevo Recuento</h3>
         <p class="text-zinc-500 text-sm text-center mb-10">Censo detallado de la colonia</p>
         
-        <form action="<?= BASE_URL ?>/colonias/poblacion/<?= $colony['id'] ?>" method="POST" class="space-y-8">
+        <form id="pwa-pop-form" action="<?= BASE_URL ?>/colonias/poblacion/<?= $colony['id'] ?>" method="POST" class="space-y-8">
             <div class="grid grid-cols-2 gap-4">
                 <?php if ($colony['poblacion_detallada']): ?>
                     <?php 
@@ -445,6 +505,58 @@ if ($colony['poblacion_detallada']) {
     </div>
 </div>
 
+<!-- Modal: Nuevo Recordatorio -->
+<div id="reminder-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/80 backdrop-blur-xl" onclick="toggleReminderModal()"></div>
+    <div class="relative w-full max-w-lg bg-zinc-900 border border-white/10 rounded-[2.5rem] shadow-2xl p-10">
+        <h3 class="text-3xl font-black text-white mb-2 text-center">Nuevo Aviso</h3>
+        <p class="text-zinc-500 text-sm text-center mb-10">Programar tarea de mantenimiento</p>
+        
+        <form action="<?= BASE_URL ?>/reminders" method="POST" class="space-y-6">
+            <input type="hidden" name="colonia_id" value="<?= $colony['id'] ?>">
+            
+            <div class="space-y-2">
+                <label class="text-[10px] uppercase font-black text-zinc-500 tracking-widest pl-1">Título de la tarea</label>
+                <input type="text" name="titulo" required class="magic-input w-full" placeholder="Ej: Renovar aceite mineral">
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div class="space-y-2">
+                    <label class="text-[10px] uppercase font-black text-zinc-500 tracking-widest pl-1">Categoría</label>
+                    <select name="clase" class="magic-input w-full appearance-none">
+                        <option value="humedad">Humedad</option>
+                        <option value="limpieza">Limpieza</option>
+                        <option value="antifugas">Antifugas</option>
+                        <option value="hibernacion">Hibernación</option>
+                        <option value="alimentacion">Alimentación</option>
+                        <option value="otros">Otros</option>
+                    </select>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] uppercase font-black text-zinc-500 tracking-widest pl-1">Repetir</label>
+                    <select name="frecuencia" class="magic-input w-full appearance-none">
+                        <option value="unica">Una vez</option>
+                        <option value="diaria">Cada día</option>
+                        <option value="semanal">Cada semana</option>
+                        <option value="quincenal">Cada quincena</option>
+                        <option value="mensual">Cada mes</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <label class="text-[10px] uppercase font-black text-zinc-500 tracking-widest pl-1">Fecha de inicio / próxima</label>
+                <input type="date" name="fecha_proxima" required class="magic-input w-full" value="<?= date('Y-m-d') ?>">
+            </div>
+
+            <div class="flex gap-4 pt-4">
+                <button type="button" onclick="toggleReminderModal()" class="flex-1 py-4 text-zinc-500 font-bold">Cancelar</button>
+                <button type="submit" class="flex-1 py-5 bg-purple-500 rounded-3xl text-white font-black uppercase tracking-widest shadow-2xl shadow-purple-500/20">Programar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
@@ -469,6 +581,10 @@ function toggleDiaryForm() {
 
 function togglePopForm() {
     document.getElementById('pop-form-modal').classList.toggle('hidden');
+}
+
+function toggleReminderModal() {
+    document.getElementById('reminder-modal').classList.toggle('hidden');
 }
 
 function previewDiaryImage(input) {

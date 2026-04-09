@@ -17,6 +17,40 @@
     <!-- Timeline Container -->
     <div class="relative space-y-16 before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-zinc-800 before:to-transparent">
 
+        <!-- Version 1.2.0 -->
+        <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+            <!-- Icon -->
+            <div class="flex items-center justify-center w-10 h-10 rounded-full border border-zinc-800 bg-zinc-950 text-blue-500 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 transition-all group-hover:scale-120 group-hover:border-blue-500/50">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+            </div>
+            <!-- Content -->
+            <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] glass-card p-6 md:p-8 hover:border-blue-400/30 transition-all">
+                <div class="flex items-center justify-between mb-4">
+                    <time class="text-[10px] font-black text-blue-400 uppercase tracking-widest">9 Abril, 2026</time>
+                    <span class="px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 text-[10px] font-black border border-blue-500/20">v1.2.0</span>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-4">PWA, Notificaciones y Recordatorios</h3>
+                <ul class="space-y-3">
+                    <li class="flex gap-3 text-sm text-zinc-400">
+                        <span class="text-blue-500 font-bold">+</span>
+                        <span>**PWA Ready**: Aplicación 100% instalable en móvil y escritorio con acceso directo y soporte offline completo.</span>
+                    </li>
+                    <li class="flex gap-3 text-sm text-zinc-400">
+                        <span class="text-blue-500 font-bold">+</span>
+                        <span>**Recordatorios de Cría**: Sistema de gestión de tareas (alimentación, humedad, limpieza) con avisos programables.</span>
+                    </li>
+                    <li class="flex gap-3 text-sm text-zinc-400">
+                        <span class="text-blue-500 font-bold">+</span>
+                        <span>**Web Push Notifications**: Notificaciones nativas para recordatorios de mantenimiento, integradas con el navegador.</span>
+                    </li>
+                    <li class="flex gap-3 text-sm text-zinc-400">
+                        <span class="text-emerald-500 font-bold">#</span>
+                        <span>**Sincronización Offline**: Los registros realizados sin conexión se sincronizan automáticamente mediante IndexedDB.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
         <!-- Version 1.1.7 -->
         <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
             <!-- Icon -->

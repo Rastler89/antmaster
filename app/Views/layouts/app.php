@@ -10,7 +10,16 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
 ?>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#3b82f6">
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- PWA iOS Support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="AntMaster">
+    <link rel="apple-touch-icon" href="/assets/img/icon-192.png">
+
     <!-- Meta Tags -->
     <title><?= htmlspecialchars(($title ?? '') . ' - ' . APP_NAME) ?></title>
     <meta name="description" content="<?= htmlspecialchars($description ?? APP_DESCRIPTION) ?>">
@@ -71,6 +80,9 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
                 }
             }
         }
+    </script>
+    <script>
+        window.VAPID_PUBLIC_KEY = "<?= defined('VAPID_PUBLIC_KEY') ? VAPID_PUBLIC_KEY : '' ?>";
     </script>
     <style>
         body {
@@ -227,6 +239,9 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
                         <a href="?lang=en" class="px-2 py-0.5 text-[10px] font-black rounded <?= APP_LANG == 'en' ? 'bg-blue-500 text-white' : 'text-zinc-500 hover:text-white' ?>">EN</a>
                         <a href="?lang=fr" class="px-2 py-0.5 text-[10px] font-black rounded <?= APP_LANG == 'fr' ? 'bg-blue-500 text-white' : 'text-zinc-500 hover:text-white' ?>">FR</a>
                     </div>
+
+                    <!-- PWA Status Indicator -->
+                    <div id="pwa-status-indicator" class="mr-2"></div>
 
                     <?php if (is_logged_in()): ?>
                         <a href="<?= BASE_URL ?>/" class="text-sm text-muted hover:text-main transition"><?= __('nav_dashboard') ?></a>
@@ -433,6 +448,18 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
             }
         };
     });
+    </script>
+    <!-- PWA Scripts -->
+    <script src="<?= asset('assets/js/pwa-db.js') ?>"></script>
+    <script src="<?= asset('assets/js/pwa-main.js') ?>"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('AntMaster Pro SW: Registrado.', reg.scope))
+                    .catch(err => console.error('AntMaster Pro SW: Error.', err));
+            });
+        }
     </script>
 </body>
 </html>

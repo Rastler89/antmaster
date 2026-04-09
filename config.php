@@ -13,7 +13,7 @@ define('DB_PASS', $env_db_pass);
 
 // Configuración de la Aplicación
 define('APP_NAME', 'AntMaster Pro');
-define('APP_VERSION', '1.1.7');
+define('APP_VERSION', '1.2.0');
 
 // Detección del Protocolo
 $isLocal = preg_match('/^(localhost|127\.0\.0\.1)(:\d+)?$/', $_SERVER['HTTP_HOST'] ?? '');
@@ -95,8 +95,13 @@ function __($key, $params = []) {
 
 // Configuración de SEO
 define('APP_DESCRIPTION', __('seo_description'));
-define('APP_KEYWORDS', __('seo_keywords'));
-define('APP_IMAGE', 'assets/img/og-preview.png'); // Sin barra inicial
+define('APP_KEYWORDS',      'hormigas, cría, ants, antmaster, pwa, gestión, colonias');
+define('APP_IMAGE',         'assets/img/logo.png');
+
+// Configuración Web Push (VAPID)
+// Puedes generarlas en Docker con: php vendor/bin/web-push-php generate-vapid-keys
+define('VAPID_PUBLIC_KEY',  'BCooJCvGcCp6p15kWP2atTCED0OYVDKjRI20zsEPtZ3MWs3VIf9kgdKGDzKz6iOsmygKGbG7bmdjMlFa16zF6jw');
+define('VAPID_PRIVATE_KEY', 'PoAX7ZxKe8g0Lp1AuJfyO92BwID6mkyLoyusM9rwQXg');
 
 // Conexión PDO
 try {

@@ -132,16 +132,20 @@ class ColonyController extends Controller {
         }
         usort($media, function($a, $b) { return strcmp($b['fecha'], $a['fecha']); });
 
+        require_once '../app/Models/Reminder.php';
+        $reminders = Reminder::forColony($id);
+        
         $data = [
-            'colony'  => $colony,
+            'colony' => $colony,
             'history' => $history,
-            'diary'   => $diary,
-            'media'   => $media,
-            'stocks'  => Stock::where('usuario_id', '=', $_SESSION['user_id']),
-            'trend'   => $trend,
-            'userSlug'=> $userSlug,
+            'diary' => $diary,
+            'reminders' => $reminders,
             'averageHistory' => $averageHistory,
-            'title'   => $colony['nombre'] . ' | AntMaster Pro',
+            'trend' => $trend,
+            'userSlug' => $userSlug,
+            'castas' => json_decode($colony['poblacion_detallada'] ?? '{}', true),
+            'media' => $media,
+            'title' => $colony['nombre'] . ' | AntMaster Pro',
             'description' => 'Sigue el progreso de ' . $colony['nombre'] . ' (' . $colony['especie_nombre'] . ') en AntMaster Pro. Población actual: ' . $colony['poblacion_actual'] . ' hormigas.'
         ];
         
@@ -209,13 +213,14 @@ class ColonyController extends Controller {
         $stockId = $_POST['stock_id'] ?? null;
         $cantidadUsada = $_POST['cantidad_usada'] ?? 0;
 
-        // Lógica de Stock para Alimentación
+        // Lógica de Stock para Alimentación (Integrada con el nuevo sistema de movimientos)
         if ($tipoEvento === 'Alimentación' && !empty($stockId)) {
             $stock = Stock::whereOne('id', '=', $stockId);
             if ($stock && ($stock['usuario_id'] == $_SESSION['user_id'] || is_admin())) {
                 if ($stock['cantidad'] >= $cantidadUsada) {
-                    $nuevaCantidad = $stock['cantidad'] - $cantidadUsada;
-                    Stock::update($stockId, ['cantidad' => $nuevaCantidad]);
+                    // El ID de la entrada del diario aún no existe, lo vincularemos luego si es posible 
+                    // o usamos una carga diferida. Por ahora, registramos la salida.
+                    Stock::addMovement($stockId, 'SALIDA', $cantidadUsada, "Alimentación de colonia: " . ($colony['nombre'] ?? $id));
                 } else {
                     // Si llega aquí es un bypass de la JS, pero mejor prevenir
                     $_SESSION['error'] = 'No hay suficiente stock para esta alimentación.';

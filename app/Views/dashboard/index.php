@@ -172,6 +172,59 @@
             </div>
         </div>
 
+        <!-- Reminders Widget -->
+        <div class="glass-card p-10 mb-8 border-purple-500/20">
+            <div class="flex items-center justify-between mb-8">
+                <h3 class="text-xs uppercase font-black text-purple-400 tracking-[0.3em] flex items-center gap-3">
+                    <span class="flex h-3 w-3 relative">
+                        <?php if (!empty($pendingReminders)): ?>
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+                        <?php endif; ?>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-purple-500"></span>
+                    </span>
+                    Tareas de Mantenimiento
+                </h3>
+            </div>
+            
+            <?php if (empty($pendingReminders)): ?>
+                <div class="text-center py-6 bg-white/5 rounded-2xl border border-white/5">
+                    <p class="text-[10px] uppercase font-black text-purple-400/50 tracking-widest">Todo al día ✨</p>
+                </div>
+            <?php else: ?>
+                <div class="space-y-4">
+                    <?php 
+                    $claseIcons = [
+                        'humedad' => '💧',
+                        'limpieza' => '✨',
+                        'antifugas' => '🛡️',
+                        'hibernacion' => '❄️',
+                        'alimentacion' => '🍖',
+                        'otros' => '🔔'
+                    ];
+                    foreach (array_slice($pendingReminders, 0, 5) as $r): 
+                        $isOverdue = strtotime($r['fecha_proxima']) < strtotime('today');
+                    ?>
+                        <div class="relative group p-4 rounded-2xl bg-purple-500/5 hover:bg-purple-500/10 border border-purple-500/10 transition-all flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <span class="text-lg"><?= $claseIcons[$r['clase']] ?? '🔔' ?></span>
+                                <div>
+                                    <h4 class="text-xs font-bold text-white"><?= htmlspecialchars($r['titulo']) ?></h4>
+                                    <p class="text-[9px] font-black <?= $isOverdue ? 'text-red-400' : 'text-zinc-500' ?> uppercase tracking-tighter">
+                                        <?= htmlspecialchars($r['colonia_nombre'] ?? 'Global') ?> • <?= date('d M', strtotime($r['fecha_proxima'])) ?>
+                                    </p>
+                                </div>
+                            </div>
+                            <form action="<?= BASE_URL ?>/reminders/complete/<?= $r['id'] ?>" method="POST">
+                                <button type="submit" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-zinc-500 hover:bg-emerald-500 hover:text-white transition-all">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                                </button>
+                            </form>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+        </div>
+
         <!-- Alertas de Stock Crítico -->
         <div class="glass-card p-8 border-red-500/10">
             <div class="flex items-center justify-between mb-6">

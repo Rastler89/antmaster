@@ -53,7 +53,14 @@ $router->post('/settings', 'SettingsController@update');
 
 $router->get('/stock', 'StockController@index');
 $router->post('/stock', 'StockController@store');
+$router->post('/stock/adjust/{id}', 'StockController@adjust');
+$router->get('/api/stock/history/{id}', 'StockController@history');
 $router->delete('/stock/{id}', 'StockController@destroy');
+
+$router->post('/reminders', 'ReminderController@store');
+$router->post('/reminders/complete/{id}', 'ReminderController@complete');
+$router->post('/api/push/subscribe', 'ReminderController@subscribe');
+$router->get('/cron/reminders', 'ReminderController@process');
 
 $router->get('/especies', 'EspeciesController@index');
 $router->get('/especies/ver/{id}', 'EspeciesController@show');
@@ -83,6 +90,10 @@ $router->get('/admin/especies/editar/{id}', 'AdminEspeciesController@edit');
 $router->post('/admin/especies/editar/{id}', 'AdminEspeciesController@update');
 $router->get('/admin/especies/traducir/{id}', 'AdminEspeciesController@translate');
 $router->post('/admin/especies/traducir/{id}', 'AdminEspeciesController@storeTranslation');
+
+// API PWA (Sincronización Offline)
+$router->get('/api/data', 'ApiController@data');
+$router->post('/api/sync', 'ApiController@sync');
 
 // Rutas Públicas (Logs Compartibles)
 $router->get('/log/{user}/{colony}', 'PublicLogController@show');

@@ -20,8 +20,12 @@ class DashboardController extends Controller {
 
         $allStocks = Stock::where('usuario_id', '=', $userId);
         $lowStock = array_filter($allStocks, function($s) {
-            return $s['cantidad'] < 10;
+            $threshold = (float)($s['punto_pedido'] ?? 10.00);
+            return (float)$s['cantidad'] <= $threshold;
         });
+
+        require_once '../app/Models/Reminder.php';
+        $pendingReminders = Reminder::getPendingForUser($userId);
 
         $data = [
             'colonies'    => $colonies,
@@ -29,6 +33,7 @@ class DashboardController extends Controller {
             'totalSpecies'=> count(Colony::getSpeciesDistribution($userId)),
             'stocks'      => $allStocks,
             'lowStock'    => $lowStock,
+            'pendingReminders' => $pendingReminders,
             'distribution' => Colony::getSpeciesDistribution($userId),
             'globalHistory' => Colony::getGlobalHistory($userId, $range),
             'range'       => $range,

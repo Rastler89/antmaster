@@ -1,0 +1,2 @@
+0 * * * * curl -s http://localhost/cron/reminders > /dev/null
+# Mantener una línea vacía al final del archivo crontab
