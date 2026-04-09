@@ -144,31 +144,34 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
 
         .magic-input {
             width: 100%;
-            background: rgba(0,0,0,0.05); /* Más suave para ver el fondo */
-            border: 1px solid var(--theme-border);
-            color: var(--theme-text-main);
-            padding: 0.75rem 1rem;
-            border-radius: 0.75rem;
-            outline: none;
-            transition: all 0.3s ease;
-            appearance: none;
-            /* Flecha dinámica */
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='rgba(128,128,128,0.8)'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 1rem center;
-            background-size: 1rem;
+            background: rgba(255, 255, 255, 0.03) !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            color: white !important;
+            padding: 0.85rem 1.25rem;
+            padding-right: 2.5rem !important;
+            border-radius: 1.25rem !important;
+            outline: none !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            appearance: none !important;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='rgba(255,255,255,0.4)' stroke-width='3'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E") !important;
+            background-repeat: no-repeat !important;
+            background-position: right 1.25rem center !important;
+            background-size: 0.75rem !important;
+            cursor: pointer;
         }
         
         .magic-input:focus {
-            border-color: var(--theme-primary);
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
-            background-color: var(--theme-card);
+            border-color: var(--theme-primary) !important;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15) !important;
+            background-color: rgba(255, 255, 255, 0.05) !important;
+            transform: translateY(-1px);
         }
 
         .magic-input option {
-            background-color: var(--theme-background);
-            color: var(--theme-text-main);
-            padding: 10px;
+            background-color: #18181b; /* Zinc 900 */
+            color: white;
+            padding: 1rem;
+            border: none;
         }
 
         .blobs-container {
@@ -345,16 +348,7 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
         <?= isset($content) ? $content : '' ?>
     </main>
 
-    <!-- Ko-fi Widget -->
-    <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
-    <script>
-    kofiWidgetOverlay.draw('rastler', {
-        'type': 'floating-chat',
-        'floating-chat.donateButton.text': 'Support me',
-        'floating-chat.donateButton.background-color': '#00b9fe',
-        'floating-chat.donateButton.text-color': '#fff'
-    });
-    </script>
+
 
     <!-- Footer -->
     <footer class="mt-auto py-12 border-t border-white/5 bg-zinc-950/20 backdrop-blur-md relative z-10">
@@ -398,17 +392,11 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
                         <p class="text-xs text-zinc-600 leading-relaxed italic">
                             "Desarrollado con pasión para ayudar a crecer tus colonias."
                         </p>
-                        <!-- Ko-fi integration if you want it here -->
                         <div class="pt-2">
-                             <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
-                             <script>
-                             kofiWidgetOverlay.draw('rastler', {
-                                 'type': 'floating-chat',
-                                 'floating-chat.donateButton.text': 'Tip Me',
-                                 'floating-chat.donateButton.background-color': '#00b9fe',
-                                 'floating-chat.donateButton.text-color': '#fff'
-                             });
-                             </script>
+                             <a href="https://ko-fi.com/rastler" target="_blank" class="inline-flex items-center gap-3 px-5 py-3 bg-[#00b9fe] hover:bg-[#00a2e0] text-white rounded-[1.2rem] text-[10px] font-black uppercase tracking-widest transition-all shadow-xl shadow-blue-500/10 active:scale-95">
+                                <img src="https://ko-fi.com/img/cup-border.png" alt="Ko-fi" class="w-4 h-4 brightness-0 invert">
+                                Apoyar Proyecto
+                             </a>
                         </div>
                     </div>
                 </div>

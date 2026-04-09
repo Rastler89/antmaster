@@ -132,68 +132,132 @@
 </div>
 
 <!-- Modal: Añadir Nuevo -->
-<div id="add-stock-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
-    <div class="absolute inset-0 bg-black/80 backdrop-blur-xl" onclick="this.parentElement.classList.add('hidden')"></div>
-    <div class="relative w-full max-w-2xl bg-zinc-900 border border-white/10 shadow-2xl rounded-[3rem] overflow-hidden">
-        <div class="px-10 py-12">
-            <h3 class="text-4xl font-black text-white tracking-tighter italic mb-2"><?= __('stock_add_title') ?></h3>
-            <p class="text-zinc-500 text-sm mb-10">Gestiona tus recursos con precisión militar.</p>
-            
-            <form method="POST" action="<?= BASE_URL ?>/stock" class="space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="space-y-2">
-                        <label class="text-[10px] uppercase font-black text-zinc-500 tracking-widest pl-1"><?= __('stock_label_food_type') ?></label>
-                        <input type="text" name="nombre" required placeholder="<?= __('stock_placeholder_food') ?>" class="magic-input w-full">
+<div id="add-stock-modal" class="fixed inset-0 z-[100] hidden overflow-y-auto">
+    <div class="fixed inset-0 bg-zinc-950/90 backdrop-blur-xl" onclick="this.parentElement.classList.add('hidden'); this.parentElement.classList.remove('flex')"></div>
+    <div class="relative min-h-full flex items-center justify-center p-4 md:p-8">
+        <div class="relative w-full max-w-2xl bg-zinc-900 border border-white/10 shadow-2xl rounded-[2rem] md:rounded-[3rem] overflow-hidden animate-fade-in-up">
+            <div class="px-6 py-8 md:px-10 md:py-12">
+                <div class="flex items-start justify-between mb-8">
+                    <div>
+                        <h3 class="text-3xl md:text-4xl font-black text-white tracking-tighter italic mb-2 tracking-tight"><?= __('stock_add_title') ?></h3>
+                        <p class="text-zinc-500 text-xs md:text-sm">Gestiona tus recursos con precisión militar.</p>
                     </div>
-                    <div class="space-y-2">
-                        <label class="text-[10px] uppercase font-black text-zinc-500 tracking-widest pl-1"><?= __('stock_label_category') ?></label>
-                        <select name="categoria" class="magic-input w-full">
-                            <option value="Vivo">🦗 <?= __('stock_cat_live') ?></option>
-                            <option value="Congelado">❄️ <?= __('stock_cat_frozen') ?></option>
-                            <option value="Seco">🍂 <?= __('stock_cat_dry') ?></option>
-                            <option value="Jarabes/Líquidos">🍯 <?= __('stock_cat_syrup') ?></option>
-                            <option value="Semillas">🌾 <?= __('stock_cat_seeds') ?></option>
-                            <option value="Otros" selected>📦 <?= __('stock_cat_others') ?></option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="space-y-2">
-                        <label class="text-[10px] uppercase font-black text-zinc-500 tracking-widest pl-1">Cantidad Inicial</label>
-                        <input type="number" step="0.01" name="cantidad" required placeholder="0.00" class="magic-input w-full">
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-[10px] uppercase font-black text-zinc-500 tracking-widest pl-1">Unidad</label>
-                        <select name="unidad" class="magic-input w-full">
-                            <option value="g"><?= __('stock_unit_grams') ?></option>
-                            <option value="ml"><?= __('stock_unit_ml') ?></option>
-                            <option value="uds"><?= __('stock_unit_units') ?></option>
-                        </select>
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-[10px] uppercase font-black text-orange-500 tracking-widest pl-1">Aviso Crítico</label>
-                        <input type="number" step="0.01" name="punto_pedido" required value="10.00" class="magic-input w-full border-orange-500/20">
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="space-y-2">
-                        <label class="text-[10px] uppercase font-black text-zinc-500 tracking-widest pl-1"><?= __('stock_label_expiry') ?></label>
-                        <input type="date" name="fecha_caducidad" class="magic-input w-full">
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-[10px] uppercase font-black text-zinc-500 tracking-widest pl-1"><?= __('stock_label_notes') ?></label>
-                        <input type="text" name="notas" placeholder="Ej: Comprado en tienda local" class="magic-input w-full">
-                    </div>
-                </div>
-
-                <div class="flex gap-4 pt-6">
-                    <button type="button" onclick="document.getElementById('add-stock-modal').classList.add('hidden')" class="flex-1 py-4 text-zinc-500 font-bold uppercase tracking-widest rounded-2xl border border-white/5 hover:bg-white/5 transition-colors">
-                        <?= __('btn_cancel') ?>
+                    <button onclick="document.getElementById('add-stock-modal').classList.add('hidden'); document.getElementById('add-stock-modal').classList.remove('flex')" class="p-2 text-zinc-500 hover:text-white transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
                     </button>
-                    <button type="submit" class="flex-[2] magic-btn py-4 text-xs font-black uppercase tracking-widest">
-                        <?= __('stock_btn_add') ?>
+                </div>
+                
+                <form method="POST" action="<?= BASE_URL ?>/stock" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="text-[10px] uppercase font-black text-zinc-500 tracking-widest pl-1"><?= __('stock_label_food_type') ?></label>
+                            <input type="text" name="nombre" required placeholder="<?= __('stock_placeholder_food') ?>" class="magic-input w-full">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] uppercase font-black text-zinc-500 tracking-widest pl-1"><?= __('stock_label_category') ?></label>
+                            <select name="categoria" class="magic-input w-full">
+                                <option value="Vivo">🦗 <?= __('stock_cat_live') ?></option>
+                                <option value="Congelado">❄️ <?= __('stock_cat_frozen') ?></option>
+                                <option value="Seco">🍂 <?= __('stock_cat_dry') ?></option>
+                                <option value="Jarabes/Líquidos">🍯 <?= __('stock_cat_syrup') ?></option>
+                                <option value="Semillas">🌾 <?= __('stock_cat_seeds') ?></option>
+                                <option value="Otros" selected>📦 <?= __('stock_cat_others') ?></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="space-y-2">
+                            <label class="text-[10px] uppercase font-black text-zinc-500 tracking-widest pl-1">Cantidad Inicial</label>
+                            <input type="number" step="0.01" name="cantidad" required placeholder="0.00" class="magic-input w-full">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] uppercase font-black text-zinc-500 tracking-widest pl-1">Unidad</label>
+                            <select name="unidad" class="magic-input w-full">
+                                <option value="g"><?= __('stock_unit_grams') ?></option>
+                                <option value="ml"><?= __('stock_unit_ml') ?></option>
+                                <option value="uds"><?= __('stock_unit_units') ?></option>
+                            </select>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] uppercase font-black text-orange-500 tracking-widest pl-1">Aviso Crítico</label>
+                            <input type="number" step="0.01" name="punto_pedido" required value="10.00" class="magic-input w-full border-orange-500/20">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="text-[10px] uppercase font-black text-zinc-500 tracking-widest pl-1"><?= __('stock_label_expiry') ?></label>
+                            <input type="date" name="fecha_caducidad" class="magic-input w-full text-sm">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] uppercase font-black text-zinc-500 tracking-widest pl-1"><?= __('stock_label_notes') ?></label>
+                            <input type="text" name="notas" placeholder="Ej: Comprado en tienda local" class="magic-input w-full">
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col-reverse md:flex-row gap-4 pt-6">
+                        <button type="button" onclick="document.getElementById('add-stock-modal').classList.add('hidden'); document.getElementById('add-stock-modal').classList.remove('flex')" class="flex-1 py-4 text-zinc-500 font-bold uppercase tracking-widest rounded-2xl border border-white/5 hover:bg-white/5 transition-colors">
+                            <?= __('btn_cancel') ?>
+                        </button>
+                        <button type="submit" class="flex-[2] magic-btn py-4 text-xs font-black uppercase tracking-widest">
+                            <?= __('stock_btn_add') ?>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Ajustar -->
+<div id="adjust-modal" class="fixed inset-0 z-[100] hidden overflow-y-auto">
+    <div class="fixed inset-0 bg-zinc-950/90 backdrop-blur-xl" onclick="this.parentElement.classList.add('hidden'); this.parentElement.classList.remove('flex')"></div>
+    <div class="relative min-h-full flex items-center justify-center p-4">
+        <div class="relative w-full max-w-lg bg-zinc-900 border border-white/10 shadow-2xl rounded-[2rem] md:rounded-[3rem] p-6 md:p-10 animate-fade-in-up">
+            <div class="flex items-center justify-between mb-8">
+                <h3 id="adjust-title" class="text-2xl md:text-3xl font-black text-white tracking-tighter italic mr-4">Ajustar Inventario</h3>
+                <button onclick="document.getElementById('adjust-modal').classList.add('hidden'); document.getElementById('adjust-modal').classList.remove('flex')" class="p-2 text-zinc-500 hover:text-white transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            
+            <form id="adjust-form" method="POST" action="" class="space-y-6">
+                <div class="flex gap-2 p-1 bg-black/40 rounded-2xl border border-white/5">
+                    <label class="flex-1 relative cursor-pointer group">
+                        <input type="radio" name="tipo" value="ENTRADA" checked class="peer sr-only">
+                        <div class="py-3 text-center rounded-xl text-[10px] font-black uppercase tracking-widest transition-all peer-checked:bg-emerald-500 peer-checked:text-white text-zinc-500 hover:text-zinc-300">
+                            Entrada / Compra
+                        </div>
+                    </label>
+                    <label class="flex-1 relative cursor-pointer group">
+                        <input type="radio" name="tipo" value="SALIDA" class="peer sr-only">
+                        <div class="py-3 text-center rounded-xl text-[10px] font-black uppercase tracking-widest transition-all peer-checked:bg-red-500 peer-checked:text-white text-zinc-500 hover:text-zinc-300">
+                            Salida / Consumo
+                        </div>
+                    </label>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-[10px] uppercase font-black text-zinc-500 tracking-widest pl-1">Cantidad a cambiar</label>
+                    <div class="relative flex items-center">
+                        <input type="text" inputmode="decimal" name="cantidad" required autocomplete="off" 
+                               class="magic-input w-full text-2xl font-black text-white" 
+                               style="padding-right: 5.5rem !important;"
+                               placeholder="0.00" 
+                               oninput="this.value = this.value.replace(/[^0-9.,]/g, '').replace(',', '.')">
+                        <span id="adjust-unit" class="magic-indicator absolute right-6 top-1/2 -translate-y-1/2 text-zinc-500 font-bold uppercase text-[10px] tracking-widest bg-transparent pointer-events-none select-none">g</span>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-[10px] uppercase font-black text-zinc-500 tracking-widest pl-1"><?= __('stock_label_reason') ?></label>
+                    <input type="text" name="motivo" placeholder="<?= __('stock_placeholder_reason') ?>" required class="magic-input w-full">
+                </div>
+
+                <div class="flex gap-4 pt-4">
+                    <button type="submit" class="flex-1 magic-btn py-4 text-xs font-black uppercase tracking-widest">
+                        <?= __('stock_btn_save_adjust') ?>
                     </button>
                 </div>
             </form>
@@ -201,63 +265,23 @@
     </div>
 </div>
 
-<!-- Modal: Ajustar -->
-<div id="adjust-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
-    <div class="absolute inset-0 bg-black/80 backdrop-blur-xl" onclick="this.parentElement.classList.add('hidden')"></div>
-    <div class="relative w-full max-w-lg bg-zinc-900 border border-white/10 shadow-2xl rounded-[3rem] p-10">
-        <h3 id="adjust-title" class="text-3xl font-black text-white tracking-tighter italic mb-8">Ajustar Inventario</h3>
-        <form id="adjust-form" method="POST" action="" class="space-y-6">
-            <div class="flex gap-2 p-1 bg-black/40 rounded-2xl border border-white/5">
-                <label class="flex-1 relative cursor-pointer group">
-                    <input type="radio" name="tipo" value="ENTRADA" checked class="peer sr-only">
-                    <div class="py-3 text-center rounded-xl text-[10px] font-black uppercase tracking-widest transition-all peer-checked:bg-emerald-500 peer-checked:text-white text-zinc-500 hover:text-zinc-300">
-                        Entrada / Compra
-                    </div>
-                </label>
-                <label class="flex-1 relative cursor-pointer group">
-                    <input type="radio" name="tipo" value="SALIDA" class="peer sr-only">
-                    <div class="py-3 text-center rounded-xl text-[10px] font-black uppercase tracking-widest transition-all peer-checked:bg-red-500 peer-checked:text-white text-zinc-500 hover:text-zinc-300">
-                        Salida / Consumo
-                    </div>
-                </label>
-            </div>
-
-            <div class="space-y-2">
-                <label class="text-[10px] uppercase font-black text-zinc-500 tracking-widest pl-1">Cantidad a cambiar</label>
-                <div class="relative flex items-center">
-                    <input type="text" inputmode="decimal" name="cantidad" required autocomplete="off" 
-                           class="magic-input w-full text-2xl font-black text-white" 
-                           style="padding-right: 5.5rem !important;"
-                           placeholder="0.00" 
-                           oninput="this.value = this.value.replace(/[^0-9.,]/g, '').replace(',', '.')">
-                    <span id="adjust-unit" class="magic-indicator absolute right-6 top-1/2 -translate-y-1/2 text-zinc-500 font-bold uppercase text-[10px] tracking-widest bg-transparent pointer-events-none select-none">g</span>
-                </div>
-            </div>
-
-            <div class="space-y-2">
-                <label class="text-[10px] uppercase font-black text-zinc-500 tracking-widest pl-1"><?= __('stock_label_reason') ?></label>
-                <input type="text" name="motivo" placeholder="<?= __('stock_placeholder_reason') ?>" required class="magic-input w-full">
-            </div>
-
-            <div class="flex gap-4 pt-4">
-                <button type="submit" class="flex-1 magic-btn py-4 text-xs font-black uppercase tracking-widest">
-                    <?= __('stock_btn_save_adjust') ?>
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
-
 <!-- Modal: Historial -->
-<div id="history-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
-    <div class="absolute inset-0 bg-black/80 backdrop-blur-xl" onclick="this.parentElement.classList.add('hidden')"></div>
-    <div class="relative w-full max-w-3xl bg-zinc-900 border border-white/10 shadow-2xl rounded-[3rem] overflow-hidden">
-        <div class="p-10">
-            <h3 id="history-title-ui" class="text-3xl font-black text-white tracking-tighter italic mb-8">Historial: Item</h3>
-            <div id="history-content" class="space-y-4 max-h-[50vh] overflow-y-auto pr-2 custom-scrollbar">
-                <!-- Data via JS -->
-                <div class="flex items-center justify-center py-10">
-                    <div class="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+<div id="history-modal" class="fixed inset-0 z-[100] hidden overflow-y-auto">
+    <div class="fixed inset-0 bg-zinc-950/90 backdrop-blur-xl" onclick="this.parentElement.classList.add('hidden'); this.parentElement.classList.remove('flex')"></div>
+    <div class="relative min-h-full flex items-center justify-center p-4">
+        <div class="relative w-full max-w-3xl bg-zinc-900 border border-white/10 shadow-2xl rounded-[2rem] md:rounded-[3rem] overflow-hidden animate-fade-in-up">
+            <div class="p-6 md:p-10">
+                <div class="flex items-center justify-between mb-8">
+                    <h3 id="history-title-ui" class="text-2xl md:text-3xl font-black text-white tracking-tighter italic">Historial: Item</h3>
+                    <button onclick="document.getElementById('history-modal').classList.add('hidden'); document.getElementById('history-modal').classList.remove('flex')" class="p-2 text-zinc-500 hover:text-white transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+                <div id="history-content" class="space-y-4 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
+                    <!-- Data via JS -->
+                    <div class="flex items-center justify-center py-10">
+                        <div class="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -324,27 +348,6 @@
 </script>
 
 <style>
-    .magic-input {
-        background: rgba(255, 255, 255, 0.03) !important;
-        border: 1px solid rgba(255, 255, 255, 0.08) !important;
-        border-radius: 1rem !important;
-        padding: 0.75rem 1rem;
-        padding-right: 1rem !important; /* Base padding */
-        color: white !important;
-        transition: all 0.3s ease !important;
-    }
-    .magic-input:focus,
-    .magic-input:focus-within {
-        background: rgba(255, 255, 255, 0.05) !important;
-        border-color: #3b82f6 !important;
-        box-shadow: 0 0 20px rgba(59, 130, 246, 0.1) !important;
-        outline: none !important;
-    }
-    .magic-input::-webkit-outer-spin-button,
-    .magic-input::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
     .magic-indicator {
         pointer-events: none;
         user-select: none;
