@@ -13,7 +13,7 @@ define('DB_PASS', $env_db_pass);
 
 // Configuración de la Aplicación
 define('APP_NAME', 'AntMaster Pro');
-define('APP_VERSION', '1.1.6');
+define('APP_VERSION', '1.1.7');
 
 // Detección del Protocolo
 $isLocal = preg_match('/^(localhost|127\.0\.0\.1)(:\d+)?$/', $_SERVER['HTTP_HOST'] ?? '');

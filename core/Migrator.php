@@ -1,7 +1,7 @@
 <?php
 
 class Migrator {
-    public static function run() {
+    public static function run($force = false) {
         $pdo = Database::getConnection();
 
         // 1. Asegurar que las tablas de control existen
@@ -24,7 +24,7 @@ class Migrator {
         $dbVersion = $stmt->fetchColumn();
 
         // Si la versión es correcta (y existe el registro), saltar el escaneo por rendimiento
-        if ($dbVersion && defined('APP_VERSION') && $dbVersion === APP_VERSION) {
+        if (!$force && $dbVersion && defined('APP_VERSION') && $dbVersion === APP_VERSION) {
             return;
         }
 

@@ -69,6 +69,7 @@ $router->put('/admin/revisiones/{id}', 'EspeciesController@resolveRevision');
 
 // Panel de Administración (Usuarios y Estadísticas)
 $router->get('/admin/dashboard', 'AdminController@dashboard');
+$router->post('/admin/run_migrations', 'AdminController@runMigrations');
 $router->post('/admin/usuarios/ban/{id}', 'AdminController@toggleBan');
 $router->get('/admin/usuarios/ver/{id}', 'AdminController@viewUser');
 $router->post('/admin/usuarios/stock/editar/{id}', 'AdminController@editUserStock');

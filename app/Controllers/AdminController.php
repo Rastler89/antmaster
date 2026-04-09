@@ -180,4 +180,12 @@ class AdminController extends Controller {
             $this->redirect('/admin/dashboard');
         }
     }
+
+    public function runMigrations() {
+        require_admin();
+        require_once '../core/Migrator.php';
+        Migrator::run(true);
+        $_SESSION['success'] = "Migraciones forzadas ejecutadas con éxito.";
+        $this->redirect('/admin/dashboard');
+    }
 }
