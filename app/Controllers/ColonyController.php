@@ -73,6 +73,10 @@ class ColonyController extends Controller {
         ];
         
         if (Colony::create($data)) {
+            require_once '../app/Helpers/GamificationHelper.php';
+            GamificationHelper::addXP($_SESSION['user_id'], 50);
+            GamificationHelper::checkAndAwardBadges($_SESSION['user_id']);
+
             $_SESSION['success'] = "Colonia creada correctamente.";
             $this->redirect('/colonias');
         } else {
@@ -240,6 +244,10 @@ class ColonyController extends Controller {
         ];
         
         if (Colony::addDiaryEntry($id, $data)) {
+            require_once '../app/Helpers/GamificationHelper.php';
+            GamificationHelper::addXP($_SESSION['user_id'], 10);
+            GamificationHelper::checkAndAwardBadges($_SESSION['user_id']);
+
             $_SESSION['success'] = "Entrada al diario añadida correctamente" . ($imagePath ? " e imagen optimizada" : "");
         } else {
             $_SESSION['error'] = "Error al guardar la entrada en el diario.";

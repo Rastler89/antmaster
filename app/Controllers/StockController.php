@@ -42,6 +42,12 @@ class StockController extends Controller {
                 'cantidad'   => $data['cantidad'],
                 'motivo'     => 'Carga inicial de inventario'
             ]);
+
+            // Gamificación: +5 XP
+            require_once '../app/Helpers/GamificationHelper.php';
+            GamificationHelper::addXP($_SESSION['user_id'], 5);
+            GamificationHelper::checkAndAwardBadges($_SESSION['user_id']);
+
             $_SESSION['success'] = 'Stock añadido correctamente.';
         } else {
             $_SESSION['error'] = 'Error al guardar el stock.';

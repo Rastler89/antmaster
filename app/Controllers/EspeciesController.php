@@ -4,11 +4,19 @@ require_once '../app/Models/SpeciesRevision.php';
 
 class EspeciesController extends Controller {
     public function index() {
-        require_login();
-        
+        $json_ld = json_encode([
+            "@context" => "https://schema.org",
+            "@type" => "CollectionPage",
+            "name" => "Fichas de Cría de Hormigas | AntMaster Pro",
+            "description" => "Explora nuestra enciclopedia completa de especies de hormigas con cuidados, parámetros y consejos de cría."
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
         $data = [
             'especies' => Species::all(),
             'title'    => 'Fichas de Cría | AntMaster Pro',
+            'description' => 'Explora nuestra enciclopedia completa de especies de hormigas con cuidados, parámetros y consejos de cría.',
+            'og_type' => 'website',
+            'json_ld' => $json_ld,
             'success'  => $_SESSION['success'] ?? '',
             'error'    => $_SESSION['error'] ?? ''
         ];
@@ -18,17 +26,28 @@ class EspeciesController extends Controller {
     }
 
     public function show($id) {
-        require_login();
-        
         $species = Species::find($id);
         if (!$species) {
             $this->redirect('/especies');
         }
         
+        $json_ld = json_encode([
+            "@context" => "https://schema.org",
+            "@type" => "Article",
+            "headline" => "Guía de cría de " . $species['nombre_cientifico'],
+            "description" => "Aprende todo sobre " . $species['nombre_cientifico'] . ": alimentación, temperatura, y biología.",
+            "author" => [
+                "@type" => "Organization",
+                "name" => "AntMaster Pro"
+            ]
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
         $data = [
             'especie' => $species,
             'title'   => $species['nombre_cientifico'] . ' (' . $species['nombre'] . ') | AntMaster Pro',
-            'description' => 'Guía de cría completa para ' . $species['nombre_cientifico'] . '. Aprende sobre su alimentación, temperatura, humedad y cuidados específicos.'
+            'description' => 'Guía de cría completa para ' . $species['nombre_cientifico'] . '. Aprende sobre su alimentación, temperatura, humedad y cuidados específicos.',
+            'og_type' => 'article',
+            'json_ld' => $json_ld
         ];
         
         $this->view('especies/show', $data);
@@ -177,6 +196,11 @@ class EspeciesController extends Controller {
                 SpeciesRevision::update($id, ['estado' => 'aprobada']);
                 $_SESSION['success'] = 'Revisión aprobada y ficha actualizada permanentemente.';
             }
+
+            // Gamificación: Otorgar XP al autor de la sugerencia
+            require_once '../app/Helpers/GamificationHelper.php';
+            GamificationHelper::addXP($revision['usuario_id'], 250);
+            GamificationHelper::checkAndAwardBadges($revision['usuario_id']);
         } else {
             SpeciesRevision::update($id, [
                 'estado' => 'rechazada',

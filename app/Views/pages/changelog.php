@@ -6,11 +6,11 @@
                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
                 <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
             </span>
-            Evolución del Proyecto
+            <?= __('changelog_tag') ?>
         </div>
-        <h1 class="text-5xl md:text-7xl font-black text-white mb-6 tracking-tighter">Changelog</h1>
+        <h1 class="text-5xl md:text-7xl font-black text-white mb-6 tracking-tighter"><?= __('changelog_title') ?></h1>
         <p class="text-zinc-500 text-lg max-w-2xl mx-auto">
-            Sigue de cerca cada actualización, mejora y corrección que implementamos para hacer de AntMaster Pro la mejor herramienta para mirmecólogos.
+            <?= __('changelog_desc') ?>
         </p>
     </div>
 
@@ -29,23 +29,23 @@
                     <time class="text-[10px] font-black text-blue-400 uppercase tracking-widest">9 Abril, 2026</time>
                     <span class="px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 text-[10px] font-black border border-blue-500/20">v1.2.0</span>
                 </div>
-                <h3 class="text-xl font-bold text-white mb-4">PWA, Notificaciones y Recordatorios</h3>
+                <h3 class="text-xl font-bold text-white mb-4"><?= __('changelog_v120_title') ?></h3>
                 <ul class="space-y-3">
                     <li class="flex gap-3 text-sm text-zinc-400">
                         <span class="text-blue-500 font-bold">+</span>
-                        <span>**PWA Ready**: Aplicación 100% instalable en móvil y escritorio con acceso directo y soporte offline completo.</span>
+                        <span><?= __('changelog_v120_item1') ?></span>
                     </li>
                     <li class="flex gap-3 text-sm text-zinc-400">
                         <span class="text-blue-500 font-bold">+</span>
-                        <span>**Recordatorios de Cría**: Sistema de gestión de tareas (alimentación, humedad, limpieza) con avisos programables.</span>
+                        <span><?= __('changelog_v120_item2') ?></span>
                     </li>
                     <li class="flex gap-3 text-sm text-zinc-400">
                         <span class="text-blue-500 font-bold">+</span>
-                        <span>**Web Push Notifications**: Notificaciones nativas para recordatorios de mantenimiento, integradas con el navegador.</span>
+                        <span><?= __('changelog_v120_item3') ?></span>
                     </li>
                     <li class="flex gap-3 text-sm text-zinc-400">
                         <span class="text-emerald-500 font-bold">#</span>
-                        <span>**Sincronización Offline**: Los registros realizados sin conexión se sincronizan automáticamente mediante IndexedDB.</span>
+                        <span><?= __('changelog_v120_item4') ?></span>
                     </li>
                 </ul>
             </div>
@@ -63,11 +63,11 @@
                     <time class="text-[10px] font-black text-blue-400 uppercase tracking-widest">9 Abril, 2026</time>
                     <span class="px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 text-[10px] font-black border border-blue-500/20">v1.1.7</span>
                 </div>
-                <h3 class="text-xl font-bold text-white mb-4">Hotfix Producción</h3>
+                <h3 class="text-xl font-bold text-white mb-4"><?= __('changelog_v117_title') ?></h3>
                 <ul class="space-y-3">
                     <li class="flex gap-3 text-sm text-zinc-400">
                         <span class="text-red-500 font-bold">!</span>
-                        <span>**Migraciones**: Forzar el disparador de migraciones en producción para añadir el campo `is_draft` al registro de especies.</span>
+                        <span><?= __('changelog_v117_item1') ?></span>
                     </li>
                 </ul>
             </div>
@@ -85,23 +85,23 @@
                     <time class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">7 Abril, 2026</time>
                     <span class="px-3 py-1 rounded-full bg-zinc-500/10 text-zinc-500 text-[10px] font-black border border-white/5">v1.1.6</span>
                 </div>
-                <h3 class="text-xl font-bold text-white mb-4">Módulo de Especies y Estabilidad</h3>
+                <h3 class="text-xl font-bold text-white mb-4"><?= __('changelog_v116_title') ?></h3>
                 <ul class="space-y-3">
                     <li class="flex gap-3 text-sm text-zinc-400">
                         <span class="text-blue-500 font-bold">+</span>
-                        <span>**Soporte Off-database**: Ahora puedes registrar especies nuevas "on-the-fly" si no existen en la Wiki.</span>
+                        <span><?= __('changelog_v116_item1') ?></span>
                     </li>
                     <li class="flex gap-3 text-sm text-zinc-400">
                         <span class="text-blue-500 font-bold">+</span>
-                        <span>**Panel Admin Pro**: Nuevo flujo de aprobación para especies sugeridas por usuarios.</span>
+                        <span><?= __('changelog_v116_item2') ?></span>
                     </li>
                     <li class="flex gap-3 text-sm text-zinc-400">
                         <span class="text-emerald-500 font-bold">#</span>
-                        <span>**QR Smart-Entry**: Corregido el enlace QR y añadida apertura automática del formulario.</span>
+                        <span><?= __('changelog_v116_item3') ?></span>
                     </li>
                     <li class="flex gap-3 text-sm text-zinc-400">
                         <span class="text-red-500 font-bold">!</span>
-                        <span>**Schema Fix**: Resuelto error fatal en la persistencia de temas/ajustes de usuario.</span>
+                        <span><?= __('changelog_v116_item4') ?></span>
                     </li>
                 </ul>
             </div>

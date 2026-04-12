@@ -1,6 +1,18 @@
 <?php
 abstract class Model {
     protected static $table;
+    protected $attributes = [];
+
+    public function __construct($data = []) {
+        $this->attributes = $data;
+    }
+
+    public function __get($name) {
+        if ($name === 'attributes') {
+            return $this->attributes;
+        }
+        return $this->attributes[$name] ?? null;
+    }
 
     // Obtener conexión estática a la BD
     protected static function db() {

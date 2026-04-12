@@ -16,7 +16,7 @@
 
 <!-- Sección de Ayuda (Cerrable) -->
 <div class="glass-card p-6 border-blue-500/20 mb-8 relative overflow-hidden group transition-all duration-300" data-help-id="dashboard_main">
-    <button onclick="dismissHelp('dashboard_main')" class="absolute top-4 right-4 p-2 text-zinc-500 hover:text-white transition-colors" title="Cerrar Ayuda">
+    <button onclick="dismissHelp('dashboard_main')" class="absolute top-4 right-4 p-2 text-zinc-500 hover:text-white transition-colors" title="<?= __('nav_mobile_close') ?>">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
     </button>
     <div class="flex items-start gap-4">
@@ -24,9 +24,9 @@
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
         </div>
         <div>
-            <h3 class="text-lg font-bold text-white mb-1">¿Cómo leer tu analítica?</h3>
+            <h3 class="text-lg font-bold text-white mb-1"><?= __('db_help_title') ?></h3>
             <p class="text-sm text-zinc-400 leading-relaxed max-w-2xl">
-                Este panel resume el estado global de tu imperio. Las gráficas de la izquierda muestran el crecimiento acumulado de todas tus colonias, mientras que a la derecha verás alertas críticas de stock y la diversidad de especies que posees.
+                <?= __('db_help_desc') ?>
             </p>
         </div>
     </div>
@@ -153,6 +153,31 @@
 
     <!-- Widgets Laterales -->
     <div class="space-y-8 pb-12 lg:pb-0">
+        <!-- User Rank Widget -->
+        <div class="glass-card p-8 border-blue-500/20 relative overflow-hidden group">
+            <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-blue-500/5 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-1000"></div>
+            <div class="flex items-center gap-4 mb-6 relative z-10">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-600 to-purple-700 flex items-center justify-center text-3xl shadow-xl shadow-blue-500/20">
+                    🐜
+                </div>
+                <div>
+                    <span class="text-[10px] uppercase font-black text-zinc-500 tracking-widest block mb-1"><?= __('db_rank_title') ?></span>
+                    <h4 class="text-xl font-black text-white leading-none"><?= $userRank ?></h4>
+                </div>
+            </div>
+            <div class="space-y-2 relative z-10">
+                <div class="flex items-center justify-between text-[10px] font-black uppercase tracking-tighter">
+                    <span class="text-blue-400"><?= $userXP ?> XP</span>
+                    <span class="text-zinc-600"><?= __('db_rank_next') ?></span>
+                </div>
+                <div class="h-2 w-full bg-white/5 rounded-full overflow-hidden border border-white/5">
+                    <?php $progress = ($userXP % 500) / 5; ?>
+                    <div class="h-full bg-gradient-to-r from-blue-500 to-purple-600" style="width: <?= $progress ?>%"></div>
+                </div>
+                <a href="<?= BASE_URL ?>/u/<?= $userSlug ?>" class="block text-center pt-2 text-[9px] font-black text-zinc-500 hover:text-white uppercase tracking-[0.2em] transition-colors"><?= __('db_rank_view_public') ?></a>
+            </div>
+        </div>
+
         <!-- Distribución de Especies -->
         <div class="glass-card p-6 md:p-8 border-white/5">
             <h3 class="text-lg font-bold text-white mb-6 flex items-center gap-2">
@@ -182,13 +207,13 @@
                         <?php endif; ?>
                         <span class="relative inline-flex rounded-full h-3 w-3 bg-purple-500"></span>
                     </span>
-                    Tareas de Mantenimiento
+                    <?= __('db_reminders_title') ?>
                 </h3>
             </div>
             
             <?php if (empty($pendingReminders)): ?>
                 <div class="text-center py-6 bg-white/5 rounded-2xl border border-white/5">
-                    <p class="text-[10px] uppercase font-black text-purple-400/50 tracking-widest">Todo al día ✨</p>
+                    <p class="text-[10px] uppercase font-black text-purple-400/50 tracking-widest"><?= __('db_reminders_empty') ?></p>
                 </div>
             <?php else: ?>
                 <div class="space-y-4">

@@ -54,9 +54,19 @@ class AuthController extends Controller {
             return;
         }
 
+        // Generar slug único basado en el nombre
+        $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $nombre)));
+        $tempSlug = $slug;
+        $i = 1;
+        while (User::whereOne('slug', '=', $tempSlug)) {
+            $tempSlug = $slug . '-' . $i++;
+        }
+        $slug = $tempSlug;
+
         $data = [
             'nombre' => $nombre,
             'email' => $email,
+            'slug' => $slug,
             'password' => password_hash($password, PASSWORD_DEFAULT)
         ];
 
