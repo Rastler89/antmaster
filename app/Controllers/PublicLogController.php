@@ -23,11 +23,38 @@ class PublicLogController extends Controller {
             return (int)$entry['is_visible'] === 1;
         });
 
+        $title = 'Log de ' . $colony['nombre'] . ' de ' . $colony['usuario_nombre'] . ' | AntMaster Pro';
+        $desc = "Sigue la evolución de la colonia de " . ($colony['especie_nombre'] ?? 'hormigas') . " de " . $colony['usuario_nombre'] . ". " . count($visibleDiary) . " entradas en el diario. Población: " . $colony['poblacion_actual'] . " hormigas.";
+
+        $json_ld = json_encode([
+            "@context" => "https://schema.org",
+            "@type" => "Dataset",
+            "name" => "Log de Colonia: " . $colony['nombre'],
+            "description" => "Registro público de observaciones y crecimiento de colonia de " . ($colony['especie_nombre'] ?? 'hormigas') . ".",
+            "creator" => [
+                "@type" => "Person",
+                "name" => $colony['usuario_nombre']
+            ],
+            "publisher" => [
+                "@type" => "Organization",
+                "name" => "AntMaster Pro"
+            ]
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
+        $og_image_url = null;
+        if (!empty($colony['imagen_portada'])) {
+            $og_image_url = rtrim(BASE_URL, '/') . asset($colony['imagen_portada']);
+        }
+
         $data = [
             'colony'  => $colony,
             'history' => $history,
             'diary'   => $visibleDiary,
-            'title'   => 'Log de ' . $colony['nombre'] . ' (' . $colony['usuario_nombre'] . ') | AntMaster Pro'
+            'title'   => $title,
+            'description' => $desc,
+            'og_type' => 'article',
+            'og_image' => $og_image_url,
+            'json_ld' => $json_ld
         ];
         
         $this->view('colony/public_show', $data);

@@ -17,12 +17,8 @@ RUN apt-get update && apt-get install -y \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
-# Copiar el código fuente
-COPY . /var/www/html/
-
-# Configurar permisos para Apache
-RUN chown -R www-data:www-data /var/www/html/
-RUN chmod -R 755 /var/www/html/
+# Copiar el código fuente con permisos predefinidos para evitar capas masivas
+COPY --chown=www-data:www-data . /var/www/html/
 
 # Configuración de Cron
 COPY docker/cron-reminders /etc/cron.d/cron-reminders

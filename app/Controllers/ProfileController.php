@@ -38,13 +38,36 @@ class ProfileController extends Controller {
         $emailHash = md5(strtolower(trim($user->attributes['email'])));
         $gravatarUrl = "https://www.gravatar.com/avatar/{$emailHash}?s=200&d=mp";
 
+        $title = $user->attributes['nombre'] . ' | Perfil de Criador';
+        $desc = "Perfil público de " . $user->attributes['nombre'] . ". Rango: " . $user->getRank() . " con " . $user->attributes['xp'] . " XP. Explorar colonias y logros en AntMaster Pro.";
+
+        $json_ld = json_encode([
+            "@context" => "https://schema.org",
+            "@type" => "ProfilePage",
+            "mainEntity" => [
+                "@type" => "Person",
+                "name" => $user->attributes['nombre'],
+                "description" => $user->attributes['bio'] ?? '',
+                "image" => $user->attributes['profile_image'] ?: $gravatarUrl,
+                "interactionStatistic" => [
+                    "@type" => "InteractionCounter",
+                    "interactionType" => "https://schema.org/FollowAction",
+                    "userInteractionCount" => $user->attributes['xp']
+                ]
+            ]
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
         $data = [
             'user' => $user->attributes,
             'rank' => $user->getRank(),
             'colonies' => $colonies,
             'badges' => $userBadges,
             'avatar' => $user->attributes['profile_image'] ?: $gravatarUrl,
-            'title' => $user->attributes['nombre'] . ' | Perfil de Mirmecólogo',
+            'title' => $title,
+            'description' => $desc,
+            'og_image' => $user->attributes['profile_image'] ?: $gravatarUrl,
+            'og_type' => 'profile',
+            'json_ld' => $json_ld,
             'xp' => $user->attributes['xp']
         ];
 

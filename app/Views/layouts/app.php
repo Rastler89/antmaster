@@ -28,59 +28,40 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
     <link rel="canonical" href="<?= (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" ?>">
 
     <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="<?= (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" ?>">
+    <meta property="og:type" content="<?= htmlspecialchars($og_type ?? 'website') ?>">
+    <meta property="og:url" content="<?= htmlspecialchars($og_url ?? (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]") ?>">
     <meta property="og:title" content="<?= htmlspecialchars(($title ?? '') . ' - ' . APP_NAME) ?>">
     <meta property="og:description" content="<?= htmlspecialchars($description ?? APP_DESCRIPTION) ?>">
-    <meta property="og:image" content="<?= asset(APP_IMAGE) ?>">
+    <meta property="og:image" content="<?= htmlspecialchars($og_image ?? asset(APP_IMAGE)) ?>">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="<?= (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" ?>">
+    <meta property="twitter:url" content="<?= htmlspecialchars($og_url ?? (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]") ?>">
     <meta property="twitter:title" content="<?= htmlspecialchars(($title ?? '') . ' - ' . APP_NAME) ?>">
     <meta property="twitter:description" content="<?= htmlspecialchars($description ?? APP_DESCRIPTION) ?>">
-    <meta property="twitter:image" content="<?= asset(APP_IMAGE) ?>">
+    <meta property="twitter:image" content="<?= htmlspecialchars($og_image ?? asset(APP_IMAGE)) ?>">
+
+    <!-- Localización y SEO -->
+    <link rel="alternate" hreflang="es" href="<?= htmlspecialchars(BASE_URL . parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH) . '?lang=es') ?>" />
+    <link rel="alternate" hreflang="en" href="<?= htmlspecialchars(BASE_URL . parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH) . '?lang=en') ?>" />
+    <link rel="alternate" hreflang="fr" href="<?= htmlspecialchars(BASE_URL . parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH) . '?lang=fr') ?>" />
+    <link rel="alternate" hreflang="x-default" href="<?= htmlspecialchars(BASE_URL . parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH)) ?>" />
 
     <!-- Tipografía: Outfit -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style><?= $themeVariables ?></style>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        background: '#09090b', // Zinc 950
-                        foreground: '#fafafa',
-                        card: '#18181b',
-                        border: '#27272a',
-                        primary: '#3b82f6', // Blue 500
-                    },
-                    animation: {
-                        'blob': 'blob 7s infinite',
-                        'fade-in': 'fadeIn 0.5s ease-out',
-                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite'
-                    },
-                    keyframes: {
-                        blob: {
-                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
-                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
-                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
-                            '100%': { transform: 'translate(0px, 0px) scale(1)' }
-                        },
-                        fadeIn: {
-                            '0%': { opacity: '0', transform: 'translateY(10px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' }
-                        }
-                    }
-                }
-            }
-        }
+    <!-- Tailwind CSS Precompilado -->
+    <link rel="stylesheet" href="<?= asset('assets/css/tailwind.css') . '?v=' . APP_VERSION ?>">
+    
+    <?php if (isset($json_ld)): ?>
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+        <?= $json_ld ?>
     </script>
+    <?php endif; ?>
     <script>
         window.VAPID_PUBLIC_KEY = "<?= defined('VAPID_PUBLIC_KEY') ? VAPID_PUBLIC_KEY : '' ?>";
     </script>
@@ -212,8 +193,8 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
     </style>
 </head>
 <body class="antialiased selection:bg-blue-500/30 selection:text-white transition-colors duration-500 <?= $colorblindClass ?> <?= $reducedMotionClass ?>">
-    <!-- Background Magic blobs -->
-    <div class="blobs-container">
+    <!-- Background Magic blobs (Decorativo) -->
+    <div class="blobs-container" aria-hidden="true">
         <div class="blob1 animate-blob duration-[10000ms]"></div>
         <div class="blob2 animate-blob duration-[12000ms]" style="animation-delay: 2s;"></div>
     </div>
@@ -237,10 +218,10 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
                 <!-- Desktop Menu -->
                 <div class="hidden md:flex items-center gap-6">
                     <!-- Language Switcher -->
-                    <div class="flex items-center gap-1 bg-white/5 p-1 rounded-lg border border-white/10 mr-2">
-                        <a href="?lang=es" class="px-2 py-0.5 text-[10px] font-black rounded <?= APP_LANG == 'es' ? 'bg-blue-500 text-white' : 'text-zinc-500 hover:text-white' ?>">ES</a>
-                        <a href="?lang=en" class="px-2 py-0.5 text-[10px] font-black rounded <?= APP_LANG == 'en' ? 'bg-blue-500 text-white' : 'text-zinc-500 hover:text-white' ?>">EN</a>
-                        <a href="?lang=fr" class="px-2 py-0.5 text-[10px] font-black rounded <?= APP_LANG == 'fr' ? 'bg-blue-500 text-white' : 'text-zinc-500 hover:text-white' ?>">FR</a>
+                    <div class="flex items-center gap-1 bg-white/5 p-1 rounded-lg border border-white/10 mr-2" aria-label="Selector de Idioma">
+                        <a href="?lang=es" aria-label="<?= __('nav_lang_es') ?? 'Español' ?>" class="px-2 py-0.5 text-[10px] font-black rounded <?= APP_LANG == 'es' ? 'bg-blue-500 text-white' : 'text-zinc-400 hover:text-white' ?>">ES</a>
+                        <a href="?lang=en" aria-label="<?= __('nav_lang_en') ?? 'English' ?>" class="px-2 py-0.5 text-[10px] font-black rounded <?= APP_LANG == 'en' ? 'bg-blue-500 text-white' : 'text-zinc-400 hover:text-white' ?>">EN</a>
+                        <a href="?lang=fr" aria-label="<?= __('nav_lang_fr') ?? 'Français' ?>" class="px-2 py-0.5 text-[10px] font-black rounded <?= APP_LANG == 'fr' ? 'bg-blue-500 text-white' : 'text-zinc-400 hover:text-white' ?>">FR</a>
                     </div>
 
                     <!-- PWA Status Indicator -->
@@ -263,21 +244,21 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
                         <a href="<?= BASE_URL ?>/especies" class="text-sm text-muted hover:text-main transition"><?= __('nav_species') ?></a>
                         <a href="<?= BASE_URL ?>/stock" class="text-sm text-muted hover:text-main transition"><?= __('nav_stock') ?></a>
                         <?php if (is_admin()): ?>
-                            <a href="<?= BASE_URL ?>/admin/dashboard" class="px-3 py-2 text-muted hover:text-red-400 transition-colors flex items-center gap-1.5" title="Panel de Administración">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                            <a href="<?= BASE_URL ?>/admin/dashboard" aria-label="Panel de Administración" class="px-3 py-2 text-muted hover:text-red-400 transition-colors flex items-center gap-1.5" title="Panel de Administración">
+                                <svg class="w-5 h-5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
                             </a>
                         <?php endif; ?>
                         
-                        <a href="<?= BASE_URL ?>/perfil/editar" class="p-2 bg-white/5 border border-white/10 text-muted rounded-lg hover:text-main hover:bg-white/10 transition" title="Mi Perfil">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                        <a href="<?= BASE_URL ?>/perfil/editar" aria-label="Mi Perfil" class="p-2 bg-white/5 border border-white/10 text-muted rounded-lg hover:text-main hover:bg-white/10 transition" title="Mi Perfil">
+                            <svg class="w-5 h-5 pointer-events-none" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                         </a>
 
-                        <a href="<?= BASE_URL ?>/settings" class="p-2 bg-white/5 border border-white/10 text-muted rounded-lg hover:text-main hover:bg-white/10 transition" title="<?= __('nav_settings') ?>">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        <a href="<?= BASE_URL ?>/settings" aria-label="<?= __('nav_settings') ?>" class="p-2 bg-white/5 border border-white/10 text-muted rounded-lg hover:text-main hover:bg-white/10 transition" title="<?= __('nav_settings') ?>">
+                            <svg class="w-5 h-5 pointer-events-none" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                         </a>
 
-                        <a href="<?= BASE_URL ?>/logout" class="px-3 py-2 text-muted hover:text-red-400 transition-colors" title="<?= __('nav_logout') ?>">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                        <a href="<?= BASE_URL ?>/logout" aria-label="<?= __('nav_logout') ?>" class="px-3 py-2 text-muted hover:text-red-400 transition-colors" title="<?= __('nav_logout') ?>">
+                            <svg class="w-5 h-5 pointer-events-none" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
                         </a>
                     <?php else: ?>
                         <a href="<?= BASE_URL ?>/login" class="text-sm font-medium text-muted hover:text-main transition"><?= __('nav_login') ?></a>
@@ -288,11 +269,11 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
                 <!-- Mobile Header Icons -->
                 <div class="flex md:hidden items-center gap-4">
                     <?php if (is_logged_in()): ?>
-                        <a href="<?= BASE_URL ?>/logout" class="p-2 text-muted hover:text-red-400">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                        <a href="<?= BASE_URL ?>/logout" aria-label="Cerrar sesión" class="p-2 text-muted hover:text-red-400">
+                            <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
                         </a>
-                        <a href="<?= BASE_URL ?>/settings" class="p-2 text-muted hover:text-main">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        <a href="<?= BASE_URL ?>/settings" aria-label="Ajustes" class="p-2 text-muted hover:text-main">
+                            <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                         </a>
                     <?php else: ?>
                         <a href="<?= BASE_URL ?>/login" class="text-xs font-bold text-muted uppercase tracking-widest"><?= __('nav_login') ?></a>

@@ -1,0 +1,9 @@
+.git
+.github
+node_modules
+tailwindcss.exe
+npm-debug.log*
+.env
+scratch
+docker/data
+uploads

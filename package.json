@@ -1,0 +1,24 @@
+{
+  "name": "antmaster",
+  "version": "1.0.0",
+  "description": "AntMaster Pro es una aplicación web integral (CMS/Panel de Control) diseñada para entusiastas de la mirmecología. Permite a los usuarios gestionar sus colonias de hormigas, llevar un registro del progreso, administrar su stock de alimentos e interactuar con una base de datos global de fichas de cría de diferentes especies.",
+  "main": "tailwind.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rastler89/antmaster.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Rastler89/antmaster/issues"
+  },
+  "homepage": "https://github.com/Rastler89/antmaster#readme",
+  "devDependencies": {
+    "tailwindcss": "^4.2.2"
+  }
+}
