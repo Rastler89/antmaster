@@ -62,8 +62,8 @@ class DashboardController extends Controller {
             'range'       => $range,
             'userName'    => $_SESSION['user_name'],
             'userRank'    => $userObj->getRank(),
-            'userXP'      => $userModel['xp'],
-            'userSlug'    => $userModel['slug'],
+            'userXP'      => $userModel['xp'] ?? 0,
+            'userSlug'    => $userModel['slug'] ?? null,
             'title'       => 'Dashboard Analítico | AntMaster Pro'
         ];
         

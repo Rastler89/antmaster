@@ -4,8 +4,8 @@ class ThemeManager {
     public static function getThemes() {
         return [
             'messor' => [
-                'name' => 'Messor (Noche Profunda)',
-                'description' => 'El clásico modo oscuro, sobrio y elegante.',
+                'name' => __('theme_messor_name'),
+                'description' => __('theme_messor_desc'),
                 'colors' => [
                     'background' => '#09090b',
                     'foreground' => '#fafafa',
@@ -18,8 +18,8 @@ class ThemeManager {
                 ]
             ],
             'lasius' => [
-                'name' => 'Lasius (Jardín Húmedo)',
-                'description' => 'Tonos verdosos que evocan el frescor del jardín.',
+                'name' => __('theme_lasius_name'),
+                'description' => __('theme_lasius_desc'),
                 'colors' => [
                     'background' => '#020617',
                     'foreground' => '#f0fdf4',
@@ -32,8 +32,8 @@ class ThemeManager {
                 ]
             ],
             'camponotus' => [
-                'name' => 'Camponotus (Madera Imperial)',
-                'description' => 'Un toque de distinción con tonos tierra y dorados.',
+                'name' => __('theme_camponotus_name'),
+                'description' => __('theme_camponotus_desc'),
                 'colors' => [
                     'background' => '#0c0a09',
                     'foreground' => '#fffaf3',
@@ -46,8 +46,8 @@ class ThemeManager {
                 ]
             ],
             'solenopsis' => [
-                'name' => 'Solenopsis (Alerta Fuego)',
-                'description' => 'Energía y contraste con acentos rojos intensos.',
+                'name' => __('theme_solenopsis_name'),
+                'description' => __('theme_solenopsis_desc'),
                 'colors' => [
                     'background' => '#020617',
                     'foreground' => '#fef2f2',
@@ -60,8 +60,8 @@ class ThemeManager {
                 ]
             ],
             'myrmecia' => [
-                'name' => 'Myrmecia (Desierto Australiano)',
-                'description' => 'Tonos anaranjados y cálidos para una lectura suave.',
+                'name' => __('theme_myrmecia_name'),
+                'description' => __('theme_myrmecia_desc'),
                 'colors' => [
                     'background' => '#020617',
                     'foreground' => '#fff7ed',
@@ -74,8 +74,8 @@ class ThemeManager {
                 ]
             ],
             'alba' => [
-                'name' => 'Alba (Modo Claro)',
-                'description' => 'Interfaz limpia con máxima luminosidad.',
+                'name' => __('theme_alba_name'),
+                'description' => __('theme_alba_desc'),
                 'colors' => [
                     'background' => '#f4f4f5',
                     'foreground' => '#09090b',
