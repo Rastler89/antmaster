@@ -93,29 +93,29 @@
                                 <div class="absolute inset-0 rounded-full animate-ping bg-blue-500/20"></div>
                                 <svg class="w-10 h-10 text-blue-400 pointer-events-none" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                             </div>
-                            <h3 class="text-2xl font-black text-white mb-2">Panel de Control Analítico</h3>
-                            <p class="text-zinc-400 text-sm max-w-sm mb-0">Pasa el ratón para ver tu imperio en tiempo real.</p>
+                            <h3 class="text-2xl font-black text-white mb-2"><?= __('home_analytics_title') ?></h3>
+                            <p class="text-zinc-400 text-sm max-w-sm mb-0"><?= __('home_analytics_desc') ?></p>
                         </div>
 
                         <!-- Real Dashboard Content Simulation (Always there, visible on hover) -->
                         <div class="space-y-6 opacity-0 translate-y-4 transition-all duration-700 delay-100 group-hover:opacity-100 group-hover:translate-y-0 group-hover:blur-0 blur-sm pointer-events-none h-full overflow-hidden">
                             <div class="flex justify-between items-center mb-2">
-                                <h4 class="text-lg font-bold text-white">Hola, <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">Marabunta</span> 👋</h4>
+                                <h4 class="text-lg font-bold text-white"><?= __('dashboard_welcome', ['name' => '<span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">Marabunta</span>']) ?> 👋</h4>
                                 <div class="w-24 h-4 bg-white/5 rounded-full"></div>
                             </div>
                             
                             <!-- KPI Cards -->
                             <div class="grid grid-cols-3 gap-3">
                                 <div class="bg-white/5 border border-white/10 rounded-xl p-3">
-                                    <div class="text-[8px] uppercase font-black text-zinc-500 tracking-widest mb-1 leading-tight">Total Ants</div>
+                                    <div class="text-[8px] uppercase font-black text-zinc-500 tracking-widest mb-1 leading-tight"><?= __('home_total_ants') ?></div>
                                     <div class="text-lg font-black text-white leading-none">1,240</div>
                                 </div>
                                 <div class="bg-white/5 border border-white/10 rounded-xl p-3">
-                                    <div class="text-[8px] uppercase font-black text-zinc-500 tracking-widest mb-1 leading-tight">Colonies</div>
+                                    <div class="text-[8px] uppercase font-black text-zinc-500 tracking-widest mb-1 leading-tight"><?= __('home_colonies') ?></div>
                                     <div class="text-lg font-black text-white leading-none">5</div>
                                 </div>
                                 <div class="bg-white/5 border border-white/10 rounded-xl p-3">
-                                    <div class="text-[8px] uppercase font-black text-zinc-500 tracking-widest mb-1 leading-tight">Success Rate</div>
+                                    <div class="text-[8px] uppercase font-black text-zinc-500 tracking-widest mb-1 leading-tight"><?= __('home_success_rate') ?></div>
                                     <div class="text-lg font-black text-emerald-400 leading-none">94%</div>
                                 </div>
                             </div>
@@ -123,7 +123,7 @@
                             <!-- Simulado de Gráfico Global -->
                             <div class="bg-white/5 border border-white/10 rounded-xl p-4 overflow-hidden relative h-[100px] md:h-[180px]">
                                 <div class="mb-4 flex items-center justify-between relative z-10 shrink-0">
-                                    <div class="text-[10px] font-bold text-zinc-400">Empire Growth</div>
+                                    <div class="text-[10px] font-bold text-zinc-400"><?= __('home_empire_growth') ?></div>
                                     <div class="flex gap-1">
                                         <div class="w-8 h-3 bg-blue-500/50 rounded-full"></div>
                                         <div class="w-8 h-3 bg-white/5 rounded-full"></div>
@@ -150,7 +150,7 @@
 
                             <!-- Simulado de Tabla / Listado -->
                             <div class="hidden md:block bg-white/5 border border-white/10 rounded-xl overflow-hidden shrink-0">
-                                <div class="px-4 py-2 bg-white/5 text-[8px] font-black uppercase text-zinc-500 tracking-widest border-b border-white/5">Recent Colonies</div>
+                                <div class="px-4 py-2 bg-white/5 text-[8px] font-black uppercase text-zinc-500 tracking-widest border-b border-white/5"><?= __('home_recent_colonies') ?></div>
                                 <div class="divide-y divide-white/5">
                                     <div class="px-4 py-2 flex items-center justify-between">
                                         <div class="flex items-center gap-2">
@@ -210,26 +210,26 @@
         <div class="glass-card p-1 md:p-12 overflow-hidden relative">
             <div class="grid md:grid-cols-2 items-center gap-12">
                 <div class="p-8 md:p-0">
-                    <h2 class="text-3xl md:text-4xl font-bold mb-6">Nunca te quedes sin suministros</h2>
-                    <p class="text-zinc-400 mb-8">Nuestra gestión de stock inteligente te avisará cuando te estés quedando sin comida o accesorios críticos para tus colonias.</p>
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6"><?= __('home_stock_title') ?></h2>
+                    <p class="text-zinc-400 mb-8"><?= __('home_stock_desc') ?></p>
                     <ul class="space-y-4">
                         <li class="flex items-center gap-3 text-zinc-300">
                             <div class="w-5 h-5 rounded-full bg-blue-500/20 flex items-center justify-center border border-blue-500/30">
                                 <svg class="w-3 h-3 text-blue-400" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                             </div>
-                            Control de inventario de hormigas
+                            <?= __('home_stock_li1') ?>
                         </li>
                         <li class="flex items-center gap-3 text-zinc-300">
                             <div class="w-5 h-5 rounded-full bg-blue-500/20 flex items-center justify-center border border-blue-500/30">
                                 <svg class="w-3 h-3 text-blue-400" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                             </div>
-                            Alertas de stock bajo
+                            <?= __('home_stock_li2') ?>
                         </li>
                         <li class="flex items-center gap-3 text-zinc-300">
                             <div class="w-5 h-5 rounded-full bg-blue-500/20 flex items-center justify-center border border-blue-500/30">
                                 <svg class="w-3 h-3 text-blue-400" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                             </div>
-                            Historial de adquisiciones
+                            <?= __('home_stock_li3') ?>
                         </li>
                     </ul>
                 </div>
@@ -237,8 +237,8 @@
                     <div class="absolute inset-0 bg-blue-600/20 blur-3xl rounded-full opacity-50 group-hover:opacity-75 transition-opacity"></div>
                     <div class="relative glass-card p-6 border-white/5 bg-white/[0.02]">
                         <div class="flex items-center justify-between mb-4 border-b border-white/5 pb-2">
-                             <span class="text-xs font-black uppercase tracking-widest text-zinc-500">Estado de Suministros</span>
-                             <span class="text-[10px] text-blue-400 font-bold bg-blue-500/10 px-2 py-0.5 rounded">OPTIMIZADO</span>
+                             <span class="text-xs font-black uppercase tracking-widest text-zinc-500"><?= __('home_stock_status') ?></span>
+                             <span class="text-[10px] text-blue-400 font-bold bg-blue-500/10 px-2 py-0.5 rounded"><?= __('home_stock_optimized') ?></span>
                         </div>
                         <div class="space-y-4">
                             <div class="flex items-center justify-between text-sm">
@@ -264,10 +264,10 @@
 
     <!-- Final CTA -->
     <section class="text-center py-20 px-4">
-        <h2 class="text-4xl font-bold mb-6 leading-tight">¿Listo para llevar tu afición al <br><span class="text-blue-400">siguiente nivel?</span></h2>
-        <p class="text-zinc-400 mb-10 max-w-lg mx-auto">Únete a cientos de mirmecólogos que ya están usando AntMaster Pro para gestionar sus colonias.</p>
+        <h2 class="text-4xl font-bold mb-6 leading-tight"><?= __('home_cta_title') ?></h2>
+        <p class="text-zinc-400 mb-10 max-w-lg mx-auto"><?= __('home_cta_desc') ?></p>
         <a href="<?= BASE_URL ?>/register" class="magic-btn text-lg px-12 py-5">
-            Crear mi cuenta ahora
+            <?= __('home_cta_btn') ?>
         </a>
     </section>
 </div>

@@ -218,10 +218,10 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
                 <!-- Desktop Menu -->
                 <div class="hidden md:flex items-center gap-6">
                     <!-- Language Switcher -->
-                    <div class="flex items-center gap-1 bg-white/5 p-1 rounded-lg border border-white/10 mr-2" aria-label="Selector de Idioma">
-                        <a href="?lang=es" aria-label="<?= __('nav_lang_es') ?? 'Español' ?>" class="px-2 py-0.5 text-[10px] font-black rounded <?= APP_LANG == 'es' ? 'bg-blue-500 text-white' : 'text-zinc-400 hover:text-white' ?>">ES</a>
-                        <a href="?lang=en" aria-label="<?= __('nav_lang_en') ?? 'English' ?>" class="px-2 py-0.5 text-[10px] font-black rounded <?= APP_LANG == 'en' ? 'bg-blue-500 text-white' : 'text-zinc-400 hover:text-white' ?>">EN</a>
-                        <a href="?lang=fr" aria-label="<?= __('nav_lang_fr') ?? 'Français' ?>" class="px-2 py-0.5 text-[10px] font-black rounded <?= APP_LANG == 'fr' ? 'bg-blue-500 text-white' : 'text-zinc-400 hover:text-white' ?>">FR</a>
+                    <div class="flex items-center gap-1 bg-white/5 p-1 rounded-lg border border-white/10 mr-2" aria-label="<?= __('nav_lang_selector') ?>">
+                        <a href="?lang=es" aria-label="Español" class="px-2 py-0.5 text-[10px] font-black rounded <?= APP_LANG == 'es' ? 'bg-blue-500 text-white' : 'text-zinc-400 hover:text-white' ?>">ES</a>
+                        <a href="?lang=en" aria-label="English" class="px-2 py-0.5 text-[10px] font-black rounded <?= APP_LANG == 'en' ? 'bg-blue-500 text-white' : 'text-zinc-400 hover:text-white' ?>">EN</a>
+                        <a href="?lang=fr" aria-label="Français" class="px-2 py-0.5 text-[10px] font-black rounded <?= APP_LANG == 'fr' ? 'bg-blue-500 text-white' : 'text-zinc-400 hover:text-white' ?>">FR</a>
                     </div>
 
                     <!-- PWA Status Indicator -->
@@ -244,12 +244,12 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
                         <a href="<?= BASE_URL ?>/especies" class="text-sm text-muted hover:text-main transition"><?= __('nav_species') ?></a>
                         <a href="<?= BASE_URL ?>/stock" class="text-sm text-muted hover:text-main transition"><?= __('nav_stock') ?></a>
                         <?php if (is_admin()): ?>
-                            <a href="<?= BASE_URL ?>/admin/dashboard" aria-label="Panel de Administración" class="px-3 py-2 text-muted hover:text-red-400 transition-colors flex items-center gap-1.5" title="Panel de Administración">
+                            <a href="<?= BASE_URL ?>/admin/dashboard" aria-label="<?= __('nav_admin_panel') ?>" class="px-3 py-2 text-muted hover:text-red-400 transition-colors flex items-center gap-1.5" title="<?= __('nav_admin_panel') ?>">
                                 <svg class="w-5 h-5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
                             </a>
                         <?php endif; ?>
                         
-                        <a href="<?= BASE_URL ?>/perfil/editar" aria-label="Mi Perfil" class="p-2 bg-white/5 border border-white/10 text-muted rounded-lg hover:text-main hover:bg-white/10 transition" title="Mi Perfil">
+                        <a href="<?= BASE_URL ?>/perfil/editar" aria-label="<?= __('nav_profile') ?>" class="p-2 bg-white/5 border border-white/10 text-muted rounded-lg hover:text-main hover:bg-white/10 transition" title="<?= __('nav_profile') ?>">
                             <svg class="w-5 h-5 pointer-events-none" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                         </a>
 
@@ -269,11 +269,11 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
                 <!-- Mobile Header Icons -->
                 <div class="flex md:hidden items-center gap-4">
                     <?php if (is_logged_in()): ?>
-                        <a href="<?= BASE_URL ?>/logout" aria-label="Cerrar sesión" class="p-2 text-muted hover:text-red-400">
+                        <a href="<?= BASE_URL ?>/logout" aria-label="<?= __('nav_logout') ?>" class="p-2 text-muted hover:text-red-400">
                             <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
                         </a>
-                        <a href="<?= BASE_URL ?>/settings" aria-label="Ajustes" class="p-2 text-muted hover:text-main">
-                            <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        <a href="<?= BASE_URL ?>/settings" aria-label="<?= __('nav_settings') ?>" class="p-2 text-muted hover:text-main">
+                            <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                         </a>
                     <?php else: ?>
                         <a href="<?= BASE_URL ?>/login" class="text-xs font-bold text-muted uppercase tracking-widest"><?= __('nav_login') ?></a>
@@ -362,7 +362,7 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
                         </span>
                     </div>
                     <p class="text-sm text-zinc-500 max-w-sm mb-6 leading-relaxed">
-                        La plataforma definitiva para el seguimiento y gestión de colonias de hormigas. Diseñada para entusiastas de la mirmecología que buscan precisión y comunidad.
+                        <?= __('footer_desc') ?>
                     </p>
                     <div class="flex items-center gap-4">
                         <a href="https://rastler.dev" target="_blank" class="text-zinc-500 hover:text-blue-400 transition-colors">
@@ -374,24 +374,24 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
                 </div>
                 
                 <div>
-                    <h4 class="text-xs font-black uppercase tracking-widest text-white mb-6">Explorar</h4>
+                    <h4 class="text-xs font-black uppercase tracking-widest text-white mb-6"><?= __('footer_explore') ?></h4>
                     <ul class="space-y-4">
-                        <li><a href="<?= BASE_URL ?>/acerca-de" class="text-sm text-zinc-500 hover:text-white transition-colors">Sobre el proyecto</a></li>
-                        <li><a href="<?= BASE_URL ?>/guia-de-uso" class="text-sm text-zinc-500 hover:text-white transition-colors">Guía de Uso</a></li>
-                        <li><a href="<?= BASE_URL ?>/changelog" class="text-sm text-zinc-500 hover:text-white transition-colors">Historial (Changelog)</a></li>
+                        <li><a href="<?= BASE_URL ?>/acerca-de" class="text-sm text-zinc-500 hover:text-white transition-colors"><?= __('footer_about') ?></a></li>
+                        <li><a href="<?= BASE_URL ?>/guia-de-uso" class="text-sm text-zinc-500 hover:text-white transition-colors"><?= __('footer_usage') ?></a></li>
+                        <li><a href="<?= BASE_URL ?>/changelog" class="text-sm text-zinc-500 hover:text-white transition-colors"><?= __('footer_changelog') ?></a></li>
                     </ul>
                 </div>
 
                 <div>
-                    <h4 class="text-xs font-black uppercase tracking-widest text-white mb-6">Comunidad</h4>
+                    <h4 class="text-xs font-black uppercase tracking-widest text-white mb-6"><?= __('footer_community') ?></h4>
                     <div class="space-y-4">
                         <p class="text-xs text-zinc-600 leading-relaxed italic">
-                            "Desarrollado con pasión para ayudar a crecer tus colonias."
+                            "<?= __('footer_passion') ?>"
                         </p>
                         <div class="pt-2">
                              <a href="https://ko-fi.com/rastler" target="_blank" class="inline-flex items-center gap-3 px-5 py-3 bg-[#00b9fe] hover:bg-[#00a2e0] text-white rounded-[1.2rem] text-[10px] font-black uppercase tracking-widest transition-all shadow-xl shadow-blue-500/10 active:scale-95">
                                 <img src="https://ko-fi.com/img/cup-border.png" alt="Ko-fi" class="w-4 h-4 brightness-0 invert">
-                                Apoyar Proyecto
+                                <?= __('footer_support') ?>
                              </a>
                         </div>
                     </div>
@@ -400,10 +400,10 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
             
             <div class="mt-12 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
                 <p class="text-[10px] text-zinc-600 uppercase font-black tracking-widest">
-                    &copy; <?= date('Y') ?> AntMaster Pro. Desarrollado por <a href="https://rastler.dev" class="text-zinc-500 hover:text-blue-400 underline decoration-blue-500/20 underline-offset-4">Rastler</a>.
+                    <?= __('footer_rights', ['year' => date('Y'), 'name' => 'Rastler']) ?>
                 </p>
                 <div class="flex items-center gap-6">
-                    <span class="text-[10px] text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 font-black">SISTEMA ONLINE</span>
+                    <span class="text-[10px] text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 font-black"><?= __('footer_online') ?></span>
                 </div>
             </div>
         </div>

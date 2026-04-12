@@ -4,16 +4,16 @@
     </div>
     
     <h1 class="text-8xl font-black text-transparent bg-clip-text bg-gradient-to-br from-yellow-400 to-orange-600 mb-2">404</h1>
-    <h2 class="text-2xl font-bold text-white mb-4">¡Rastro de feromonas perdido!</h2>
+    <h2 class="text-2xl font-bold text-white mb-4"><?= __('error_404_title') ?></h2>
     
     <p class="text-zinc-400 mb-8 max-w-sm">
-        Nuestras hormigas exploradoras han peinado toda la zona, pero parece que la hoja o miga de pan que buscas no está en esta ruta. ¡Quizás la movieron al hormiguero vecino!
+        <?= __('error_404_desc') ?>
     </p>
 
     <a href="<?= defined('BASE_URL') ? BASE_URL : '/' ?>" class="magic-btn group">
         <span class="flex items-center gap-2">
             <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-            Volver a la Base
+            <?= __('error_back_home') ?>
         </span>
     </a>
 </div>
