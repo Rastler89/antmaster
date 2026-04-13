@@ -116,13 +116,14 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
         .magic-btn::before {
             content: '';
             position: absolute;
-            top: 0; left: -100%; width: 100%; height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
+            transform: translateX(-100%);
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
+            transition: transform 0.5s;
         }
 
         .magic-btn:hover::before {
-            left: 100%;
+            transform: translateX(100%);
         }
 
         .magic-input {
@@ -209,7 +210,7 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
                     <a href="<?= BASE_URL ?>/" class="flex items-center gap-2 group">
                         <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 p-0.5 shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform">
                             <div class="w-full h-full bg-background rounded-[10px] flex items-center justify-center overflow-hidden">
-                                <img src="<?= asset('assets/img/logo.png') ?>" alt="AntMaster" class="w-8 h-8 object-contain" width="32" height="32" decoding="async">
+                                <img src="<?= asset('assets/img/logo.webp') ?>" alt="AntMaster" class="w-8 h-8 object-contain" width="32" height="32" decoding="async">
                             </div>
                         </div>
                         <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500 tracking-tight">
@@ -356,7 +357,7 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
                     <div class="flex items-center gap-3 mb-6">
                         <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 p-0.5">
                             <div class="w-full h-full bg-background rounded-[7px] flex items-center justify-center overflow-hidden">
-                                <img src="<?= asset('assets/img/logo.png') ?>" alt="AntMaster" class="w-6 h-6 object-contain" width="24" height="24" loading="lazy" decoding="async">
+                                <img src="<?= asset('assets/img/logo.webp') ?>" alt="AntMaster" class="w-6 h-6 object-contain" width="24" height="24" loading="lazy" decoding="async">
                             </div>
                         </div>
                         <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">

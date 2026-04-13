@@ -81,7 +81,8 @@ class ImageHelper {
         imagecopyresampled($dstImage, $srcImage, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
 
         // Generate filename
-        $extension = ($mime == 'image/png' && $quality == 100) ? 'png' : 'jpg'; // We convert everything else to JPG for compression
+        // Change compression default to WEBP to save massive bandwidth and maintain transparency.
+        $extension = 'webp';
         $filename = uniqid('img_', true) . '.' . $extension;
         $destination = rtrim($destinationFolder, '/') . '/' . $filename;
 
@@ -90,8 +91,14 @@ class ImageHelper {
             mkdir($destinationFolder, 0777, true);
         }
 
-        // Save as JPEG with compression
-        $result = imagejpeg($dstImage, $destination, $quality);
+        // Save as WEBP with compression
+        if (function_exists('imagewebp')) {
+             $result = imagewebp($dstImage, $destination, $quality);
+        } else {
+             // Fallback if webp is not compiled in GD
+             $result = imagejpeg($dstImage, str_replace('.webp', '.jpg', $destination), $quality);
+             if ($result) $filename = str_replace('.webp', '.jpg', $filename);
+        }
 
         // Cleanup
         imagedestroy($srcImage);

@@ -22,7 +22,7 @@
             </ul>
         </div>
         <div class="w-full md:w-1/2 glass-card p-4 border-emerald-500/10 hover:border-emerald-500/30 transition-all">
-            <img src="<?= asset('assets/img/guide-1.png') ?>" alt="Registro de Colonia" class="rounded-lg shadow-2xl">
+            <img src="<?= asset('assets/img/guide-1.webp') ?>" alt="Registro de Colonia" class="rounded-lg shadow-2xl">
         </div>
     </div>
 
@@ -40,7 +40,7 @@
             </ul>
         </div>
         <div class="w-full md:w-1/2 glass-card p-4 border-blue-500/10 hover:border-blue-500/30 transition-all">
-            <img src="<?= asset('assets/img/guide-2.png') ?>" alt="Control de Población" class="rounded-lg shadow-2xl">
+            <img src="<?= asset('assets/img/guide-2.webp') ?>" alt="Control de Población" class="rounded-lg shadow-2xl">
         </div>
     </div>
 
@@ -54,7 +54,7 @@
             </p>
         </div>
         <div class="w-full md:w-1/2 glass-card p-4 border-orange-500/10 hover:border-orange-500/30 transition-all">
-            <img src="<?= asset('assets/img/guide-3.png') ?>" alt="Inventario de Alimento" class="rounded-lg shadow-2xl">
+            <img src="<?= asset('assets/img/guide-3.webp') ?>" alt="Inventario de Alimento" class="rounded-lg shadow-2xl">
         </div>
     </div>
 

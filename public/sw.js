@@ -4,7 +4,7 @@ const ASSETS_TO_CACHE = [
   '/offline.html',
   '/assets/img/icon-192.png',
   '/assets/img/icon-512.png',
-  '/assets/img/logo.png',
+  '/assets/img/logo.webp',
   'https://cdn.tailwindcss.com',
   'https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap'
 ];

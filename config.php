@@ -96,7 +96,7 @@ function __($key, $params = []) {
 // Configuración de SEO
 define('APP_DESCRIPTION', __('seo_description'));
 define('APP_KEYWORDS',      'hormigas, cría, ants, antmaster, pwa, gestión, colonias');
-define('APP_IMAGE',         'assets/img/logo.png');
+define('APP_IMAGE',         'assets/img/logo.webp');
 
 // Configuración Web Push (VAPID)
 // Puedes generarlas en Docker con: php vendor/bin/web-push-php generate-vapid-keys
