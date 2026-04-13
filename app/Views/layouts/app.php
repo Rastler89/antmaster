@@ -207,7 +207,7 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
                     <a href="<?= BASE_URL ?>/" class="flex items-center gap-2 group">
                         <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 p-0.5 shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform">
                             <div class="w-full h-full bg-background rounded-[10px] flex items-center justify-center overflow-hidden">
-                                <img src="<?= asset('assets/img/logo.png') ?>" alt="AntMaster" class="w-8 h-8 object-contain">
+                                <img src="<?= asset('assets/img/logo.png') ?>" alt="AntMaster" class="w-8 h-8 object-contain" width="32" height="32" decoding="async">
                             </div>
                         </div>
                         <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500 tracking-tight">
@@ -354,7 +354,7 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
                     <div class="flex items-center gap-3 mb-6">
                         <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 p-0.5">
                             <div class="w-full h-full bg-background rounded-[7px] flex items-center justify-center overflow-hidden">
-                                <img src="<?= asset('assets/img/logo.png') ?>" alt="AntMaster" class="w-6 h-6 object-contain">
+                                <img src="<?= asset('assets/img/logo.png') ?>" alt="AntMaster" class="w-6 h-6 object-contain" width="24" height="24" loading="lazy" decoding="async">
                             </div>
                         </div>
                         <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
@@ -390,7 +390,7 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
                         </p>
                         <div class="pt-2">
                              <a href="https://ko-fi.com/rastler" target="_blank" class="inline-flex items-center gap-3 px-5 py-3 bg-[#00b9fe] hover:bg-[#00a2e0] text-white rounded-[1.2rem] text-[10px] font-black uppercase tracking-widest transition-all shadow-xl shadow-blue-500/10 active:scale-95">
-                                <img src="https://ko-fi.com/img/cup-border.png" alt="Ko-fi" class="w-4 h-4 brightness-0 invert">
+                                <img src="https://ko-fi.com/img/cup-border.png" alt="Ko-fi" class="w-4 h-4 brightness-0 invert" width="16" height="16" loading="lazy" decoding="async">
                                 <?= __('footer_support') ?>
                              </a>
                         </div>
@@ -434,8 +434,8 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
     });
     </script>
     <!-- PWA Scripts -->
-    <script src="<?= asset('assets/js/pwa-db.js') ?>"></script>
-    <script src="<?= asset('assets/js/pwa-main.js') ?>"></script>
+    <script src="<?= asset('assets/js/pwa-db.js') ?>" defer></script>
+    <script src="<?= asset('assets/js/pwa-main.js') ?>" defer></script>
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
