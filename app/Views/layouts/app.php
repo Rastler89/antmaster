@@ -53,8 +53,10 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style><?= $themeVariables ?></style>
-    <!-- Tailwind CSS Precompilado -->
-    <link rel="stylesheet" href="<?= asset('assets/css/tailwind.css') . '?v=' . APP_VERSION ?>">
+    <!-- Tailwind CSS Precompilado y Optimizado (Lighthouse) -->
+    <link rel="preload" href="<?= asset('assets/css/tailwind.css') . '?v=' . APP_VERSION ?>" as="style">
+    <link rel="stylesheet" href="<?= asset('assets/css/tailwind.css') . '?v=' . APP_VERSION ?>" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="<?= asset('assets/css/tailwind.css') . '?v=' . APP_VERSION ?>"></noscript>
     
     <?php if (isset($json_ld)): ?>
     <!-- Structured Data -->

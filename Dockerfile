@@ -1,7 +1,7 @@
 FROM php:8.2-apache
 
-# Habilitar mod_rewrite de Apache para usar .htaccess
-RUN a2enmod rewrite
+# Habilitar mod_rewrite y módulos de optimización (Lighthouse) de Apache
+RUN a2enmod rewrite expires headers deflate
 
 # Instalar dependencias para las extensiones de PHP, pdo_mysql / gd, cron y curl
 RUN apt-get update && apt-get install -y \
