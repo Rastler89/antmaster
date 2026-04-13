@@ -113,7 +113,7 @@ const PWA_MANAGER = (function() {
     };
 
     const syncDataFromServer = async () => {
-        if (isOffline) return;
+        if (isOffline || !window.IS_LOGGED_IN) return;
         
         try {
             const response = await fetch('/api/data');

@@ -18,8 +18,9 @@
     .chart-path {
         opacity: 0;
         transform: translateY(10px);
-        transition: all 1.5s ease-out;
+        transition: opacity 1.5s ease-out, transform 1.5s ease-out;
         transition-delay: 1.2s;
+        will-change: opacity, transform;
     }
     .group:hover .chart-path {
         opacity: 0.2;
@@ -93,29 +94,29 @@
                                 <div class="absolute inset-0 rounded-full animate-ping bg-blue-500/20"></div>
                                 <svg class="w-10 h-10 text-blue-400 pointer-events-none" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                             </div>
-                            <h3 class="text-2xl font-black text-white mb-2"><?= __('home_analytics_title') ?></h3>
-                            <p class="text-zinc-400 text-sm max-w-sm mb-0"><?= __('home_analytics_desc') ?></p>
+                            <h2 class="text-2xl font-black text-white mb-2"><?= __('home_analytics_title') ?></h2>
+                            <p class="text-zinc-300 text-sm max-w-sm mb-0"><?= __('home_analytics_desc') ?></p>
                         </div>
 
                         <!-- Real Dashboard Content Simulation (Always there, visible on hover) -->
                         <div class="space-y-6 opacity-0 translate-y-4 transition-all duration-700 delay-100 group-hover:opacity-100 group-hover:translate-y-0 group-hover:blur-0 blur-sm pointer-events-none h-full overflow-hidden">
                             <div class="flex justify-between items-center mb-2">
-                                <h4 class="text-lg font-bold text-white"><?= __('dashboard_welcome', ['name' => '<span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">Marabunta</span>']) ?> 👋</h4>
+                                <div class="text-lg font-bold text-white"><?= __('dashboard_welcome', ['name' => '<span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">Marabunta</span>']) ?> 👋</div>
                                 <div class="w-24 h-4 bg-white/5 rounded-full"></div>
                             </div>
                             
                             <!-- KPI Cards -->
                             <div class="grid grid-cols-3 gap-3">
                                 <div class="bg-white/5 border border-white/10 rounded-xl p-3">
-                                    <div class="text-[8px] uppercase font-black text-zinc-500 tracking-widest mb-1 leading-tight"><?= __('home_total_ants') ?></div>
+                                    <div class="text-[8px] uppercase font-black text-zinc-400 tracking-widest mb-1 leading-tight"><?= __('home_total_ants') ?></div>
                                     <div class="text-lg font-black text-white leading-none">1,240</div>
                                 </div>
                                 <div class="bg-white/5 border border-white/10 rounded-xl p-3">
-                                    <div class="text-[8px] uppercase font-black text-zinc-500 tracking-widest mb-1 leading-tight"><?= __('home_colonies') ?></div>
+                                    <div class="text-[8px] uppercase font-black text-zinc-400 tracking-widest mb-1 leading-tight"><?= __('home_colonies') ?></div>
                                     <div class="text-lg font-black text-white leading-none">5</div>
                                 </div>
                                 <div class="bg-white/5 border border-white/10 rounded-xl p-3">
-                                    <div class="text-[8px] uppercase font-black text-zinc-500 tracking-widest mb-1 leading-tight"><?= __('home_success_rate') ?></div>
+                                    <div class="text-[8px] uppercase font-black text-zinc-400 tracking-widest mb-1 leading-tight"><?= __('home_success_rate') ?></div>
                                     <div class="text-lg font-black text-emerald-400 leading-none">94%</div>
                                 </div>
                             </div>
@@ -133,9 +134,9 @@
                                 <!-- Stylized SVG Charts -->
                                 <div class="absolute bottom-0 left-0 right-0 h-[60%] md:h-[70%]">
                                     <svg viewBox="0 0 400 100" class="w-full h-full preserve-3d" aria-hidden="true" focusable="false">
-                                        <path d="M0,100 L0,80 C40,75 60,95 100,70 C140,45 160,85 200,50 C240,15 260,60 300,30 C340,0 360,40 400,10 L400,100 Z" 
+                                        <path d="M 0 100 L 0 80 C 40 75 60 95 100 70 C 140 45 160 85 200 50 C 240 15 260 60 300 30 C 340 0 360 40 400 10 L 400 100 Z" 
                                               fill="url(#gradient-chart)" fill-opacity="0.2" class="chart-path"></path>
-                                        <path d="M0,80 C40,75 60,95 100,70 C140,45 160,85 200,50 C240,15 260,60 300,30 C340,0 360,40 400,10" 
+                                        <path d="M 0 80 C 40 75 60 95 100 70 C 140 45 160 85 200 50 C 240 15 260 60 300 30 C 340 0 360 40 400 10" 
                                               fill="none" stroke="#3b82f6" stroke-width="2.5" class="chart-line"></path>
                                         
                                         <defs>
@@ -150,7 +151,7 @@
 
                             <!-- Simulado de Tabla / Listado -->
                             <div class="hidden md:block bg-white/5 border border-white/10 rounded-xl overflow-hidden shrink-0">
-                                <div class="px-4 py-2 bg-white/5 text-[8px] font-black uppercase text-zinc-500 tracking-widest border-b border-white/5"><?= __('home_recent_colonies') ?></div>
+                                <div class="px-4 py-2 bg-white/5 text-[8px] font-black uppercase text-zinc-400 tracking-widest border-b border-white/5"><?= __('home_recent_colonies') ?></div>
                                 <div class="divide-y divide-white/5">
                                     <div class="px-4 py-2 flex items-center justify-between">
                                         <div class="flex items-center gap-2">
@@ -184,7 +185,7 @@
             <div class="w-12 h-12 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-6 group-hover:bg-blue-500 group-hover:text-white transition-all">
                 <svg class="w-6 h-6 pointer-events-none" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
             </div>
-            <h3 class="text-xl font-bold mb-3"><?= __('feature_metrics_title') ?></h3>
+            <h2 class="text-xl font-bold mb-3"><?= __('feature_metrics_title') ?></h2>
             <p class="text-zinc-400 text-sm leading-relaxed"><?= __('feature_metrics_desc') ?></p>
         </div>
 
@@ -192,7 +193,7 @@
             <div class="w-12 h-12 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center mb-6 group-hover:bg-purple-500 group-hover:text-white transition-all">
                 <svg class="w-6 h-6 pointer-events-none" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.168.477 4 1.253m0-13C13.168 5.477 14.754 5 16.5 5S19.832 6.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4 1.253"></path></svg>
             </div>
-            <h3 class="text-xl font-bold mb-3"><?= __('feature_sheets_title') ?></h3>
+            <h2 class="text-xl font-bold mb-3"><?= __('feature_sheets_title') ?></h2>
             <p class="text-zinc-400 text-sm leading-relaxed"><?= __('feature_sheets_desc') ?></p>
         </div>
 
@@ -200,7 +201,7 @@
             <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-6 group-hover:bg-emerald-500 group-hover:text-white transition-all">
                 <svg class="w-6 h-6 pointer-events-none" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
             </div>
-            <h3 class="text-xl font-bold mb-3"><?= __('feature_diary_title') ?></h3>
+            <h2 class="text-xl font-bold mb-3"><?= __('feature_diary_title') ?></h2>
             <p class="text-zinc-400 text-sm leading-relaxed"><?= __('feature_diary_desc') ?></p>
         </div>
     </section>
@@ -237,7 +238,7 @@
                     <div class="absolute inset-0 bg-blue-600/20 blur-3xl rounded-full opacity-50 group-hover:opacity-75 transition-opacity"></div>
                     <div class="relative glass-card p-6 border-white/5 bg-white/[0.02]">
                         <div class="flex items-center justify-between mb-4 border-b border-white/5 pb-2">
-                             <span class="text-xs font-black uppercase tracking-widest text-zinc-500"><?= __('home_stock_status') ?></span>
+                             <span class="text-xs font-black uppercase tracking-widest text-zinc-400"><?= __('home_stock_status') ?></span>
                              <span class="text-[10px] text-blue-400 font-bold bg-blue-500/10 px-2 py-0.5 rounded"><?= __('home_stock_optimized') ?></span>
                         </div>
                         <div class="space-y-4">

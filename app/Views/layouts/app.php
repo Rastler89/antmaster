@@ -67,6 +67,7 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
     <?php endif; ?>
     <script>
         window.VAPID_PUBLIC_KEY = "<?= defined('VAPID_PUBLIC_KEY') ? VAPID_PUBLIC_KEY : '' ?>";
+        window.IS_LOGGED_IN = <?= is_logged_in() ? 'true' : 'false' ?>;
     </script>
     <style>
         body {
@@ -165,6 +166,7 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
             z-index: -1;
             overflow: hidden;
             pointer-events: none;
+            will-change: transform;
         }
         .blob1 {
             position: absolute; top: -10%; left: -10%;
@@ -240,7 +242,7 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
                         ?>
                         <div class="hidden lg:flex flex-col items-end mr-2">
                             <span class="text-[9px] font-black uppercase tracking-widest text-blue-400 leading-none mb-0.5"><?= $navRank ?></span>
-                            <span class="text-[8px] font-bold text-zinc-600 leading-none"><?= $navUser['xp'] ?? 0 ?> XP</span>
+                            <span class="text-[8px] font-bold text-zinc-400 leading-none"><?= $navUser['xp'] ?? 0 ?> XP</span>
                         </div>
 
                         <a href="<?= BASE_URL ?>/" class="text-sm text-muted hover:text-main transition"><?= __('nav_dashboard') ?></a>
@@ -295,31 +297,31 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
         
         <div class="relative flex items-center justify-around h-20 px-6 pb-2">
             <a href="<?= BASE_URL ?>/" class="group flex flex-col items-center gap-1">
-                <div class="<?= current_url() == '/' ? 'text-blue-400 bg-blue-500/10' : 'text-zinc-500' ?> p-2 rounded-xl transition-all active:scale-90">
+                <div class="<?= current_url() == '/' ? 'text-blue-400 bg-blue-500/10' : 'text-zinc-400' ?> p-2 rounded-xl transition-all active:scale-90">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                 </div>
-                <span class="text-[9px] font-black uppercase tracking-widest <?= current_url() == '/' ? 'text-blue-400' : 'text-zinc-600' ?>"><?= __('nav_home') ?></span>
+                <span class="text-[9px] font-black uppercase tracking-widest <?= current_url() == '/' ? 'text-blue-400' : 'text-zinc-400' ?>"><?= __('nav_home') ?></span>
             </a>
 
             <a href="<?= BASE_URL ?>/colonias" class="group flex flex-col items-center gap-1">
-                <div class="<?= str_contains(current_url(), '/colonias') ? 'text-emerald-400 bg-emerald-500/10' : 'text-zinc-500' ?> p-2 rounded-xl transition-all active:scale-90">
+                <div class="<?= str_contains(current_url(), '/colonias') ? 'text-emerald-400 bg-emerald-500/10' : 'text-zinc-400' ?> p-2 rounded-xl transition-all active:scale-90">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                 </div>
-                <span class="text-[9px] font-black uppercase tracking-widest <?= str_contains(current_url(), '/colonias') ? 'text-emerald-400' : 'text-zinc-600' ?>"><?= __('nav_colonies') ?></span>
+                <span class="text-[9px] font-black uppercase tracking-widest <?= str_contains(current_url(), '/colonias') ? 'text-emerald-400' : 'text-zinc-400' ?>"><?= __('nav_colonies') ?></span>
             </a>
 
             <a href="<?= BASE_URL ?>/especies" class="group flex flex-col items-center gap-1">
-                <div class="<?= str_contains(current_url(), '/especies') ? 'text-purple-400 bg-purple-500/10' : 'text-zinc-500' ?> p-2 rounded-xl transition-all active:scale-90">
+                <div class="<?= str_contains(current_url(), '/especies') ? 'text-purple-400 bg-purple-500/10' : 'text-zinc-400' ?> p-2 rounded-xl transition-all active:scale-90">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.168.477 4 1.253m0-13C13.168 5.477 14.754 5 16.5 5S19.832 5.477 21 6.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4 1.253"></path></svg>
                 </div>
-                <span class="text-[9px] font-black uppercase tracking-widest <?= str_contains(current_url(), '/especies') ? 'text-purple-400' : 'text-zinc-600' ?>"><?= __('nav_species') ?></span>
+                <span class="text-[9px] font-black uppercase tracking-widest <?= str_contains(current_url(), '/especies') ? 'text-purple-400' : 'text-zinc-400' ?>"><?= __('nav_species') ?></span>
             </a>
 
             <a href="<?= BASE_URL ?>/stock" class="group flex flex-col items-center gap-1">
-                <div class="<?= str_contains(current_url(), '/stock') ? 'text-orange-400 bg-orange-500/10' : 'text-zinc-500' ?> p-2 rounded-xl transition-all active:scale-90">
+                <div class="<?= str_contains(current_url(), '/stock') ? 'text-orange-400 bg-orange-500/10' : 'text-zinc-400' ?> p-2 rounded-xl transition-all active:scale-90">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
                 </div>
-                <span class="text-[9px] font-black uppercase tracking-widest <?= str_contains(current_url(), '/stock') ? 'text-orange-400' : 'text-zinc-600' ?>"><?= __('nav_stock') ?></span>
+                <span class="text-[9px] font-black uppercase tracking-widest <?= str_contains(current_url(), '/stock') ? 'text-orange-400' : 'text-zinc-400' ?>"><?= __('nav_stock') ?></span>
             </a>
         </div>
     </div>
@@ -365,31 +367,31 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
                             <?= APP_NAME ?>
                         </span>
                     </div>
-                    <p class="text-sm text-zinc-500 max-w-sm mb-6 leading-relaxed">
+                    <p class="text-sm text-zinc-400 max-w-sm mb-6 leading-relaxed">
                         <?= __('footer_desc') ?>
                     </p>
                     <div class="flex items-center gap-4">
-                        <a href="https://rastler.dev" target="_blank" class="text-zinc-500 hover:text-blue-400 transition-colors">
+                        <a href="https://rastler.dev" target="_blank" class="text-zinc-400 hover:text-blue-400 transition-colors">
                             <span class="text-xs font-black uppercase tracking-widest">rastler.dev</span>
                         </a>
                         <span class="text-zinc-800">|</span>
-                        <span class="text-xs text-zinc-600">v<?= APP_VERSION ?></span>
+                        <span class="text-xs text-zinc-400">v<?= APP_VERSION ?></span>
                     </div>
                 </div>
                 
                 <div>
                     <h4 class="text-xs font-black uppercase tracking-widest text-white mb-6"><?= __('footer_explore') ?></h4>
                     <ul class="space-y-4">
-                        <li><a href="<?= BASE_URL ?>/acerca-de" class="text-sm text-zinc-500 hover:text-white transition-colors"><?= __('footer_about') ?></a></li>
-                        <li><a href="<?= BASE_URL ?>/guia-de-uso" class="text-sm text-zinc-500 hover:text-white transition-colors"><?= __('footer_usage') ?></a></li>
-                        <li><a href="<?= BASE_URL ?>/changelog" class="text-sm text-zinc-500 hover:text-white transition-colors"><?= __('footer_changelog') ?></a></li>
+                        <li><a href="<?= BASE_URL ?>/acerca-de" class="text-sm text-zinc-400 hover:text-white transition-colors"><?= __('footer_about') ?></a></li>
+                        <li><a href="<?= BASE_URL ?>/guia-de-uso" class="text-sm text-zinc-400 hover:text-white transition-colors"><?= __('footer_usage') ?></a></li>
+                        <li><a href="<?= BASE_URL ?>/changelog" class="text-sm text-zinc-400 hover:text-white transition-colors"><?= __('footer_changelog') ?></a></li>
                     </ul>
                 </div>
 
                 <div>
                     <h4 class="text-xs font-black uppercase tracking-widest text-white mb-6"><?= __('footer_community') ?></h4>
                     <div class="space-y-4">
-                        <p class="text-xs text-zinc-600 leading-relaxed italic">
+                        <p class="text-xs text-zinc-400 leading-relaxed italic">
                             "<?= __('footer_passion') ?>"
                         </p>
                         <div class="pt-2">
@@ -403,7 +405,7 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
             </div>
             
             <div class="mt-12 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
-                <p class="text-[10px] text-zinc-600 uppercase font-black tracking-widest">
+                <p class="text-[10px] text-zinc-400 uppercase font-black tracking-widest">
                     <?= __('footer_rights', ['year' => date('Y'), 'name' => 'Rastler']) ?>
                 </p>
                 <div class="flex items-center gap-6">
