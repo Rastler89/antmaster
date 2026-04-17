@@ -22,6 +22,12 @@ require_once '../core/Migrator.php';
 // Ejecutar migraciones automáticamente si las hay
 Migrator::run();
 
+// Rastreo de actividad de usuario
+if (isset($_SESSION['user_id'])) {
+    require_once '../app/Helpers/SessionTracker.php';
+    SessionTracker::updateActivity();
+}
+
 $router = new Router();
 
 // Rutas base
@@ -82,6 +88,8 @@ $router->get('/admin/usuarios/ver/{id}', 'AdminController@viewUser');
 $router->post('/admin/usuarios/stock/editar/{id}', 'AdminController@editUserStock');
 $router->post('/admin/usuarios/stock/borrar/{id}', 'AdminController@deleteUserStock');
 $router->post('/admin/usuarios/colonia/borrar/{id}', 'AdminController@deleteUserColony');
+$router->post('/admin/update_broadcast', 'AdminController@updateBroadcast');
+$router->post('/admin/cleanup_logs', 'AdminController@cleanupLogs');
 
 // Gestión de Especies y Traducciones (Admin)
 $router->get('/admin/especies', 'AdminEspeciesController@index');

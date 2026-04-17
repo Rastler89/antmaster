@@ -4,6 +4,7 @@ require_once '../app/Models/User.php';
 require_once '../app/Models/Colony.php';
 require_once '../app/Models/SpeciesRevision.php';
 require_once '../app/Models/Stock.php';
+require_once '../app/Helpers/SystemInfo.php';
 
 class AdminController extends Controller {
 
@@ -19,7 +20,9 @@ class AdminController extends Controller {
             'banned_users' => 0,
             'total_colonies' => 0,
             'avg_colonies_per_user' => 0,
-            'draft_species_count' => 0
+            'draft_species_count' => 0,
+            'db_size' => SystemInfo::getDatabaseSize(),
+            'server' => SystemInfo::getServerInfo()
         ];
 
         // Usuarios totales y baneados
@@ -45,11 +48,61 @@ class AdminController extends Controller {
         $drafts_data = $pdo->query("SELECT COUNT(*) as total FROM especies WHERE is_draft = 1")->fetch();
         $stats['draft_species_count'] = $drafts_data['total'] ?? 0;
 
-        // Listado de usuarios para gestionar con estadísticas de compromiso
+        // --- Nuevas métricas de sesión (Rastreo avanzado) ---
+        $session_stats = $pdo->query("
+            SELECT 
+                AVG(TIMESTAMPDIFF(SECOND, login_at, last_activity_at)) as avg_duration,
+                COUNT(DISTINCT CASE WHEN last_activity_at >= NOW() - INTERVAL 1 DAY THEN user_id END) as users_today,
+                COUNT(DISTINCT CASE WHEN last_activity_at >= NOW() - INTERVAL 7 DAY THEN user_id END) as users_week,
+                COUNT(DISTINCT CASE WHEN last_activity_at >= NOW() - INTERVAL 30 DAY THEN user_id END) as users_month
+            FROM user_sessions
+            WHERE last_activity_at > login_at
+        ")->fetch();
+
+        $stats['avg_session_duration'] = round($session_stats['avg_duration'] ?? 0);
+        $stats['users_today'] = $session_stats['users_today'] ?? 0;
+        $stats['users_week'] = $session_stats['users_week'] ?? 0;
+        $stats['users_month'] = $session_stats['users_month'] ?? 0;
+
+        // Metricas de Retención (DAU/MAU)
+        $stats['retention_rate'] = ($stats['users_month'] > 0) ? round(($stats['users_today'] / $stats['users_month']) * 100, 1) : 0;
+
+        // --- MÉTRICAS DE SALUD DE LA PLATAFORMA ---
+        
+        // 1. Tasa de Cuidado Global (Reminders hoy)
+        $care_data = $pdo->query("
+            SELECT 
+                COUNT(*) as total,
+                SUM(CASE WHEN completado = 1 THEN 1 ELSE 0 END) as completados
+            FROM recordatorios 
+            WHERE fecha_proxima = CURRENT_DATE
+        ")->fetch();
+        $stats['care_index'] = ($care_data['total'] > 0) ? round(($care_data['completados'] / $care_data['total']) * 100) : 100;
+
+        // 2. Cobertura de Conocimiento (Especies verificadas)
+        $knowledge_data = $pdo->query("
+            SELECT 
+                COUNT(*) as total,
+                SUM(CASE WHEN is_draft = 0 THEN 1 ELSE 0 END) as verificadas
+            FROM especies
+        ")->fetch();
+        $stats['knowledge_coverage'] = ($knowledge_data['total'] > 0) ? round(($knowledge_data['verificadas'] / $knowledge_data['total']) * 100) : 0;
+
+        // 3. Suscripciones Push Activas
+        $push_data = $pdo->query("SELECT COUNT(*) as total FROM user_push_subscriptions")->fetch();
+        $stats['push_subscriptions'] = $push_data['total'] ?? 0;
+
+        // 4. Mensaje de Alerta del Sistema
+        $alert_data = $pdo->query("SELECT setting_value FROM system_settings WHERE setting_key = 'system_alert_message'")->fetch();
+        $stats['system_alert'] = $alert_data['setting_value'] ?? '';
+
+        // Listado de usuarios para gestionar con estadísticas de compromiso mejoradas
         $users = $pdo->query("
             SELECT u.id, u.nombre, u.email, u.rol, u.fecha_registro, u.last_login, u.is_banned,
                    (SELECT COUNT(*) FROM colonias WHERE usuario_id = u.id) as colonies_count,
-                   (SELECT COUNT(*) FROM diario d JOIN colonias c ON d.colonia_id = c.id WHERE c.usuario_id = u.id) as diary_count
+                   (SELECT COUNT(*) FROM diario d JOIN colonias c ON d.colonia_id = c.id WHERE c.usuario_id = u.id) as diary_count,
+                   (SELECT AVG(TIMESTAMPDIFF(SECOND, login_at, last_activity_at)) FROM user_sessions WHERE user_id = u.id AND last_activity_at > login_at) as avg_session,
+                   (SELECT SUM(TIMESTAMPDIFF(SECOND, login_at, last_activity_at)) FROM user_sessions WHERE user_id = u.id AND last_activity_at > login_at) as total_time
             FROM usuarios u 
             ORDER BY u.id DESC
         ")->fetchAll();
@@ -71,7 +124,6 @@ class AdminController extends Controller {
         ];
 
         // 2. Distribución de Especies (Top 10)
-        // Usamos el nombre científico para evitar ambigüedades
         $species_dist_raw = $pdo->query("
             SELECT e.nombre_cientifico as etiqueta, COUNT(c.id) as total 
             FROM colonias c 
@@ -86,7 +138,31 @@ class AdminController extends Controller {
             'data'   => array_column($species_dist_raw, 'total')
         ];
 
-        // 3. Revisiones Pendientes (NUEVO)
+        // 3. Heatmap de Actividad (Por hora del día)
+        $heatmap_raw = $pdo->query("
+            SELECT HOUR(login_at) as hora, COUNT(*) as total 
+            FROM user_sessions 
+            WHERE login_at >= NOW() - INTERVAL 30 DAY
+            GROUP BY hora 
+            ORDER BY hora ASC
+        ")->fetchAll();
+
+        $heatmap_data = array_fill(0, 24, 0);
+        foreach ($heatmap_raw as $row) {
+            $heatmap_data[(int)$row['hora']] = (int)$row['total'];
+        }
+
+        // 4. Eventos Recientes (Logins, colonias, registros)
+        $recent_events = $pdo->query("
+            (SELECT 'user_reg' as type, nombre as description, fecha_registro as date FROM usuarios ORDER BY fecha_registro DESC LIMIT 5)
+            UNION ALL
+            (SELECT 'colony_new' as type, nombre as description, fecha_adquisicion as date FROM colonias ORDER BY fecha_adquisicion DESC LIMIT 5)
+            UNION ALL
+            (SELECT 'login' as type, (SELECT nombre FROM usuarios WHERE id = user_id) as description, login_at as date FROM user_sessions ORDER BY login_at DESC LIMIT 5)
+            ORDER BY date DESC LIMIT 10
+        ")->fetchAll();
+
+        // 5. Revisiones Pendientes
         $pending_revisions = SpeciesRevision::getPendingWithDetails();
         $stats['pending_revisions'] = count($pending_revisions);
 
@@ -95,7 +171,9 @@ class AdminController extends Controller {
             'users' => $users,
             'chart_user_growth' => $chart_user_growth,
             'chart_species_dist' => $chart_species_dist,
-            'pending_revisions' => array_slice($pending_revisions, 0, 5) // Mostramos solo las 5 más recientes
+            'heatmap_data' => $heatmap_data,
+            'recent_events' => $recent_events,
+            'pending_revisions' => array_slice($pending_revisions, 0, 5)
         ]);
     }
 
@@ -186,6 +264,31 @@ class AdminController extends Controller {
         require_once '../core/Migrator.php';
         Migrator::run(true);
         $_SESSION['success'] = "Migraciones forzadas ejecutadas con éxito.";
+        $this->redirect('/admin/dashboard');
+    }
+
+    public function updateBroadcast() {
+        require_admin();
+        $message = trim($_POST['message'] ?? '');
+        $pdo = Database::getConnection();
+        
+        // Upsert simple para system_settings
+        $stmt = $pdo->prepare("INSERT INTO system_settings (setting_key, setting_value) VALUES ('system_alert_message', ?) 
+                               ON DUPLICATE KEY UPDATE setting_value = ?, updated_at = CURRENT_TIMESTAMP");
+        $stmt->execute([$message, $message]);
+
+        $_SESSION['success'] = "Comunicado global actualizado.";
+        $this->redirect('/admin/dashboard');
+    }
+
+    public function cleanupLogs() {
+        require_admin();
+        $pdo = Database::getConnection();
+        
+        // Limpiar sesiones de más de 30 días
+        $pdo->query("DELETE FROM user_sessions WHERE login_at < NOW() - INTERVAL 30 DAY");
+        
+        $_SESSION['success'] = "Mantenimiento completado: Logs de sesiones antiguas eliminados.";
         $this->redirect('/admin/dashboard');
     }
 }

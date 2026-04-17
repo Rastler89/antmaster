@@ -23,6 +23,9 @@ class AuthController extends Controller {
 
             // Registrar last_login
             User::update($user['id'], ['last_login' => date('Y-m-d H:i:s')]);
+            
+            require_once '../app/Helpers/SessionTracker.php';
+            SessionTracker::startSession($user['id']);
 
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_name'] = $user['nombre'];
@@ -72,6 +75,10 @@ class AuthController extends Controller {
 
         if (User::create($data)) {
             $user = User::whereOne('email', '=', $email);
+            
+            require_once '../app/Helpers/SessionTracker.php';
+            SessionTracker::startSession($user['id']);
+
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_name'] = $user['nombre'];
             $_SESSION['user_rol'] = $user['rol'];
