@@ -171,14 +171,18 @@ $reducedMotionClass = $userSettings['reduced_motion'] ? 'reduce-motion' : '';
         .blob1 {
             position: absolute; top: -10%; left: -10%;
             width: 50vw; height: 50vw;
-            background: radial-gradient(circle, var(--theme-primary) 0%, transparent 60%);
-            opacity: 0.2;
+            background: radial-gradient(circle, var(--theme-primary) 0%, transparent 70%);
+            opacity: 0.15;
+            border-radius: 50%;
+            filter: blur(80px);
         }
         .blob2 {
             position: absolute; bottom: -10%; right: -10%;
             width: 50vw; height: 50vw;
-            background: radial-gradient(circle, var(--theme-accent) 0%, transparent 60%);
-            opacity: 0.2;
+            background: radial-gradient(circle, var(--theme-accent) 0%, transparent 70%);
+            opacity: 0.15;
+            border-radius: 50%;
+            filter: blur(80px);
         }
 
         /* Accesibilidad - Daltonismo */

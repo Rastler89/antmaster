@@ -68,6 +68,8 @@ class SessionTracker {
     public static function formatDuration($seconds) {
         if (!$seconds) return "0s";
         
+        $seconds = (int)$seconds;
+        
         $h = floor($seconds / 3600);
         $m = floor(($seconds % 3600) / 60);
         $s = $seconds % 60;
