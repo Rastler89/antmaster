@@ -11,11 +11,16 @@ class Species extends Model {
         $lang = defined('APP_LANG') ? APP_LANG : 'es';
         
         $sql = "SELECT e.*, 
-                       COALESCE(t.nombre, e.nombre) as nombre,
-                       COALESCE(t.descripcion, e.descripcion) as descripcion,
-                       COALESCE(t.alimentacion, e.alimentacion) as alimentacion,
-                       COALESCE(t.consejos_cria, e.consejos_cria) as consejos_cria,
-                       COALESCE(t.localizacion, e.localizacion) as localizacion
+                       COALESCE(NULLIF(t.nombre, ''), e.nombre) as nombre,
+                       COALESCE(NULLIF(t.descripcion, ''), e.descripcion) as descripcion,
+                       COALESCE(NULLIF(t.alimentacion, ''), e.alimentacion) as alimentacion,
+                       COALESCE(NULLIF(t.consejos_cria, ''), e.consejos_cria) as consejos_cria,
+                       COALESCE(NULLIF(t.localizacion, ''), e.localizacion) as localizacion,
+                       COALESCE(NULLIF(t.velocidad_crecimiento, ''), e.velocidad_crecimiento) as velocidad_crecimiento,
+                       COALESCE(NULLIF(t.tamano, ''), e.tamano) as tamano,
+                       COALESCE(NULLIF(t.castas, ''), e.castas) as castas,
+                       COALESCE(NULLIF(t.reproduccion, ''), e.reproduccion) as reproduccion,
+                       COALESCE(NULLIF(t.vuelos, ''), e.vuelos) as vuelos
                 FROM especies e
                 LEFT JOIN especies_traducciones t ON e.id = t.especie_id AND t.idioma = ?
                 WHERE e.is_draft = 0
@@ -33,11 +38,16 @@ class Species extends Model {
         $lang = defined('APP_LANG') ? APP_LANG : 'es';
         
         $sql = "SELECT e.*, 
-                       COALESCE(t.nombre, e.nombre) as nombre,
-                       COALESCE(t.descripcion, e.descripcion) as descripcion,
-                       COALESCE(t.alimentacion, e.alimentacion) as alimentacion,
-                       COALESCE(t.consejos_cria, e.consejos_cria) as consejos_cria,
-                       COALESCE(t.localizacion, e.localizacion) as localizacion
+                       COALESCE(NULLIF(t.nombre, ''), e.nombre) as nombre,
+                       COALESCE(NULLIF(t.descripcion, ''), e.descripcion) as descripcion,
+                       COALESCE(NULLIF(t.alimentacion, ''), e.alimentacion) as alimentacion,
+                       COALESCE(NULLIF(t.consejos_cria, ''), e.consejos_cria) as consejos_cria,
+                       COALESCE(NULLIF(t.localizacion, ''), e.localizacion) as localizacion,
+                       COALESCE(NULLIF(t.velocidad_crecimiento, ''), e.velocidad_crecimiento) as velocidad_crecimiento,
+                       COALESCE(NULLIF(t.tamano, ''), e.tamano) as tamano,
+                       COALESCE(NULLIF(t.castas, ''), e.castas) as castas,
+                       COALESCE(NULLIF(t.reproduccion, ''), e.reproduccion) as reproduccion,
+                       COALESCE(NULLIF(t.vuelos, ''), e.vuelos) as vuelos
                 FROM especies e
                 LEFT JOIN especies_traducciones t ON e.id = t.especie_id AND t.idioma = ?
                 WHERE e.id = ?";
@@ -74,8 +84,10 @@ class Species extends Model {
      * Crear o actualizar una traducción
      */
     public static function updateOrCreateTranslation($species_id, $lang, $data) {
-        $sql = "REPLACE INTO especies_traducciones (especie_id, idioma, nombre, descripcion, alimentacion, consejos_cria, localizacion) 
-                VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $sql = "REPLACE INTO especies_traducciones (
+                    especie_id, idioma, nombre, descripcion, alimentacion, 
+                    consejos_cria, localizacion, velocidad_crecimiento, tamano, castas, reproduccion, vuelos
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         $stmt = static::db()->prepare($sql);
         return $stmt->execute([
@@ -85,7 +97,12 @@ class Species extends Model {
             $data['descripcion'] ?? null,
             $data['alimentacion'] ?? null,
             $data['consejos_cria'] ?? null,
-            $data['localizacion'] ?? null
+            $data['localizacion'] ?? null,
+            $data['velocidad_crecimiento'] ?? null,
+            $data['tamano'] ?? null,
+            $data['castas'] ?? null,
+            $data['reproduccion'] ?? null,
+            $data['vuelos'] ?? null
         ]);
     }
 

@@ -128,15 +128,24 @@ class EspeciesController extends Controller {
             $this->redirect('/especies/proponer');
         }
 
+        // --- DETECCIÓN DE ESPECIE EXISTENTE ---
+        // Si ya existe una especie con ese nombre científico, la tratamos como edición
+        $existing = Species::whereOne('nombre_cientifico', $campos['nombre_cientifico']);
+        $especie_id = $existing ? $existing['id'] : null;
+
         $revision = [
             'usuario_id' => $_SESSION['user_id'],
-            'especie_id' => null, // NULL indica "especie nueva"
+            'especie_id' => $especie_id, // NULL indica "especie nueva", ID indica "edición"
             'cambios_solicitados' => json_encode($campos),
             'estado' => 'pendiente'
         ];
 
         if (SpeciesRevision::create($revision)) {
-            $_SESSION['success'] = '¡Tu propuesta de nueva especie ha sido enviada a revisión!';
+            if ($especie_id) {
+                $_SESSION['success'] = '¡Tu sugerencia de mejora para ' . $campos['nombre_cientifico'] . ' ha sido enviada!';
+            } else {
+                $_SESSION['success'] = '¡Tu propuesta de nueva especie ha sido enviada a revisión!';
+            }
         } else {
             $_SESSION['error'] = 'Hubo un error al guardar tu propuesta.';
         }
@@ -148,8 +157,11 @@ class EspeciesController extends Controller {
     public function pendingRevisions() {
         require_admin();
         
+        $revisiones = SpeciesRevision::getPendingWithDetails();
+        SpeciesRevision::enrichWithOriginalData($revisiones);
+
         $data = [
-            'revisiones' => SpeciesRevision::getPendingWithDetails(),
+            'revisiones' => $revisiones,
             'title' => 'Panel de Revisiones | AntMaster Pro',
             'success'  => $_SESSION['success'] ?? '',
             'error'    => $_SESSION['error'] ?? ''
@@ -217,6 +229,35 @@ class EspeciesController extends Controller {
         $results = Species::search($q);
         header('Content-Type: application/json');
         echo json_encode($results);
+        exit;
+    }
+
+    public function apiGetByScientificName() {
+        require_login();
+        $name = $_GET['name'] ?? '';
+        
+        $sql = "SELECT e.*, 
+                       COALESCE(NULLIF(t.nombre, ''), e.nombre) as nombre,
+                       COALESCE(NULLIF(t.descripcion, ''), e.descripcion) as descripcion,
+                       COALESCE(NULLIF(t.alimentacion, ''), e.alimentacion) as alimentacion,
+                       COALESCE(NULLIF(t.consejos_cria, ''), e.consejos_cria) as consejos_cria,
+                       COALESCE(NULLIF(t.localizacion, ''), e.localizacion) as localizacion,
+                       COALESCE(NULLIF(t.velocidad_crecimiento, ''), e.velocidad_crecimiento) as velocidad_crecimiento,
+                       COALESCE(NULLIF(t.tamano, ''), e.tamano) as tamano,
+                       COALESCE(NULLIF(t.castas, ''), e.castas) as castas,
+                       COALESCE(NULLIF(t.reproduccion, ''), e.reproduccion) as reproduccion,
+                       COALESCE(NULLIF(t.vuelos, ''), e.vuelos) as vuelos
+                FROM especies e
+                LEFT JOIN especies_traducciones t ON e.id = t.especie_id AND t.idioma = ?
+                WHERE e.nombre_cientifico = ?
+                LIMIT 1";
+        
+        $stmt = Database::getConnection()->prepare($sql);
+        $stmt->execute([APP_LANG, $name]);
+        $species = $stmt->fetch();
+
+        header('Content-Type: application/json');
+        echo json_encode($species ?: null);
         exit;
     }
 }

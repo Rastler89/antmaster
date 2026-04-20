@@ -25,4 +25,23 @@ class SpeciesRevision extends Model {
             ORDER BY r.fecha_creacion DESC
         ");
     }
+
+    /**
+     * Enriquecer las revisiones con los datos actuales de la especie para comparar
+     */
+    public static function enrichWithOriginalData(&$revisiones) {
+        foreach ($revisiones as &$rev) {
+            if ($rev['especie_id']) {
+                $species = Species::find($rev['especie_id']);
+                if ($species) {
+                    $cambios = json_decode($rev['cambios_solicitados'], true);
+                    $original = [];
+                    foreach ($cambios as $key => $val) {
+                        $original[$key] = $species[$key] ?? null;
+                    }
+                    $rev['datos_originales'] = $original;
+                }
+            }
+        }
+    }
 }

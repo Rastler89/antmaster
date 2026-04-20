@@ -65,12 +65,36 @@
                         </div>
                     </div>
                     
-                    <div class="bg-black/30 rounded-xl p-5 mb-5 border border-white/5 font-mono text-sm max-h-80 overflow-y-auto custom-scrollbar">
-                        <div class="grid grid-cols-1 gap-4">
+                    <div class="bg-black/30 rounded-xl p-5 mb-5 border border-white/5 text-sm max-h-96 overflow-y-auto custom-scrollbar">
+                        <div class="space-y-6">
                             <?php foreach($cambios as $key => $val): ?>
-                                <div>
-                                    <strong class="text-blue-400 capitalize block mb-1 opacity-80"><?= str_replace('_', ' ', $key) ?>:</strong>
-                                    <span class="text-zinc-300 break-words leading-relaxed"><?= nl2br(htmlspecialchars($val)) ?></span>
+                                <?php 
+                                    $originalVal = $rev['datos_originales'][$key] ?? null;
+                                    $hasChanged = !$isNew && ($originalVal != $val);
+                                    $label = str_replace('_', ' ', $key);
+                                ?>
+                                <div class="border-b border-white/5 pb-4 last:border-0 last:pb-0">
+                                    <strong class="text-blue-400 capitalize block mb-2 opacity-80 text-xs tracking-wider"><?= htmlspecialchars($label) ?></strong>
+                                    
+                                    <?php if ($hasChanged): ?>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div class="p-3 rounded bg-red-500/5 border border-red-500/10">
+                                                <span class="text-[10px] uppercase text-red-500/50 font-bold block mb-1">Actual</span>
+                                                <div class="text-zinc-500 line-through decoration-red-500/30"><?= nl2br(htmlspecialchars($originalVal ?: '—')) ?></div>
+                                            </div>
+                                            <div class="p-3 rounded bg-emerald-500/5 border border-emerald-500/10">
+                                                <span class="text-[10px] uppercase text-emerald-500/50 font-bold block mb-1">Propuesto</span>
+                                                <div class="text-emerald-300 font-medium"><?= nl2br(htmlspecialchars($val)) ?></div>
+                                            </div>
+                                        </div>
+                                    <?php else: ?>
+                                        <div class="text-zinc-300 break-words leading-relaxed pl-1">
+                                            <?= nl2br(htmlspecialchars($val)) ?>
+                                            <?php if (!$isNew && $originalVal == $val): ?>
+                                                <span class="text-[10px] text-zinc-600 ml-2">(Sin cambios)</span>
+                                            <?php endif; ?>
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
                             <?php endforeach; ?>
                         </div>

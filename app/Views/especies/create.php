@@ -69,7 +69,7 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-zinc-300 mb-1"><?= __('species_label_reproduction') ?></label>
-                    <select name="reproduce" class="magic-input w-full bg-zinc-900/50">
+                    <select name="reproduccion" class="magic-input w-full bg-zinc-900/50">
                         <option value="Monoginia"><?= __('species_repro_mono_desc') ?></option>
                         <option value="Poliginia"><?= __('species_repro_poly_desc') ?></option>
                         <option value="Oligoginia"><?= __('species_repro_oligo') ?></option>
@@ -110,3 +110,80 @@
         </form>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const scientificNameInput = document.querySelector('input[name="nombre_cientifico"]');
+    const commonNameInput = document.querySelector('input[name="nombre"]');
+    const form = document.querySelector('form');
+    
+    let timeout = null;
+    
+    scientificNameInput.addEventListener('input', function() {
+        clearTimeout(timeout);
+        const name = this.value.trim();
+        
+        if (name.length < 3) return;
+        
+        timeout = setTimeout(() => {
+            fetch(`<?= BASE_URL ?>/api/especies/get?name=${encodeURIComponent(name)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data) {
+                        // Mostrar pequeña notificación de que se han cargado datos
+                        showAutofillNotification(data.nombre_cientifico);
+                        
+                        // Rellenar campos si están vacíos
+                        if (!commonNameInput.value) commonNameInput.value = data.nombre;
+                        
+                        const fields = [
+                            'dificultad', 'temperatura', 'humedad', 'velocidad_crecimiento', 
+                            'tamano', 'castas', 'reproduce', 'vuelos', 'localizacion', 
+                            'descripcion', 'alimentacion', 'consejos_cria'
+                        ];
+                        
+                        fields.forEach(field => {
+                            const input = form.querySelector(`[name="${field}"]`);
+                            if (input && (!input.value || input.value === 'Principiante')) {
+                                let val = data[field];
+                                if (val) input.value = val;
+                            }
+                        });
+                    }
+                });
+        }, 800);
+    });
+    
+    function showAutofillNotification(name) {
+        const existing = document.getElementById('autofill-notif');
+        if (existing) existing.remove();
+        
+        const notif = document.createElement('div');
+        notif.id = 'autofill-notif';
+        notif.className = 'fixed bottom-6 right-6 bg-emerald-500 text-white px-6 py-3 rounded-2xl shadow-xl animate-bounce-in flex items-center gap-3 z-50';
+        notif.innerHTML = `
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <span>Datos cargados para <strong>${name}</strong></span>
+        `;
+        document.body.appendChild(notif);
+        
+        setTimeout(() => {
+            notif.classList.remove('animate-bounce-in');
+            notif.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+            setTimeout(() => notif.remove(), 500);
+        }, 4000);
+    }
+});
+</script>
+
+<style>
+@keyframes bounce-in {
+    0% { transform: scale(0.3); opacity: 0; }
+    50% { transform: scale(1.05); opacity: 1; }
+    70% { transform: scale(0.9); }
+    100% { transform: scale(1); }
+}
+.animate-bounce-in {
+    animation: bounce-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+</style>

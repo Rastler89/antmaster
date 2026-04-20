@@ -66,11 +66,16 @@ class AdminEspeciesController extends Controller {
         }
 
         $data = [
-            'nombre'        => $_POST['nombre'] ?? '',
-            'descripcion'   => $_POST['descripcion'] ?? '',
-            'alimentacion'  => $_POST['alimentacion'] ?? '',
-            'consejos_cria' => $_POST['consejos_cria'] ?? '',
-            'localizacion'  => $_POST['localizacion'] ?? ''
+            'nombre'                => $_POST['nombre'] ?? '',
+            'descripcion'           => $_POST['descripcion'] ?? '',
+            'alimentacion'          => $_POST['alimentacion'] ?? '',
+            'consejos_cria'         => $_POST['consejos_cria'] ?? '',
+            'localizacion'          => $_POST['localizacion'] ?? '',
+            'velocidad_crecimiento' => $_POST['velocidad_crecimiento'] ?? '',
+            'tamano'                => $_POST['tamano'] ?? '',
+            'castas'                => $_POST['castas'] ?? '',
+            'reproduccion'          => $_POST['reproduccion'] ?? '',
+            'vuelos'                => $_POST['vuelos'] ?? ''
         ];
 
         if (Species::updateOrCreateTranslation($id, $lang, $data)) {

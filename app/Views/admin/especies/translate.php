@@ -117,6 +117,75 @@ $trans = $translations[$current_lang] ?? [];
                     </div>
 
                     <div class="border-t border-white/5 pt-8">
+                        <!-- Otros Parámetros Biológicos -->
+                        <h4 class="text-sm font-bold text-white mb-6 flex items-center gap-2">
+                            <span class="text-indigo-400">🧬</span> Parámetros Biológicos
+                        </h4>
+                        
+                        <div class="space-y-6">
+                            <!-- Crecimiento -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div>
+                                    <label class="block text-[10px] uppercase font-black text-zinc-500 tracking-widest mb-2">Crecimiento (ES)</label>
+                                    <div class="p-3 bg-zinc-900 border border-white/5 rounded-xl text-zinc-400 text-sm italic"><?= htmlspecialchars($species['velocidad_crecimiento'] ?? 'Sin datos.') ?></div>
+                                </div>
+                                <div>
+                                    <label for="velocidad_crecimiento" class="block text-[10px] uppercase font-black text-indigo-400 tracking-widest mb-2">Crecimiento en <?= strtoupper($current_lang) ?></label>
+                                    <input type="text" id="velocidad_crecimiento" name="velocidad_crecimiento" value="<?= htmlspecialchars($trans['velocidad_crecimiento'] ?? '') ?>" class="w-full bg-indigo-500/5 border border-indigo-500/20 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-indigo-500 transition-all">
+                                </div>
+                            </div>
+
+                            <!-- Tamaño -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div>
+                                    <label class="block text-[10px] uppercase font-black text-zinc-500 tracking-widest mb-2">Tamaño (ES)</label>
+                                    <div class="p-3 bg-zinc-900 border border-white/5 rounded-xl text-zinc-400 text-sm italic"><?= htmlspecialchars($species['tamano'] ?? 'Sin datos.') ?></div>
+                                </div>
+                                <div>
+                                    <label for="tamano" class="block text-[10px] uppercase font-black text-indigo-400 tracking-widest mb-2">Tamaño en <?= strtoupper($current_lang) ?></label>
+                                    <input type="text" id="tamano" name="tamano" value="<?= htmlspecialchars($trans['tamano'] ?? '') ?>" class="w-full bg-indigo-500/5 border border-indigo-500/20 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-indigo-500 transition-all">
+                                </div>
+                            </div>
+
+                            <!-- Castas -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div>
+                                    <label class="block text-[10px] uppercase font-black text-zinc-500 tracking-widest mb-2">Castas (ES)</label>
+                                    <div class="p-3 bg-zinc-900 border border-white/5 rounded-xl text-zinc-400 text-sm italic"><?= htmlspecialchars($species['castas'] ?? 'Sin datos.') ?></div>
+                                </div>
+                                <div>
+                                    <label for="castas" class="block text-[10px] uppercase font-black text-indigo-400 tracking-widest mb-2">Castas en <?= strtoupper($current_lang) ?></label>
+                                    <input type="text" id="castas" name="castas" value="<?= htmlspecialchars($trans['castas'] ?? '') ?>" class="w-full bg-indigo-500/5 border border-indigo-500/20 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-indigo-500 transition-all">
+                                </div>
+                            </div>
+
+                            <!-- Reproducción -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div>
+                                    <label class="block text-[10px] uppercase font-black text-zinc-500 tracking-widest mb-2">Reproducción (ES)</label>
+                                    <div class="p-3 bg-zinc-900 border border-white/5 rounded-xl text-zinc-400 text-sm italic"><?= htmlspecialchars($species['reproduccion'] ?? 'Sin datos.') ?></div>
+                                </div>
+                                <div>
+                                    <label for="reproduccion" class="block text-[10px] uppercase font-black text-indigo-400 tracking-widest mb-2">Reproducción en <?= strtoupper($current_lang) ?></label>
+                                    <input type="text" id="reproduccion" name="reproduccion" value="<?= htmlspecialchars($trans['reproduccion'] ?? '') ?>" class="w-full bg-indigo-500/5 border border-indigo-500/20 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-indigo-500 transition-all">
+                                </div>
+                            </div>
+
+                            <!-- Vuelos -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div>
+                                    <label class="block text-[10px] uppercase font-black text-zinc-500 tracking-widest mb-2">Vuelos Nupciales (ES)</label>
+                                    <div class="p-3 bg-zinc-900 border border-white/5 rounded-xl text-zinc-400 text-sm italic"><?= htmlspecialchars($species['vuelos'] ?? 'Sin datos.') ?></div>
+                                </div>
+                                <div>
+                                    <label for="vuelos" class="block text-[10px] uppercase font-black text-indigo-400 tracking-widest mb-2">Vuelos en <?= strtoupper($current_lang) ?></label>
+                                    <input type="text" id="vuelos" name="vuelos" value="<?= htmlspecialchars($trans['vuelos'] ?? '') ?>" class="w-full bg-indigo-500/5 border border-indigo-500/20 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-indigo-500 transition-all">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-white/5 pt-8">
                         <!-- Localización -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <div>
