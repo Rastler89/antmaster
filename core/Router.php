@@ -29,18 +29,21 @@ class Router {
             $method = strtoupper($_POST['_method']);
         }
 
+        // Uptime monitors use HEAD, treat them as GET routes internally
+        $routeMethod = ($method === 'HEAD') ? 'GET' : $method;
+
         $uri = strtok($uri, '?');
         if ($uri != '/' && substr($uri, -1) == '/') {
             $uri = substr($uri, 0, -1);
         }
 
-        if (!isset($this->routes[$method])) {
+        if (!isset($this->routes[$routeMethod])) {
             http_response_code(405);
             echo "405 Method Not Allowed";
             return;
         }
 
-        foreach ($this->routes[$method] as $route => $controllerAction) {
+        foreach ($this->routes[$routeMethod] as $route => $controllerAction) {
             $pattern = preg_replace('/\{([a-zA-Z0-9_]+)\}/', '(?P<\1>[a-zA-Z0-9_-]+)', $route);
             $pattern = '#^' . $pattern . '$#';
             
