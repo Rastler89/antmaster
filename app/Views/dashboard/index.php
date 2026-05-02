@@ -73,7 +73,7 @@
     <!-- Gráfica de Crecimiento Global -->
     <div class="lg:col-span-2 space-y-8">
         <div class="glass-card p-8 border-white/5 relative overflow-hidden">
-            <div class="flex items-center justify-between mb-8 relative z-10">
+            <div class="flex items-center justify-between mb-8 relative z-30">
                 <div>
                     <h3 class="text-xl font-bold text-white flex items-center gap-2">
                         <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path></svg>
@@ -81,14 +81,55 @@
                     </h3>
                     <p class="text-xs text-zinc-500 mt-1"><?= __('chart_empire_tagline') ?></p>
                 </div>
-                <div class="flex p-1 bg-black/40 rounded-xl border border-white/5">
-                    <?php $ranges = [30 => __('range_30d'), 90 => __('range_90d'), 180 => __('range_180d'), 'all' => __('range_all')]; ?>
-                    <?php foreach ($ranges as $val => $label): ?>
-                        <a href="?range=<?= $val ?>" 
-                           class="px-3 py-1.5 text-[10px] font-black rounded-lg transition-all <?= ($range == $val) ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20' : 'text-zinc-500 hover:text-white' ?>">
-                            <?= $label ?>
-                        </a>
-                    <?php endforeach; ?>
+                <div class="flex flex-wrap items-center gap-3">
+                    <!-- Selector de Modo de Vista Premium -->
+                    <div class="relative" id="chartViewContainer">
+                        <button id="chartViewBtn" class="flex items-center gap-3 px-4 py-2 bg-black/40 hover:bg-black/60 rounded-xl border border-white/5 hover:border-blue-500/50 transition-all group shadow-lg">
+                            <div class="flex flex-col items-start">
+                                <span class="text-[8px] uppercase font-black text-zinc-500 tracking-widest leading-none mb-1"><?= __('chart_view_mode') ?></span>
+                                <span id="currentViewLabel" class="text-[10px] font-black text-white leading-none"><?= __('chart_view_global') ?></span>
+                            </div>
+                            <svg id="chartViewChevron" class="w-4 h-4 text-zinc-500 group-hover:text-blue-400 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+
+                        <div id="chartViewMenu" class="absolute left-0 mt-2 w-64 bg-zinc-950/95 border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] opacity-0 scale-95 pointer-events-none transition-all duration-200 z-[100] rounded-2xl overflow-hidden backdrop-blur-2xl">
+                            <div class="p-2 space-y-1">
+                                <button data-view="global" class="chart-view-option w-full flex items-center justify-between px-4 py-3 rounded-xl hover:bg-blue-500/10 hover:translate-x-1 text-white transition-all group active">
+                                    <span class="text-[10px] font-black"><?= __('chart_view_global') ?></span>
+                                    <div class="w-1.5 h-1.5 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.8)] opacity-0 group-[.active]:opacity-100"></div>
+                                </button>
+                                <button data-view="comparative" class="chart-view-option w-full flex items-center justify-between px-4 py-3 rounded-xl hover:bg-purple-500/10 hover:translate-x-1 text-white transition-all group">
+                                    <span class="text-[10px] font-black"><?= __('chart_view_all_colonies') ?></span>
+                                    <div class="w-1.5 h-1.5 rounded-full bg-purple-500 shadow-[0_0_8px_rgba(139,92,246,0.8)] opacity-0 group-[.active]:opacity-100"></div>
+                                </button>
+                                
+                                <div class="px-4 py-2 mt-2">
+                                    <span class="text-[9px] uppercase font-black text-zinc-500 tracking-[0.2em]"><?= __('chart_view_specific') ?></span>
+                                </div>
+
+                                <?php foreach ($colonies as $c): ?>
+                                    <button data-view="colony_<?= htmlspecialchars($c['nombre']) ?>" class="chart-view-option w-full flex items-center justify-between px-4 py-3 rounded-xl hover:bg-white/10 hover:translate-x-1 text-white transition-all group">
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-xs">🐜</span>
+                                            <span class="text-[10px] font-black"><?= htmlspecialchars($c['nombre']) ?></span>
+                                        </div>
+                                        <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8_rgba(16,185,129,0.8)] opacity-0 group-[.active]:opacity-100"></div>
+                                    </button>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Selector de Rango -->
+                    <div class="flex p-1 bg-black/40 rounded-xl border border-white/5">
+                        <?php $ranges = [30 => __('range_30d'), 90 => __('range_90d'), 180 => __('range_180d'), 'all' => __('range_all')]; ?>
+                        <?php foreach ($ranges as $val => $label): ?>
+                            <a href="?range=<?= $val ?>" 
+                            class="px-3 py-1.5 text-[10px] font-black rounded-lg transition-all <?= ($range == $val) ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20' : 'text-zinc-500 hover:text-white' ?>">
+                                <?= $label ?>
+                            </a>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
             </div>
             
@@ -295,28 +336,83 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Datos del PHP (Simulados para el ejemplo, pero integrados con las variables reales)
     const historyRaw = <?= json_encode($globalHistory) ?>;
+    const viewBtn = document.getElementById('chartViewBtn');
+    const viewMenu = document.getElementById('chartViewMenu');
+    const viewOptions = document.querySelectorAll('.chart-view-option');
+    const viewLabel = document.getElementById('currentViewLabel');
+    const viewChevron = document.getElementById('chartViewChevron');
     
-    // Agrupar historia global por fecha para el gráfico de línea
-    const aggregated = {};
-    historyRaw.forEach(item => {
-        const date = item.fecha_registro.split(' ')[0];
-        if (!aggregated[date]) aggregated[date] = 0;
-        aggregated[date] += parseInt(item.poblacion);
+    let currentView = 'global';
+    let empireChart;
+
+    // Control del Dropdown Custom
+    viewBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = !viewMenu.classList.contains('opacity-0');
+        if (isOpen) {
+            closeDropdown();
+        } else {
+            openDropdown();
+        }
     });
 
-    const labels = Object.keys(aggregated);
-    const data = Object.values(aggregated);
+    function openDropdown() {
+        viewMenu.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
+        viewChevron.classList.add('rotate-180');
+    }
 
-    // Gradiente azul para la gráfica de línea
-    const blueGradient = ctxEmpire.createLinearGradient(0, 0, 0, 400);
-    blueGradient.addColorStop(0, 'rgba(59, 130, 246, 0.4)');
-    blueGradient.addColorStop(1, 'rgba(59, 130, 246, 0)');
+    function closeDropdown() {
+        viewMenu.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
+        viewChevron.classList.remove('rotate-180');
+    }
 
-    new Chart(ctxEmpire, {
-        type: 'line',
-        data: {
-            labels: labels.map(d => new Date(d).toLocaleDateString('<?= APP_LANG ?>-<?= strtoupper(APP_LANG) ?>', {day:'2-digit', month:'short'})),
-            datasets: [{
+    document.addEventListener('click', (e) => {
+        if (!viewMenu.contains(e.target)) closeDropdown();
+    });
+
+    // Selección de Opción
+    viewOptions.forEach(opt => {
+        opt.addEventListener('click', () => {
+            currentView = opt.dataset.view;
+            
+            // Actualizar UI del selector
+            viewOptions.forEach(o => o.classList.remove('active'));
+            opt.classList.add('active');
+            
+            // Extraer solo el texto (evitando emojis si los hay en el span)
+            const labelSpan = opt.querySelector('span.font-black');
+            viewLabel.textContent = labelSpan.textContent;
+            
+            updateEmpireChart();
+            closeDropdown();
+        });
+    });
+
+    function updateEmpireChart() {
+        const mode = currentView;
+        
+        // Obtener todas las fechas únicas y ordenarlas
+        const allDates = [...new Set(historyRaw.map(item => item.fecha_registro.split(' ')[0]))].sort();
+        const labels = allDates.map(d => new Date(d).toLocaleDateString('<?= APP_LANG ?>-<?= strtoupper(APP_LANG) ?>', {day:'2-digit', month:'short'}));
+
+        let datasets = [];
+        const colorPalette = ['#3b82f6', '#8b5cf6', '#ec4899', '#f97316', '#10b981', '#f59e0b', '#06b6d4', '#6366f1', '#f43f5e', '#14b8a6'];
+
+        if (mode === 'global') {
+            const aggregated = {};
+            historyRaw.forEach(item => {
+                const date = item.fecha_registro.split(' ')[0];
+                if (!aggregated[date]) aggregated[date] = 0;
+                aggregated[date] += parseInt(item.poblacion);
+            });
+
+            const data = allDates.map(date => aggregated[date] || 0);
+            
+            const blueGradient = ctxEmpire.createLinearGradient(0, 0, 0, 400);
+            blueGradient.addColorStop(0, 'rgba(59, 130, 246, 0.4)');
+            blueGradient.addColorStop(1, 'rgba(59, 130, 246, 0)');
+
+            datasets.push({
                 label: '<?= __('chart_ants_label') ?>',
                 data: data,
                 borderColor: '#3b82f6',
@@ -329,37 +425,118 @@ document.addEventListener('DOMContentLoaded', function() {
                 pointBorderWidth: 0,
                 pointHoverRadius: 6,
                 pointHoverBackgroundColor: '#fff'
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false },
-                tooltip: {
+            });
+        } else if (mode === 'comparative') {
+            const colonies = [...new Set(historyRaw.map(item => item.colony_name))];
+            colonies.forEach((colony, index) => {
+                const colonyData = {};
+                historyRaw.filter(item => item.colony_name === colony).forEach(item => {
+                    colonyData[item.fecha_registro.split(' ')[0]] = parseInt(item.poblacion);
+                });
+
+                const data = allDates.map(date => colonyData[date] || null);
+                const color = colorPalette[index % colorPalette.length];
+
+                datasets.push({
+                    label: colony,
+                    data: data,
+                    borderColor: color,
+                    borderWidth: 2,
+                    fill: false,
+                    tension: 0.4,
+                    pointRadius: 3,
+                    pointBackgroundColor: color,
+                    spanGaps: true
+                });
+            });
+        } else if (mode.startsWith('colony_')) {
+            const selectedColony = mode.replace('colony_', '');
+            const colonyData = {};
+            historyRaw.filter(item => item.colony_name === selectedColony).forEach(item => {
+                colonyData[item.fecha_registro.split(' ')[0]] = parseInt(item.poblacion);
+            });
+
+            const data = allDates.map(date => colonyData[date] || null);
+            
+            const color = colorPalette[0];
+            const gradient = ctxEmpire.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, color + '66');
+            gradient.addColorStop(1, color + '00');
+
+            datasets.push({
+                label: selectedColony,
+                data: data,
+                borderColor: color,
+                borderWidth: 3,
+                fill: true,
+                backgroundColor: gradient,
+                tension: 0.4,
+                pointRadius: 4,
+                pointBackgroundColor: color,
+                spanGaps: true
+            });
+        }
+
+        if (empireChart) {
+            empireChart.destroy();
+        }
+
+        empireChart = new Chart(ctxEmpire, {
+            type: 'line',
+            data: { labels, datasets },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
                     mode: 'index',
                     intersect: false,
-                    backgroundColor: '#18181b',
-                    titleColor: '#fff',
-                    bodyColor: '#3b82f6',
-                    borderColor: '#27272a',
-                    borderWidth: 1,
-                    padding: 12,
-                    displayColors: false
-                }
-            },
-            scales: {
-                y: {
-                    grid: { color: 'rgba(255,255,255,0.05)' },
-                    ticks: { color: '#71717a', font: { size: 10 } }
                 },
-                x: {
-                    grid: { display: false },
-                    ticks: { color: '#71717a', font: { size: 10 } }
+                plugins: {
+                    legend: { 
+                        display: mode !== 'global',
+                        position: 'top',
+                        labels: {
+                            color: '#71717a',
+                            font: { size: 10, weight: 'bold' },
+                            usePointStyle: true,
+                            padding: 20
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: '#18181b',
+                        titleColor: '#fff',
+                        borderColor: '#27272a',
+                        borderWidth: 1,
+                        padding: 12,
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) label += ': ';
+                                if (context.parsed.y !== null) {
+                                    label += new Intl.NumberFormat().format(context.parsed.y);
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: { color: '#71717a', font: { size: 10 } },
+                        beginAtZero: true
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#71717a', font: { size: 10 } }
+                    }
                 }
             }
-        }
-    });
+        });
+    }
+
+    // Inicialización
+    updateEmpireChart();
 
     // Gráfico de Especies
     const speciesData = <?= json_encode($distribution) ?>;
